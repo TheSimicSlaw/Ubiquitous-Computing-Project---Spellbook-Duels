@@ -9,13 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        NavigationStack() {
+       NavigationStack() {
             TabView {
                 PlayMenuView()
                     .tabItem {
                         Label("Duel", systemImage: "wand.and.outline")
                     }
-                
+                    
                 DecksMenuView()
                     .tabItem {
                         Label("Library", systemImage: "book")

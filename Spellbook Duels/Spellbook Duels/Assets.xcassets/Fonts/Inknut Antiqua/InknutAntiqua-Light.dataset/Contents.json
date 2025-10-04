@@ -1,6 +1,7 @@
 {
-  "colors" : [
+  "data" : [
     {
+      "filename" : "InknutAntiqua-Light.ttf",
       "idiom" : "universal"
     }
   ],

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct GameFieldView: View {
     var body: some View {
-        Text("Game Field View")
+        Color("AccentOne")
+            .ignoresSafeArea()
     }
 }
 
