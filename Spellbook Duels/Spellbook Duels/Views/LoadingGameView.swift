@@ -9,7 +9,12 @@ import SwiftUI
 
 struct LoadingGameView: View {
     var body: some View {
-        Text("Loading...")
+        ZStack {
+            Color.accentOne
+                .ignoresSafeArea()
+            Text("Loading...")
+                .font(.custom("InknutAntiqua-Light", size: 25))
+        }
     }
 }
 
