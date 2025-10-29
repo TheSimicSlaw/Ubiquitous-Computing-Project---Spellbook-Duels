@@ -20,6 +20,7 @@ struct PresentedCard {
     let costVal: Int
     let element: Element
     let image: UIImage
+    let icon: UIImage
     let cardCode: String
     let Strength: Int?
     let duration: Int?
