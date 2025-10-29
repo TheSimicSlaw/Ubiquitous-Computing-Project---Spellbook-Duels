@@ -17,7 +17,7 @@ struct GameFieldView: View {
                 Divider()
                     .frame(height: 2)
                     .overlay(Color.black)
-                //Spacer() <- Doesn't work as expected because the width exceeds the screen
+                Spacer()
                 PlayerFieldView()
             }
             HStack {
@@ -25,6 +25,7 @@ struct GameFieldView: View {
                     .fill(.black.opacity(0.5))
                     .frame(width: 50, height: 100)
                     .padding(.trailing, 150)
+                //Spacer() // <- Doesn't work as expected because the width exceeds the screen
                 Rectangle() // Combined Spellbook
                     .fill(Color.accentOne)
                     .frame(width: 60, height: 100)
