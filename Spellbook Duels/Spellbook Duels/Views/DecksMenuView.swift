@@ -6,35 +6,61 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DecksMenuView: View {
+    @Query var decks: [DeckListModel]
+    
+    @State private var selectedDeck: DeckListModel?
+    
+    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    
     var body: some View {
-        ZStack {
-            
-            Color("MenuBackgroundColor")
-                .ignoresSafeArea()
-            
-            VStack{
-                Image(systemName: "book.closed.fill") // Hopefully this can work as a deck label?
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 150)
-                    .padding(.horizontal, 10)
-                    .padding(.top, 10)
-                    .foregroundStyle(LinearGradient(
-                        gradient: Gradient(colors: [.red, .blue]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    ))
+        NavigationStack {
+            ZStack {
+                Color("MenuBackgroundColor").ignoresSafeArea()
                 
-                Text("Fire And Water")
-                    .font(.custom( "InknutAntiqua-Regular", size: 19.0))
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(10)
+                VStack {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color("AccentTwo"))
+                            .frame(width: .infinity, height: 190)
+                            .ignoresSafeArea()
+                        
+                        Text("Decks")
+                            .font(.custom( "InknutAntiqua-Regular", size: 50.0))
+                            .bold()
+                        
+                    }
+                    
+                    Spacer()
+                    
+                    
+                    ScrollView {
+                        LazyVGrid (columns: columns) {
+                            ForEach(decks) { deck in
+                                ZStack {
+                                    VStack{
+                                        Spacer(minLength: 20)
+                                        
+                                        DeckGridIconView(colors: [ElementColorDict.elementColors[deck.deckElements[0]]!, ElementColorDict.elementColors[deck.deckElements[1]]!])
+                                        
+                                        Text(deck.deckName)
+                                            .font(.custom( "InknutAntiqua-Regular", size: 19.0))
+                                            .lineLimit(nil)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .padding(10)
+                                    }
+                                    .frame(width: 200, height: .infinity)
+                                    .background(Color("AccentOne"))
+                                }
+                            }
+                        }
+                    }
+                    
+                    //Spacer()
+                }
             }
-            .frame(width: 200, height: .infinity)
-            .background(Color("AccentOne"))
         }
         
     }
@@ -42,4 +68,5 @@ struct DecksMenuView: View {
 
 #Preview {
     DecksMenuView()
+        .modelContainer(DeckListModel.precons)
 }
