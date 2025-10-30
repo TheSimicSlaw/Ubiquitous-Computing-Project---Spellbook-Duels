@@ -30,6 +30,7 @@ struct DecksMenuView: View {
                         Text("Decks")
                             .font(.custom( "InknutAntiqua-Regular", size: 50.0))
                             .bold()
+                            .padding(.bottom, 50)
                         
                     }
                     
@@ -39,27 +40,30 @@ struct DecksMenuView: View {
                     ScrollView {
                         LazyVGrid (columns: columns) {
                             ForEach(decks) { deck in
-                                ZStack {
-                                    VStack{
-                                        Spacer(minLength: 20)
-                                        
-                                        DeckGridIconView(colors: [ElementColorDict.elementColors[deck.deckElements[0]]!, ElementColorDict.elementColors[deck.deckElements[1]]!])
-                                        
-                                        Text(deck.deckName)
-                                            .font(.custom( "InknutAntiqua-Regular", size: 19.0))
-                                            .lineLimit(nil)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding(10)
+                                NavigationLink(value: deck){
+                                    ZStack {
+                                        VStack{
+                                            Spacer(minLength: 20)
+                                            
+                                            DeckGridIconView(colors: [ElementColorDict.elementColors[deck.deckElements[0]]!, ElementColorDict.elementColors[deck.deckElements[1]]!])
+                                            
+                                            Text(deck.deckName)
+                                                .font(.custom( "InknutAntiqua-Regular", size: 19.0))
+                                                .foregroundStyle(.black)
+                                                .lineLimit(nil)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .padding(10)
+                                        }
+                                        .frame(width: 200, height: .infinity)
+                                        .background(Color("AccentOne"))
+                                        .padding(.vertical, 0.5)
                                     }
-                                    .frame(width: 200, height: .infinity)
-                                    .background(Color("AccentOne"))
                                 }
                             }
                         }
                     }
-                    
-                    //Spacer()
                 }
+                .navigationDestination(for: DeckListModel.self, destination: DeckEditorView.init)
             }
         }
         
