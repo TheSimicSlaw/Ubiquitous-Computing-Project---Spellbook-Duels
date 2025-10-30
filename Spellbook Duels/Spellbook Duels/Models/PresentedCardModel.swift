@@ -10,7 +10,7 @@ import UIKit
 import SwiftData
 
 //@Model
-class PresentedCardModel {
+class PresentedCardModel: Identifiable {
     var name: String
     var text: String
     var type: String

@@ -11,7 +11,7 @@ import SwiftData
 struct DecksMenuView: View {
     @Query var decks: [DeckListModel]
     
-    @State private var selectedDeck: DeckListModel?
+    //@State private var selectedDeck: DeckListModel?
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
