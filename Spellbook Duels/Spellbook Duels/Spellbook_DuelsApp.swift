@@ -14,7 +14,6 @@ struct Spellbook_DuelsApp: App {
         WindowGroup {
             ContentView()
                 .modelContainer(for: DeckListModel.self)
-                //.modelContainer(for: PresentedCardModel.self)
         }
     }
 }

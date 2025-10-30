@@ -24,7 +24,7 @@ struct DecksMenuView: View {
                     ZStack {
                         Rectangle()
                             .fill(Color("AccentTwo"))
-                            .frame(width: .infinity, height: 190)
+                            .frame(width: 425, height: 190)
                             .ignoresSafeArea()
                         
                         Text("Decks")
