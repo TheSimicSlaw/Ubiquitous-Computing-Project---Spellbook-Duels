@@ -11,12 +11,13 @@ import SwiftData
 struct DecksMenuView: View {
     @Query var decks: [DeckListModel]
     
-    //@State private var selectedDeck: DeckListModel?
+    @State private var path = NavigationPath()
+    @State private var selectedDeck: DeckListModel? = nil
     
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ZStack {
                 Color("MenuBackgroundColor").ignoresSafeArea()
                 
@@ -24,7 +25,7 @@ struct DecksMenuView: View {
                     ZStack {
                         Rectangle()
                             .fill(Color("AccentTwo"))
-                            .frame(width: 425, height: 190)
+                            .frame(width:425, height:190)
                             .ignoresSafeArea()
                         
                         Text("Decks")
@@ -40,9 +41,12 @@ struct DecksMenuView: View {
                     ScrollView {
                         LazyVGrid (columns: columns) {
                             ForEach(decks) { deck in
-                                NavigationLink(value: deck){
+                                Button {
+                                    selectedDeck = deck
+                                    path.append(deck)
+                                } label: {
                                     ZStack {
-                                        VStack{
+                                        VStack {
                                             Spacer(minLength: 20)
                                             
                                             DeckGridIconView(colors: [ElementColorDict.elementColors[deck.deckElements[0]]!, ElementColorDict.elementColors[deck.deckElements[1]]!])
@@ -63,7 +67,9 @@ struct DecksMenuView: View {
                         }
                     }
                 }
-                .navigationDestination(for: DeckListModel.self, destination: DeckEditorView.init)
+                .navigationDestination(for: DeckListModel.self) { selecteddeck in
+                    DeckEditorView(deck: selecteddeck)
+                }
             }
         }
         

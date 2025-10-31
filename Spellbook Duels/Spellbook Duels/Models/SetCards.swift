@@ -709,7 +709,7 @@ extension PresentedCardModel {
         ),
     // 42
         PresentedCardModel(
-            name: "Rcks Fall, Everyone Dies",
+            name: "Rocks Fall, Everyone Dies",
             text: "Break all items each opponent controls.",
             type: "Jinx",
             cost: "4 Aether",
@@ -1072,7 +1072,7 @@ extension PresentedCardModel {
             cost: "N Turns",
             costVal: 0,
             element: .WATER,
-            image: UIImage(named: "WavesofAged"),
+            image: UIImage(named: "WavesofAgedWine"),
             icon: nil,
             cardCode: "WAV",
             Strength: nil,
