@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7093E2662EBAF293000713DC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2652EBAF293000713DC /* FirebaseAuth */; };
+		7093E2682EBAF293000713DC /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2672EBAF293000713DC /* FirebaseDatabase */; };
+		7093E26A2EBAF293000713DC /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2692EBAF293000713DC /* FirebaseFunctions */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CFC05B0E2E90C11500FF8DFD /* Spellbook Duels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Spellbook Duels.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7093E26A2EBAF293000713DC /* FirebaseFunctions in Frameworks */,
+				7093E2682EBAF293000713DC /* FirebaseDatabase in Frameworks */,
+				7093E2662EBAF293000713DC /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +74,9 @@
 			);
 			name = "Spellbook Duels";
 			packageProductDependencies = (
+				7093E2652EBAF293000713DC /* FirebaseAuth */,
+				7093E2672EBAF293000713DC /* FirebaseDatabase */,
+				7093E2692EBAF293000713DC /* FirebaseFunctions */,
 			);
 			productName = "Spellbook Duels";
 			productReference = CFC05B0E2E90C11500FF8DFD /* Spellbook Duels.app */;
@@ -94,6 +106,9 @@
 			);
 			mainGroup = CFC05B052E90C11500FF8DFD;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CFC05B0F2E90C11500FF8DFD /* Products */;
 			projectDirPath = "";
@@ -336,6 +351,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7093E2652EBAF293000713DC /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		7093E2672EBAF293000713DC /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		7093E2692EBAF293000713DC /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CFC05B062E90C11500FF8DFD /* Project object */;
 }
