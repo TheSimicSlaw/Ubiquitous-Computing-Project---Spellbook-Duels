@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import FirebaseCore
+import FirebaseDatabase
 
 // Initialization code for Firebase
 class AppDelegate: NSObject, UIApplicationDelegate {
