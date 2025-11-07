@@ -49,18 +49,50 @@ struct DeckEditorView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
                         ForEach(sortedCards, id: \.card.cardCode) { entry in
-                            Image(uiImage: entry.card.image!)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 150, height: 200)
-                                .padding(.bottom, 5)
-                                .shadow(radius: 4)
+                            VStack {
+                                Image(uiImage: entry.card.image!)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 150, height: 200)
+                                    .shadow(radius: 4)
+                                
+                                HStack {
+                                    Button {
+                                        decreaseCardCount(card: entry.card)
+                                    } label: {
+                                        Image(systemName: "minus.rectangle.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 35, height: 50)
+                                            .foregroundStyle(.red)
+                                            .brightness(deck.cardCounts[entry.card.cardCode] ?? 1 > 0 ? 0.0 : -0.3)
+                                    }
+                                    
+                                    ZStack {
+                                        Rectangle()
+                                            .frame(width: 35, height: 26)
+                                        Text("\(deck.cardCounts[entry.card.cardCode] ?? 0)")
+                                            .foregroundStyle(Color.white)
+                                    }
+                                    
+                                    Button {
+                                        increaseCardCount(card: entry.card)
+                                    } label: {
+                                        Image(systemName: "plus.rectangle.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 35, height: 50)
+                                            .foregroundStyle(.green)
+                                            .brightness(deck.cardCounts[entry.card.cardCode] ?? 1 < 4 ? 0.0 : -0.4)
+                                    } 
+                                }
+                            }
                         }
                     }
                     .padding(.horizontal)
                 }
                 .frame(height: 170)
-                .padding(.bottom, 20)
+                .padding(.bottom, 50)
                     
                     
                 ScrollView {
@@ -68,9 +100,14 @@ struct DeckEditorView: View {
                         ForEach(availableCards) { card in
                             ZStack {
                                 VStack{
-                                    Image(uiImage: card.image!)
-                                        .resizable()
-                                        .scaledToFit()
+                                    Button {
+                                        increaseCardCount(card: card)
+                                    } label: {
+                                        Image(uiImage: card.image!)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding(.top)
+                                    }
                                             
                                     Text(card.name)
                                         .font(.custom( "InknutAntiqua-Regular", size: 15.0))
@@ -78,7 +115,7 @@ struct DeckEditorView: View {
                                         .foregroundStyle(.black)
                                         .lineLimit(nil)
                                         .fixedSize(horizontal: false, vertical: true)
-                                        .padding(10)
+                                        .padding(5)
                                 }
                                 .frame(width: 200, height: 300)
                                 .background(Color("AccentOne"))
@@ -87,7 +124,28 @@ struct DeckEditorView: View {
                         }
                     }
                 }
+                .padding(.horizontal, 5)
             }
+        }
+    }
+    
+    
+    func increaseCardCount(card: PresentedCardModel) {
+        if deck.cardCounts[card.cardCode] == nil {
+            deck.cardCounts[card.cardCode] = 1
+            deck.cardList.append(card.cardCode)
+        } else if deck.cardCounts[card.cardCode]! < 4 {
+            deck.cardCounts[card.cardCode] = deck.cardCounts[card.cardCode]! + 1
+        }
+    }
+    
+    func decreaseCardCount(card: PresentedCardModel) {
+        if deck.cardCounts[card.cardCode]! > 0 {
+            deck.cardCounts[card.cardCode] = deck.cardCounts[card.cardCode]! - 1
+        }
+        if deck.cardCounts[card.cardCode]! == 0 {
+            deck.cardList.removeAll(where: { $0 == card.cardCode })
+            deck.cardCounts[card.cardCode] = nil
         }
     }
 }
