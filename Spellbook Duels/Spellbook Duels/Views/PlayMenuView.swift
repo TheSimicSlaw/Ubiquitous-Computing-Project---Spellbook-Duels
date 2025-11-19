@@ -55,11 +55,11 @@ struct PlayMenuView: View {
                 }
             }
         }
-        .overlay {
-            if isLoading {
-                LoadingGameView()
-            }
-        }
+//        .overlay {
+//            if isLoading {
+//                LoadingGameView()
+//            }
+//        }
     }
     
     func startLoading() {
