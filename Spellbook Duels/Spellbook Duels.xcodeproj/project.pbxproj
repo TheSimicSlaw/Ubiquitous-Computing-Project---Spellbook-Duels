@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CF69D6632EBB0BF4009A16B3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CF69D6622EBB0BF4009A16B3 /* FirebaseAuth */; };
-		CF69D6652EBB0BF4009A16B3 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = CF69D6642EBB0BF4009A16B3 /* FirebaseCore */; };
-		CF69D6672EBB0BF4009A16B3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = CF69D6662EBB0BF4009A16B3 /* FirebaseDatabase */; };
-		CF69D6692EBB0CAE009A16B3 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = CF69D6682EBB0CAE009A16B3 /* FirebaseFunctions */; };
+		7093E2662EBAF293000713DC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2652EBAF293000713DC /* FirebaseAuth */; };
+		7093E2682EBAF293000713DC /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2672EBAF293000713DC /* FirebaseDatabase */; };
+		7093E26A2EBAF293000713DC /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 7093E2692EBAF293000713DC /* FirebaseFunctions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,10 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF69D6672EBB0BF4009A16B3 /* FirebaseDatabase in Frameworks */,
-				CF69D6652EBB0BF4009A16B3 /* FirebaseCore in Frameworks */,
-				CF69D6632EBB0BF4009A16B3 /* FirebaseAuth in Frameworks */,
-				CF69D6692EBB0CAE009A16B3 /* FirebaseFunctions in Frameworks */,
+				7093E26A2EBAF293000713DC /* FirebaseFunctions in Frameworks */,
+				7093E2682EBAF293000713DC /* FirebaseDatabase in Frameworks */,
+				7093E2662EBAF293000713DC /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,10 +74,9 @@
 			);
 			name = "Spellbook Duels";
 			packageProductDependencies = (
-				CF69D6622EBB0BF4009A16B3 /* FirebaseAuth */,
-				CF69D6642EBB0BF4009A16B3 /* FirebaseCore */,
-				CF69D6662EBB0BF4009A16B3 /* FirebaseDatabase */,
-				CF69D6682EBB0CAE009A16B3 /* FirebaseFunctions */,
+				7093E2652EBAF293000713DC /* FirebaseAuth */,
+				7093E2672EBAF293000713DC /* FirebaseDatabase */,
+				7093E2692EBAF293000713DC /* FirebaseFunctions */,
 			);
 			productName = "Spellbook Duels";
 			productReference = CFC05B0E2E90C11500FF8DFD /* Spellbook Duels.app */;
@@ -110,7 +107,7 @@
 			mainGroup = CFC05B052E90C11500FF8DFD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CFC05B0F2E90C11500FF8DFD /* Products */;
@@ -356,7 +353,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -367,24 +364,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CF69D6622EBB0BF4009A16B3 /* FirebaseAuth */ = {
+		7093E2652EBAF293000713DC /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		CF69D6642EBB0BF4009A16B3 /* FirebaseCore */ = {
+		7093E2672EBAF293000713DC /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
-		CF69D6662EBB0BF4009A16B3 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
 		};
-		CF69D6682EBB0CAE009A16B3 /* FirebaseFunctions */ = {
+		7093E2692EBAF293000713DC /* FirebaseFunctions */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = CF69D6612EBB0BF4009A16B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 7093E2642EBAF293000713DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
 		};
 /* End XCSwiftPackageProductDependency section */
