@@ -9,8 +9,9 @@ import Foundation
 import FirebaseDatabase
 import Combine
 
-class ViewModel: Observable {
-    @Published var num: Int = 1 // placeholder variable so that it conforms to observable
+class DatabaseController: ObservableObject {
+    @Published var player = Player()
+    @Published var opponent = Player()
     private var ref: DatabaseReference = Database.database().reference()
 
 }
