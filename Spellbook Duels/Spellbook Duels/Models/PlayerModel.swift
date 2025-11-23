@@ -6,6 +6,6 @@
 //
 
 struct Player {
-    let name: String = ""
-    let id: String = ""
+    var name: String = "Anonymous"
+    var id: String = ""
 }
