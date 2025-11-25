@@ -233,7 +233,7 @@ extension View {
         view: @escaping () -> PopupContent
     ) -> some View {
         self.modifier(
-            DeckPopupView(isPresented: isPresented, view: view)
+            PopupView(isPresented: isPresented, view: view)
         )
     }
 }

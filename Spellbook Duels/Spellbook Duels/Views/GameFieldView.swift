@@ -27,7 +27,7 @@ struct GameFieldView: View {
                     .padding(.trailing, 150)
                 //Spacer() // <- Doesn't work as expected because the width exceeds the screen
                 Rectangle() // Combined Spellbook
-                    .fill(Color.accentOne)
+                    .fill(Color("AccentOne"))
                     .frame(width: 60, height: 100)
                     .padding(.leading, 150)
             }

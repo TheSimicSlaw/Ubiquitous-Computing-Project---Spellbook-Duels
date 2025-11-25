@@ -6,6 +6,9 @@
 //
 
 struct BoardModel {
+    var playerAetherTotal: Int = 18
+    var opponentAetherTotal: Int = 18
+    
     var playerCurse: String = ""
     var playerSnap: String = ""
     var playerWard: String = ""
@@ -19,4 +22,14 @@ struct BoardModel {
     var opponentCharm: String = ""
     var opponentRelic: String = ""
     var opponentPotion: String = ""
+    
+    var playerDeck: [String]
+    var playerHand: [String]
+    var playerDiscard: [String]
+    
+    var opponentHand: [String]
+    var opponentDiscard: [String]
+    
+    
+    
 }

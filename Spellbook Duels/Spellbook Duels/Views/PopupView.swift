@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DeckPopupView<PopupContent>: ViewModifier where PopupContent: View {
+struct PopupView<PopupContent>: ViewModifier where PopupContent: View {
     
     init(isPresented: Binding<Bool>, view: @escaping () -> PopupContent) {
         self._isPresented = isPresented
