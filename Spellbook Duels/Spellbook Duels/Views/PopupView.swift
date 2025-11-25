@@ -46,6 +46,19 @@ struct PopupView<PopupContent>: ViewModifier where PopupContent: View {
     }
 }
 
+extension View {
+    public func newPopup<PopupContent: View>(
+        isPresented: Binding<Bool>,
+        view: @escaping () -> PopupContent
+    ) -> some View {
+        self.modifier(
+            PopupView(isPresented: isPresented, view: view)
+        )
+    }
+}
+
+// MARK: Preview
+
 struct DeckPopupDemo: View {
     @State private var showPopup = true
 
@@ -56,7 +69,7 @@ struct DeckPopupDemo: View {
                 .font(.title)
                 .foregroundStyle(.white)
         }
-        .newDeckPopup(isPresented: $showPopup) {
+        .newPopup(isPresented: $showPopup) {
 //            VStack(spacing: 12) {
 //                Text("Exit?")
 //                    .foregroundStyle(Color("AccentOne"))

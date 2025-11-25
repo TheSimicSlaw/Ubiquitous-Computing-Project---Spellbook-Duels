@@ -90,7 +90,7 @@ struct DecksMenuView: View {
                         }
                     }
                 }
-                .newDeckPopup(isPresented: $askingNewDeckDetails){
+                .newPopup(isPresented: $askingNewDeckDetails){
                     newDeckPopupContent
                 }
                 .navigationDestination(for: DeckListModel.self) { selecteddeck in
@@ -227,16 +227,6 @@ struct DecksMenuView: View {
     }
 }
 
-extension View {
-    public func newDeckPopup<PopupContent: View>(
-        isPresented: Binding<Bool>,
-        view: @escaping () -> PopupContent
-    ) -> some View {
-        self.modifier(
-            PopupView(isPresented: isPresented, view: view)
-        )
-    }
-}
 
 #Preview {
     DecksMenuView()

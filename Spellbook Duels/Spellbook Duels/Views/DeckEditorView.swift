@@ -155,10 +155,10 @@ struct DeckEditorView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .newDeckPopup(isPresented: $isAskingToExit) {
+        .newPopup(isPresented: $isAskingToExit) {
             exitEditorPopupContent
         }
-        .newDeckPopup(isPresented: $failedToSave) {
+        .newPopup(isPresented: $failedToSave) {
             VStack {
                 Text("The deck failed to save.")
                     .foregroundStyle(Color("AccentOne"))
