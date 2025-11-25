@@ -7,14 +7,14 @@
 
 struct BoardModel {
     var playerCurse: String = ""
-    var playerJinx: String = ""
+    var playerSnap: String = ""
     var playerWard: String = ""
     var playerCharm: String = ""
     var playerRelic: String = ""
     var playerPotion: String = ""
     
     var opponentCurse: String = ""
-    var opponentJinx: String = ""
+    var opponentSnap: String = ""
     var opponentWard: String = ""
     var opponentCharm: String = ""
     var opponentRelic: String = ""
