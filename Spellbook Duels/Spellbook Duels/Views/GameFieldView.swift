@@ -55,27 +55,27 @@ struct OpponentFieldView: View {
             
             HStack(spacing: 24) {
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
             }
             
             HStack(spacing: 19) {
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 80, height: 112)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 80, height: 80)
                     .padding(.top, 11)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
             }
         }
         
@@ -87,27 +87,27 @@ struct PlayerFieldView: View {
         VStack {
             HStack(spacing: 19) {
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 80, height: 112)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 80, height: 80)
                     .padding(.top, 11)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
             }
             
             HStack(spacing: 24) {
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
                 Rectangle()
-                    .fill(.gray)
-                    .frame(width: 60, height: 84)
+                    .stroke(.black, lineWidth: 2)
+                    .frame(width: 60, height: 60)
             }
             Image(systemName: "book")
                 .font(.system(size: 100))
