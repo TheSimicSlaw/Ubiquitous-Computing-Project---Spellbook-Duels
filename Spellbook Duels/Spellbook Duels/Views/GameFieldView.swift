@@ -13,24 +13,24 @@ struct GameFieldView: View {
             FieldBackgroundView()
             VStack {
                 OpponentFieldView()
-                Spacer()
+                //Spacer()
                 Divider()
                     .frame(height: 2)
                     .overlay(Color.black)
-                Spacer()
+                //Spacer()
                 PlayerFieldView()
             }
-            HStack {
-                Rectangle() // Discard Pile
-                    .fill(.black.opacity(0.5))
-                    .frame(width: 50, height: 100)
-                    .padding(.trailing, 150)
-                //Spacer() // <- Doesn't work as expected because the width exceeds the screen
-                Rectangle() // Combined Spellbook
-                    .fill(Color("AccentOne"))
-                    .frame(width: 60, height: 100)
-                    .padding(.leading, 150)
-            }
+//            HStack {
+//                Rectangle() // Discard Pile
+//                    .fill(.black.opacity(0.5))
+//                    .frame(width: 50, height: 100)
+//                    .padding(.trailing, 150)
+//                //Spacer() // <- Doesn't work as expected because the width exceeds the screen
+//                Rectangle() // Combined Spellbook
+//                    .fill(Color("AccentOne"))
+//                    .frame(width: 60, height: 100)
+//                    .padding(.leading, 150)
+//            }
         }
     }
 }
@@ -77,6 +77,18 @@ struct OpponentFieldView: View {
                     .stroke(.black, lineWidth: 2)
                     .frame(width: 60, height: 60)
             }
+            
+            HStack {
+                Rectangle() // Discard Pile
+                    .fill(.black.opacity(0.5))
+                    .frame(width: 80, height: 80)
+                    .padding(.trailing, 240)
+                
+                Rectangle() // Spellbook
+                    .fill(Color("AccentOne"))
+                    .frame(width: 80, height: 80)
+                    //.padding(.leading, 105)
+            }
         }
         
     }
@@ -85,6 +97,18 @@ struct OpponentFieldView: View {
 struct PlayerFieldView: View {
     var body: some View {
         VStack {
+            HStack {
+                Rectangle() // Discard Pile
+                    .fill(.black.opacity(0.5))
+                    .frame(width: 80, height: 80)
+                    .padding(.trailing, 240)
+                
+                Rectangle() // Spellbook
+                    .fill(Color("AccentOne"))
+                    .frame(width: 80, height: 80)
+                    //.padding(.leading, 150)
+            }
+            
             HStack(spacing: 19) {
                 Rectangle()
                     .stroke(.black, lineWidth: 2)

@@ -13,4 +13,7 @@ class ViewController: ObservableObject {
     @Published var isSearching: Bool = false
     @Published var isWaiting: Bool = false
     @Published var matchMakingSelection: String = ""
+    @Published var board = BoardModel()
 }
+
+

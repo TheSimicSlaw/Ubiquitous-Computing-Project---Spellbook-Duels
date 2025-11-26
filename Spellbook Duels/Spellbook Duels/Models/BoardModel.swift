@@ -23,13 +23,12 @@ struct BoardModel {
     var opponentRelic: String = ""
     var opponentPotion: String = ""
     
-    var playerDeck: [String]
-    var playerHand: [String]
-    var playerDiscard: [String]
+    var playerDeck: [String] = []
+    var playerHand: [String] = []
+    var playerDiscard: [String] = []
     
-    var opponentHand: [String]
-    var opponentDiscard: [String]
-    
-    
+    var opponentHand: [String] = []
+    var opponentDiscard: [String] = []
     
 }
+
