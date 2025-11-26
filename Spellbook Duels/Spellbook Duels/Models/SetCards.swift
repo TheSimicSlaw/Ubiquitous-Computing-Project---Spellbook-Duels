@@ -14,7 +14,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aspect of Cavern",
             text: "Your earth enchantments and items cannot be broken.",
-            type: "Charm",
+            type: .charm,
             cost: "2 Aether",
             costVal: 2,
             element: .EARTH,
@@ -31,7 +31,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Steel Shield",
             text: "Passive: While you have no defense spells, aether damage dealt to you is halved (round down).",
-            type: "Relic",
+            type: .relic,
             cost: "3 Aether",
             costVal: 3,
             element: .EARTH,
@@ -48,7 +48,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Instant Freeze",
             text: "All spells and abilities that have been cast or activated before this potion is activated have no effect. This ability resolves first. Players cannot activate abilities after this potion is activated.",
-            type: "Potion",
+            type: .potion,
             cost: "4 Turns to brew",
             costVal: 4,
             element: .WATER,
@@ -65,7 +65,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aspect of Tide",
             text: "At the end of your action phase, put a wave counter on this spell and on each of your enchantments that have wave counters on them. When this spell fades or breaks, discard your hand and draw a card for each wave counter on it.",
-            type: "Charm",
+            type: .charm,
             cost: "2 Aether",
             costVal: 2,
             element: .WATER,
@@ -82,7 +82,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aspect of Blaze",
             text: "If you would deal aether damage, you deal twice that damage instead.",
-            type: "Charm",
+            type: .charm,
             cost: "2 Aether",
             costVal: 2,
             element: .FIRE,
@@ -99,7 +99,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Sparking Projectile",
             text: "Wards cannot reduce the damage this spell deals.",
-            type: "Jinx",
+            type: .jinx,
             cost: "2 Aether",
             costVal: 2,
             element: .FIRE,
@@ -116,7 +116,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Gale Force Deflection",
             text: "All damage that would be dealt to you this defense phase is dealt to the attacking opponent instead.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "3 Aether",
             costVal: 3,
             element: .AIR,
@@ -133,7 +133,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aspect of Breeze",
             text: "If you would gain aether, you gain twice that aether instead (this includes for turn).",
-            type: "Charm",
+            type: .charm,
             cost: "3 Aether",
             costVal: 3,
             element: .AIR,
@@ -150,7 +150,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Wall Reinforcement",
             text: "Wall Reinforcement enters with 6 stone counters on it. Whenever you take aether damage, remove a stone counter from it. Wards you have gain 1 strength for each stone counter on this spell.",
-            type: "Charm",
+            type: .charm,
             cost: "3 Aether",
             costVal: 3,
             element: .EARTH,
@@ -167,7 +167,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Bottled Fortitude",
             text: "The next time you would take damage from an Attack spell, prevent that damage.",
-            type: "Potion",
+            type: .potion,
             cost: "2 Turns to Brew",
             costVal: 2,
             element: .EARTH,
@@ -184,7 +184,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Sleeping Draught",
             text: "The next opponent cannot play spells until the end of their next turn.",
-            type: "Potion",
+            type: .potion,
             cost: "3 Turns to brew",
             costVal: 3,
             element: .WATER,
@@ -201,7 +201,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Building Crescendo",
             text: "Whenever you gain aether, put that many wave counters on Building Crescendo. When this spell fades or breaks, you gain 2 aether for each wave counter on it.",
-            type: "Charm",
+            type: .charm,
             cost: "2 Aether",
             costVal: 2,
             element: .WATER,
@@ -218,7 +218,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Stoking the Flames",
             text: "You gain 3 aether each turn instead of 1. If at the end of your turn you have not played a new attack spell, break this charm.",
-            type: "Charm",
+            type: .charm,
             cost: "1 Aether",
             costVal: 1,
             element: .FIRE,
@@ -235,7 +235,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Purifying Fire",
             text: "Break a Curse. Each opponent takes 2 aether damage.",
-            type: "Potion",
+            type: .potion,
             cost: "2 Turns to Brew",
             costVal: 2,
             element: .FIRE,
@@ -252,7 +252,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Flask-Held Gale",
             text: "Break a Ward. Gain aether equal to that card’s cost.",
-            type: "Potion",
+            type: .potion,
             cost: "2 Turns to Brew",
             costVal: 2,
             element: .AIR,
@@ -269,7 +269,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Meditation",
             text: "Air spells you cast cost 2 less aether to cast.",
-            type: "Charm",
+            type: .charm,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -286,7 +286,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Jar of Dirt",
             text: "The next time you would take aether damage, prevent that damage.",
-            type: "Potion",
+            type: .potion,
             cost: "3 Turns to Brew",
             costVal: 3,
             element: .EARTH,
@@ -303,7 +303,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Bonecracker",
             text: "An opponent attacking you takes 3 aether damage. Activate this only during your defend phase.",
-            type: "Relic",
+            type: .relic,
             cost: "1 Aether",
             costVal: 1,
             element: .EARTH,
@@ -320,7 +320,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Seer’s Scrying Bowl",
             text: "Passive: You may pay 1 aether to look at the top 3 cards of your spellbook any time you have priority.",
-            type: "Relic",
+            type: .relic,
             cost: "1 Aether",
             costVal: 1,
             element: .WATER,
@@ -337,7 +337,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Scrying Water",
             text: "Look at the top 4 cards of the Spellbook. Choose one of those cards and put it into your hand, then shuffle the rest back into the Spellbook.",
-            type: "Potion",
+            type: .potion,
             cost: "1 Turn to Brew",
             costVal: 1,
             element: .WATER,
@@ -354,7 +354,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Greek Fire",
             text: "Each opponent takes 4 aether damage for each enchantment and each item they control.",
-            type: "Potion",
+            type: .potion,
             cost: "4 Turns to Brew",
             costVal: 4,
             element: .FIRE,
@@ -371,7 +371,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Kindling Staff",
             text: "Deal 3 damage to each opponent without a ward.",
-            type: "Relic",
+            type: .relic,
             cost: "1 Aether",
             costVal: 1,
             element: .FIRE,
@@ -388,7 +388,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Wax Wings",
             text: "Prevent any damage you would take from non-Fire sources until the end of your next turn.",
-            type: "Relic",
+            type: .relic,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -405,7 +405,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Breath of Fresh Air",
             text: "You gain 4 aether.",
-            type: "Potion",
+            type: .potion,
             cost: "3 Turns to Brew",
             costVal: 3,
             element: .AIR,
@@ -422,7 +422,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Earth Wand",
             text: "Passive: Earth wards and counterspells you cast have 3 extra strength.",
-            type: "Relic",
+            type: .relic,
             cost: "2 Aether",
             costVal: 2,
             element: .EARTH,
@@ -439,7 +439,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Insurmountable",
             text: "Prevent all damage that would be dealt to you this turn.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "5 Aether",
             costVal: 5,
             element: .EARTH,
@@ -456,7 +456,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Refraction Mirage",
             text: "Flip a coin. If it lands on heads, prevent all damage that would be dealt to you this turn. If tails, prevent half that damage instead, rounded down.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -473,7 +473,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Water Wand",
             text: "Passive: Whenever you cast a Water enchantment, you gain 3 aether.",
-            type: "Relic",
+            type: .relic,
             cost: "2 Aether",
             costVal: 2,
             element: .WATER,
@@ -490,7 +490,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Fire Wand",
             text: "Passive: Whenever you cast a Fire spell, each opponent loses 1 aether.",
-            type: "Relic",
+            type: .relic,
             cost: "1 Aether",
             costVal: 1,
             element: .FIRE,
@@ -507,7 +507,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Blazing Counter",
             text: "The attacking opponent takes 3 aether damage.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "3 Aether",
             costVal: 3,
             element: .FIRE,
@@ -524,7 +524,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Countergale",
             text: "Prevent half the damage you would take this defense phase (round up).",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "1 Aether",
             costVal: 1,
             element: .AIR,
@@ -541,7 +541,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Air Wand",
             text: "Passive: Whenever you cast an Air spell, you gain 3 aether.",
-            type: "Relic",
+            type: .relic,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -558,7 +558,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Hurried Wall",
             text: "Practicers of the lithomantic arts may not always have time to put up indomitable fortifications. In this case, a little improvising is needed.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "2 Aether",
             costVal: 2,
             element: .EARTH,
@@ -575,7 +575,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Wall of Rocks",
             text: "Stonecasters have honed their art for millennia, becoming quite efficient at building formidable defenses.",
-            type: "Ward",
+            type: .ward,
             cost: "3 Aether",
             costVal: 3,
             element: .EARTH,
@@ -592,7 +592,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Water Wonder Wall",
             text: "Watershapers can accomplish feats with a small vial of water that the rest of us would assume impossible.",
-            type: "Ward",
+            type: .ward,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -609,7 +609,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Icy Defense",
             text: "This spell blocks 1 less damage from Fire spells.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "2 Aether",
             costVal: 2,
             element: .WATER,
@@ -626,7 +626,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Scorching Rebuke",
             text: "At the end of the defend phase, the opponent who attacked you takes aether damage equal to the damage dealt to you this turn.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "3 Aether",
             costVal: 3,
             element: .FIRE,
@@ -643,7 +643,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Quick Counterblaze",
             text: "Pyromancers dedicate years of their life to learn how to best grow, control, and direct their blazes. However, that sometimes leaves them out of practice when it comes to dealing with incoming fire.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "2 Aether",
             costVal: 2,
             element: .FIRE,
@@ -660,7 +660,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Air-Burst Dodge",
             text: "Airchannelers train to deflect and redirect incoming attacks. In the event that something too heavy comes their way, however, a quick escape may be a better alternative.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "3 Aether",
             costVal: 3,
             element: .AIR,
@@ -677,7 +677,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Deflecting Gust",
             text: "At the end of the defend phase, the opponent who attacked you takes aether damage equal to the damage blocked by this spell.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -694,7 +694,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Mud Vortex",
             text: "Prevent all aether damage you would be dealt by Fire or Water spells.",
-            type: "Ward",
+            type: .ward,
             cost: "3 Aether",
             costVal: 3,
             element: .EARTH,
@@ -711,7 +711,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Rocks Fall, Everyone Dies",
             text: "Break all items each opponent controls.",
-            type: "Jinx",
+            type: .jinx,
             cost: "4 Aether",
             costVal: 4,
             element: .EARTH,
@@ -728,7 +728,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aquaball",
             text: "Modern practitioners of water magic have adapted the Flaming Monks’ Fireball, with limited success.",
-            type: "Jinx",
+            type: .jinx,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -745,7 +745,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Retaliatory Wave",
             text: "Whenever you are dealt damage by an opponent, put that many wave counters on Retaliatory Wave. When this spell fades or breaks, it deals 1 aether damage to each opponent for each wave counter on it.",
-            type: "Ward",
+            type: .ward,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -762,7 +762,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Wall of Flames",
             text: "Whenever an opponent attacks you, they take 1 aether damage.",
-            type: "Ward",
+            type: .ward,
             cost: "2 Aether",
             costVal: 2,
             element: .FIRE,
@@ -779,7 +779,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Fireball",
             text: "The Flaming Monks of old have long since faded from existence. This spell remains their greatest achievement, and is one of the only pieces of evidence that they ever existed at all…",
-            type: "Jinx",
+            type: .jinx,
             cost: "N Aether",
             costVal: 0,
             element: .FIRE,
@@ -796,7 +796,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Toxic Fog",
             text: "An opponent dealt aether damage by this spell cannot gain aether until their end of their turn. For that duration, spells they cast cost 1 more aether.",
-            type: "Jinx",
+            type: .jinx,
             cost: "5 Aether",
             costVal: 5,
             element: .AIR,
@@ -813,7 +813,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Countervailing Winds",
             text: "Any player attacking you must choose another player to be the target of their attack (they can choose themselves). It becomes that player’s defend phase.",
-            type: "Ward",
+            type: .ward,
             cost: "5 Aether",
             costVal: 5,
             element: .AIR,
@@ -830,7 +830,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Stone Rain",
             text: "Deal 2 aether damage to each opponent. Each opponent damaged by this spell chooses one item they have. Break it.",
-            type: "Jinx",
+            type: .jinx,
             cost: "2 Aether",
             costVal: 2,
             element: .EARTH,
@@ -847,7 +847,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Spiked Ground",
             text: "Whenever an opponent casts a non-Ward Spell, that player takes 1 aether damage.",
-            type: "Curse",
+            type: .curse,
             cost: "3 Aether",
             costVal: 3,
             element: .EARTH,
@@ -864,7 +864,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Crashing Shores",
             text: "You may skip your attack phase each turn. If you do, put a wave counter on Crashing Shores. When this spell fades or breaks, it deals 2 aether damage to each opponent for each wave counter on it.",
-            type: "Curse",
+            type: .curse,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -881,7 +881,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Hydro Vortex",
             text: "The cursed opponent cannot play items for the duration of this spell.",
-            type: "Curse",
+            type: .curse,
             cost: "4 Aether",
             costVal: 4,
             element: .WATER,
@@ -898,7 +898,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Flaming Vortex",
             text: "Whenever the cursed opponent plays a defense spell, they take 1 aether damage.",
-            type: "Curse",
+            type: .curse,
             cost: "3 Aether",
             costVal: 3,
             element: .FIRE,
@@ -915,7 +915,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Scorched Soul",
             text: "When you cast this spell, you may break a charm. If you do, that charm’s controller takes ½*N damage.",
-            type: "Curse",
+            type: .curse,
             cost: "N Aether",
             costVal: 0,
             element: .FIRE,
@@ -932,7 +932,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Unfriendly Skies",
             text: "Whenever an opponent activates an item, that player may discard a card. If they do not, break a Ward they control and you gain 2 aether.",
-            type: "Curse",
+            type: .curse,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -949,7 +949,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Stray Gust",
             text: "Defending opponent pulls a spell or item they have to their hand.",
-            type: "Jinx",
+            type: .jinx,
             cost: "1 Aether",
             costVal: 1,
             element: .AIR,
@@ -966,7 +966,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Earthquake",
             text: "Break all Curses, Wards, and Relics defending opponent controls",
-            type: "Jinx",
+            type: .jinx,
             cost: "2 Aether",
             costVal: 2,
             element: .EARTH,
@@ -983,7 +983,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Icicle Javelin",
             text: "If defending opponent has a ward, break it. Otherwise, they lose 3 aether.",
-            type: "Jinx",
+            type: .jinx,
             cost: "3 Aether",
             costVal: 3,
             element: .WATER,
@@ -1000,7 +1000,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Aetherblaze",
             text: "Each opponent who has a charm loses N aether (round up). They can’t lose more than 6 aether this way.",
-            type: "Jinx",
+            type: .jinx,
             cost: "N Aether",
             costVal: 0,
             element: .FIRE,
@@ -1017,7 +1017,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Twister’s Gale",
             text: "Choose up to N items. Their player(s) pulls those items to their hand. Each player loses one aether for each item they pulled this way.",
-            type: "Jinx",
+            type: .jinx,
             cost: "N Aether",
             costVal: 0,
             element: .AIR,
@@ -1034,7 +1034,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Hide",
             text: "If you have 3 or less Aether, you take no damage this round.",
-            type: "Counterspell",
+            type: .counterspell,
             cost: "1 Aether",
             costVal: 1,
             element: .EARTH,
@@ -1051,7 +1051,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Wall Spikes",
             text: "Passive: Your Earth wards have +2 strength, and when your opponent deals damage to you with a jinx, that player takes 2 aether damage and you destroy this relic.",
-            type: "Relic",
+            type: .relic,
             cost: "1 Aether",
             costVal: 1,
             element: .EARTH,
@@ -1068,7 +1068,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Waves of Aged Wine",
             text: "Each opponent loses life equal to the number of wave counters on this card.\nPassive: Whenever you put a brew counter on this potion, put a wave counter on it.",
-            type: "Potion",
+            type: .potion,
             cost: "N Turns",
             costVal: 0,
             element: .WATER,
@@ -1085,7 +1085,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Drown",
             text: "This card’s strength is equal to the number of age counters, brew counters, and wave counters among cards you control.",
-            type: "Jinx",
+            type: .jinx,
             cost: "5 Aether",
             costVal: 5,
             element: .WATER,
@@ -1102,7 +1102,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Immolate",
             text: "If you do not win the game during the defend phase this card resolves in, you lose the game.",
-            type: "Jinx",
+            type: .jinx,
             cost: "8 Aether",
             costVal: 8,
             element: .FIRE,
@@ -1119,7 +1119,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Counterburn",
             text: "If you played a Water counterspell this turn, double this card’s strength",
-            type: "Jinx",
+            type: .jinx,
             cost: "3 Aether",
             costVal: 3,
             element: .FIRE,
@@ -1136,7 +1136,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Lightning Vortex",
             text: "Whenever a jinx deals damage to you, the attacking player takes N aether damage, where N is 5 minus the amount of age counters on this ward.",
-            type: "Ward",
+            type: .ward,
             cost: "2 Aether",
             costVal: 2,
             element: .AIR,
@@ -1153,7 +1153,7 @@ extension PresentedCardModel {
         PresentedCardModel(
             name: "Howl",
             text: "The defending player pulls N spells and items to their hand, where N is the amount of aether you have gained the turn this was cast. If they can’t, they pull all their spells and items.",
-            type: "Jinx",
+            type: .jinx,
             cost: "4 Aether",
             costVal: 4,
             element: .AIR,
