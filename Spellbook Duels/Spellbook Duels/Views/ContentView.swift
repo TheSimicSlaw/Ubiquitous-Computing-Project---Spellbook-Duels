@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    
+    @EnvironmentObject var viewController: ViewController
     @Query var decks: [DeckListModel]
     
     
@@ -33,5 +33,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(ViewController())
         .modelContainer(DeckListModel.precons)
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GameFieldView: View {
+    @EnvironmentObject var viewController: ViewController
     var body: some View {
         ZStack {
             FieldBackgroundView()
@@ -143,4 +144,5 @@ struct PlayerFieldView: View {
 
 #Preview {
     GameFieldView()
+        .environmentObject(ViewController())
 }
