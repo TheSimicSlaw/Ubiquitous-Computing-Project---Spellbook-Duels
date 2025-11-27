@@ -80,8 +80,21 @@ enum CardZone: Hashable, Codable {
     case curse, snap, ward, charm, relic, potion
 }
 
+enum Counter: String, Hashable, Codable {
+    case wave
+    case stone
+}
+
 struct CardSlot: Hashable, Codable {
     var owner: PlayerSide
     var zone: CardZone
     var card: String
+    var counters: [Counter: Int]
+    
+    init(owner: PlayerSide, zone: CardZone, card: String = "", counters: [Counter: Int] = [:]) {
+        self.owner = owner
+        self.zone = zone
+        self.card = card
+        self.counters = counters
+    }
 }

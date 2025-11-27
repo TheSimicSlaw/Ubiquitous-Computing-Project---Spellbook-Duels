@@ -7,41 +7,6 @@
 
 import SwiftUI
 
-// MARK: - High-level game actions
-
-//enum GameActionType: String, Codable {
-//    case playCard
-//    case gainAether
-//    case dealDamage
-//    case breakCard
-//}
-//
-//struct GameAction: Identifiable, Codable {
-//    let id: UUID
-//    let type: GameActionType
-//    let player: PlayerSide          // who is performing the action
-//
-//
-//    init(
-//        id: UUID = UUID(),
-//        type: GameActionType,
-//        player: PlayerSide,
-//        cardCode: String? = nil,
-//        amount: Int? = nil,
-//        targetPlayer: PlayerSide? = nil,
-//        targetSlot: CardSlot? = nil
-//    ) {
-//        self.id = id
-//        self.type = type
-//        self.player = player
-//        self.cardCode = cardCode
-//        self.amount = amount
-//        self.targetPlayer = targetPlayer
-//        self.targetSlot = targetSlot
-//    }
-//}
-
-
 // MARK: - Action steps
 
 enum DealDamageStep: Int, Codable {
