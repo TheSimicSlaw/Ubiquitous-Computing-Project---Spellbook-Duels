@@ -127,7 +127,7 @@ final class GameEngine {
             }
 
         case "EAS": // Aspect of Cavern
-            monitors.addBreakCardMonitor(from: slot) { context, board in
+            monitors.addBreakCardMonitor(from: slot, step: .beforeBreak) { context, board in
                 let current = board.slot(for: slot.owner, zone: slot.zone)
                 guard current.card == slot.card else { return }
 
