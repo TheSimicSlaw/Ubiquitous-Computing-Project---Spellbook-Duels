@@ -9,11 +9,14 @@ import Foundation
 import UIKit
 import SwiftData
 
-//@Model
+enum CardType: String, Codable {
+    case jinx, counterspell, curse, ward, charm, relic, potion
+}
+
 class PresentedCardModel: Identifiable {
     var name: String
     var text: String
-    var type: String
+    var type: CardType
     var cost: String
     var costVal: Int
     var element: Element
@@ -26,7 +29,7 @@ class PresentedCardModel: Identifiable {
     var hasActivated: Bool
     var numTargets: Int?
     
-    init(name: String, text: String, type: String, cost: String, costVal: Int, element: Element, image: UIImage?, icon: UIImage?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?) {
+    init(name: String, text: String, type: CardType, cost: String, costVal: Int, element: Element, image: UIImage?, icon: UIImage?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?) {
         self.name = name
         self.text = text
         self.type = type
