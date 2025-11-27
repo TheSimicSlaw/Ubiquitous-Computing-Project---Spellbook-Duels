@@ -40,36 +40,71 @@ struct FieldBackgroundView: View {
 }
 
 struct OpponentFieldView: View {
+    @EnvironmentObject var viewController: ViewController
+    
     var body: some View {
         VStack {
-            Image(systemName: "book")
-                .font(.system(size: 100))
-                .fontWeight(.thin)
-                .foregroundStyle(.white)
+            HStack {
+                Text("\(viewController.board.opponentAetherTotal) Ae")
+                    .font(.custom("InknutAntiqua-Regular", size: 30))
+                    .padding(.top)
+                Spacer()
+            }
+            .padding()
+//            Image(systemName: "book")
+//                .font(.system(size: 100))
+//                .fontWeight(.thin)
+//                .foregroundStyle(.white)
             
-            HStack(spacing: 24) {
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
+            HStack(spacing: 24) { // Opponent's Potion, Relic, and Charm Zones
+                if viewController.board.opponentPotion != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                    
+                }
+                if viewController.board.opponentRelic != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
+                if viewController.board.opponentCharm != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
             }
             
-            HStack(spacing: 19) {
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 80, height: 80)
-                    .padding(.top, 11)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
+            HStack(spacing: 19) { // Opponent's Ward, Snap, and Curse zones
+                if viewController.board.opponentWard != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                    
+                }
+                if viewController.board.opponentSnap != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 80, height: 80)
+                        .padding(.top, 11)
+                }
+                if viewController.board.opponentCurse != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
             }
             
             HStack {
@@ -87,8 +122,9 @@ struct OpponentFieldView: View {
 }
 
 struct PlayerFieldView: View {
+    @EnvironmentObject var viewController: ViewController
     var body: some View {
-        VStack {
+        VStack() {
             HStack {
                 Rectangle() // Discard Pile
                     .fill(.black.opacity(0.5))
@@ -99,34 +135,66 @@ struct PlayerFieldView: View {
 //                    .frame(width: 80, height: 80)
             }
             
-            HStack(spacing: 19) {
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 80, height: 80)
-                    .padding(.top, 11)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
+            HStack(spacing: 19) { // Player's Curse, Snap, and Ward Zone
+                if viewController.board.playerCurse != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                    
+                }
+                if viewController.board.playerSnap != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 80, height: 80)
+                        .padding(.top, 11)
+                }
+                if viewController.board.playerWard != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
+                
             }
             
-            HStack(spacing: 24) {
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
-                Rectangle()
-                    .stroke(.black, lineWidth: 2)
-                    .frame(width: 60, height: 60)
+            HStack(spacing: 24) { // Player's Player's Charm, Relic, and Potion Zone
+                if viewController.board.playerCharm != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                    
+                }
+                if viewController.board.playerRelic != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
+                if viewController.board.playerPotion != "" {
+                    
+                } else {
+                    Rectangle()
+                        .stroke(.black, lineWidth: 2)
+                        .frame(width: 60, height: 60)
+                }
             }
-            Image(systemName: "book")
-                .font(.system(size: 100))
-                .fontWeight(.thin)
-                .foregroundStyle(.white)
+            
+            HStack {
+                Text("\(viewController.board.opponentAetherTotal) Ae")
+                    .font(.custom("InknutAntiqua-Regular", size: 30))
+                    .padding(.top)
+                Spacer()
+                
+            }
+            .padding()
         }
         .padding(.top, 0)
     }
