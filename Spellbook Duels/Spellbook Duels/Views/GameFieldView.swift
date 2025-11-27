@@ -57,7 +57,7 @@ struct OpponentFieldView: View {
 //                .foregroundStyle(.white)
             
             HStack(spacing: 24) { // Opponent's Potion, Relic, and Charm Zones
-                if viewController.board.opponentPotion != "" {
+                if viewController.board.opponentPotion.card != "" {
                     
                 } else {
                     Rectangle()
@@ -65,14 +65,14 @@ struct OpponentFieldView: View {
                         .frame(width: 60, height: 60)
                     
                 }
-                if viewController.board.opponentRelic != "" {
+                if viewController.board.opponentRelic.card != "" {
                     
                 } else {
                     Rectangle()
                         .stroke(.black, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
-                if viewController.board.opponentCharm != "" {
+                if viewController.board.opponentCharm.card != "" {
                     
                 } else {
                     Rectangle()
@@ -82,7 +82,7 @@ struct OpponentFieldView: View {
             }
             
             HStack(spacing: 19) { // Opponent's Ward, Snap, and Curse zones
-                if viewController.board.opponentWard != "" {
+                if viewController.board.opponentWard.card != "" {
                     
                 } else {
                     Rectangle()
@@ -90,7 +90,7 @@ struct OpponentFieldView: View {
                         .frame(width: 60, height: 60)
                     
                 }
-                if viewController.board.opponentSnap != "" {
+                if viewController.board.opponentSnap.card != "" {
                     
                 } else {
                     Rectangle()
@@ -98,7 +98,7 @@ struct OpponentFieldView: View {
                         .frame(width: 80, height: 80)
                         .padding(.top, 11)
                 }
-                if viewController.board.opponentCurse != "" {
+                if viewController.board.opponentCurse.card != "" {
                     
                 } else {
                     Rectangle()
@@ -136,7 +136,7 @@ struct PlayerFieldView: View {
             }
             
             HStack(spacing: 19) { // Player's Curse, Snap, and Ward Zone
-                if viewController.board.playerCurse != "" {
+                if viewController.board.playerCurse.card != "" {
                     
                 } else {
                     Rectangle()
@@ -144,7 +144,7 @@ struct PlayerFieldView: View {
                         .frame(width: 60, height: 60)
                     
                 }
-                if viewController.board.playerSnap != "" {
+                if viewController.board.playerSnap.card != "" {
                     
                 } else {
                     Rectangle()
@@ -152,7 +152,7 @@ struct PlayerFieldView: View {
                         .frame(width: 80, height: 80)
                         .padding(.top, 11)
                 }
-                if viewController.board.playerWard != "" {
+                if viewController.board.playerWard.card != "" {
                     
                 } else {
                     Rectangle()
@@ -163,7 +163,7 @@ struct PlayerFieldView: View {
             }
             
             HStack(spacing: 24) { // Player's Player's Charm, Relic, and Potion Zone
-                if viewController.board.playerCharm != "" {
+                if viewController.board.playerCharm.card != "" {
                     
                 } else {
                     Rectangle()
@@ -171,14 +171,14 @@ struct PlayerFieldView: View {
                         .frame(width: 60, height: 60)
                     
                 }
-                if viewController.board.playerRelic != "" {
+                if viewController.board.playerRelic.card != "" {
                     
                 } else {
                     Rectangle()
                         .stroke(.black, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
-                if viewController.board.playerPotion != "" {
+                if viewController.board.playerPotion.card != "" {
                     
                 } else {
                     Rectangle()
