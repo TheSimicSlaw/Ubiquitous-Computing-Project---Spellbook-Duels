@@ -47,6 +47,7 @@ struct OpponentFieldView: View {
             HStack {
                 Text("\(viewController.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 30))
+                    .foregroundStyle(.white)
                     .padding(.top)
                 Spacer()
             }
@@ -61,7 +62,7 @@ struct OpponentFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                     
                 }
@@ -69,14 +70,14 @@ struct OpponentFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
                 if viewController.board.opponentCharm.card != "" {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
             }
@@ -86,7 +87,7 @@ struct OpponentFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                     
                 }
@@ -94,7 +95,7 @@ struct OpponentFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 80, height: 80)
                         .padding(.top, 11)
                 }
@@ -102,7 +103,7 @@ struct OpponentFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
             }
@@ -140,7 +141,7 @@ struct PlayerFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                     
                 }
@@ -148,7 +149,7 @@ struct PlayerFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 80, height: 80)
                         .padding(.top, 11)
                 }
@@ -156,7 +157,7 @@ struct PlayerFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
                 
@@ -167,7 +168,7 @@ struct PlayerFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                     
                 }
@@ -175,14 +176,14 @@ struct PlayerFieldView: View {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
                 if viewController.board.playerPotion.card != "" {
                     
                 } else {
                     Rectangle()
-                        .stroke(.black, lineWidth: 2)
+                        .stroke(.white, lineWidth: 2)
                         .frame(width: 60, height: 60)
                 }
             }
@@ -190,6 +191,7 @@ struct PlayerFieldView: View {
             HStack {
                 Text("\(viewController.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 30))
+                    .foregroundStyle(.white)
                     .padding(.top)
                 Spacer()
                 
