@@ -19,12 +19,54 @@ final class GameEngine {
 
 
     // MARK: - Game Actions
+    
+    func dealDamage(sourceOwner: PlayerSide, sourceZone: CardZone, target: PlayerSide, amount: Int) {
+        let sourceSlot = board.slot(for: sourceOwner, zone: sourceZone)
+        guard !sourceSlot.card.isEmpty else { return }
 
-    func gainAether(for player: PlayerSide, amount: Int) {
+        var context = DealDamageContext(source: sourceSlot, target: target, amount: amount)
+
+        for entry in monitors.dealDamage.entries where entry.step == .beforeDamage {
+            entry.handler(&context, &board)
+            if context.cancelled { return }
+        }
+
+        switch context.target {
+        case .player: loseAether(sourceSlot: context.source, target: context.target, amount: context.amount, aetherTotal: &board.playerAetherTotal)
+        case .opponent: loseAether(sourceSlot: context.source, target: context.target, amount: context.amount, aetherTotal: &board.opponentAetherTotal)
+        }
+
+        for entry in monitors.dealDamage.entries where entry.step == .afterDamage {
+            entry.handler(&context, &board)
+            if context.cancelled { break }
+        }
+    }
+    
+    func loseAether(sourceSlot: CardSlot, target: PlayerSide, amount: Int, aetherTotal: inout Int) {
+        guard !sourceSlot.card.isEmpty else { return }
+
+        var ctx = LoseAetherContext(source: sourceSlot, player: target, amount: amount)
+
+        for entry in monitors.loseAether.entries where entry.step == .beforeLose {
+            entry.handler(&ctx, &board)
+            if ctx.cancelled { return }
+        }
+
+        switch ctx.player {
+        case .player:   board.playerAetherTotal   -= ctx.amount
+        case .opponent: board.opponentAetherTotal -= ctx.amount
+        }
+
+        for entry in monitors.loseAether.entries where entry.step == .afterLose {
+            entry.handler(&ctx, &board)
+            if ctx.cancelled { break }
+        }
+    }
+
+    func gainAether(sourceOwner: PlayerSide, for player: PlayerSide, amount: Int) {
         var context = GainAetherContext(player: player, amount: amount)
 
-        // Run all gain-aether monitors in insertion order
-        for entry in monitors.gainAether.entries {
+        for entry in monitors.gainAether.entries where entry.step == .beforeGain {
             entry.handler(&context, &board)
             if context.cancelled { return }
         }
@@ -33,131 +75,74 @@ final class GameEngine {
         case .player:   board.playerAetherTotal   += context.amount
         case .opponent: board.opponentAetherTotal += context.amount
         }
+        
+        for entry in monitors.gainAether.entries where entry.step == .beforeGain {
+            entry.handler(&context, &board)
+            if context.cancelled { return }
+        }
     }
 
-    func dealDamage(sourceOwner: PlayerSide, sourceZone: CardZone, target: PlayerSide, amount: Int) {
-        let sourceSlot = board.slot(for: sourceOwner, zone: sourceZone)
-        guard !sourceSlot.card.isEmpty else { return }
+    func breakCard(sourceOwner: PlayerSide, zone: CardZone, target: CardSlot) {
+        let slot = board.slot(for: sourceOwner, zone: zone)
+        guard !slot.card.isEmpty else { return }
 
-        var ctx = DealDamageContext(source: sourceSlot, target: target, amount: amount)
+        var ctx = BreakCardContext(source: slot, target: target)
 
-        // STEP 0: beforeDamage monitors (Blaze, prevention, redirection, etc.)
-        for entry in monitors.dealDamage.entries where entry.step == .beforeDamage {
+        for entry in monitors.breakCard.entries where entry.step == .beforeBreak {
+            entry.handler(&ctx, &board)
+            if ctx.cancelled { return }
+        }
+        
+        //break
+        
+        for entry in monitors.breakCard.entries where entry.step == .afterBreak {
             entry.handler(&ctx, &board)
             if ctx.cancelled { return }
         }
 
-        // APPLY DAMAGE
-        switch ctx.target {
-        case .player:   board.playerAetherTotal   -= ctx.amount
-        case .opponent: board.opponentAetherTotal -= ctx.amount
-        }
-
-        // STEP 1: afterDamage monitors (triggers that care after damage is dealt)
-        for entry in monitors.dealDamage.entries where entry.step == .afterDamage {
-            entry.handler(&ctx, &board)
-            if ctx.cancelled { break }
-        }
     }
 
-    func breakCard(at owner: PlayerSide, zone: CardZone) {
-        let slot = board.slot(for: owner, zone: zone)
-        guard !slot.card.isEmpty else { return }
+    // MARK: - Card Monitor Registration
 
-        var ctx = BreakCardContext(target: slot)
-
-        // Run all break-card monitors
-        for entry in monitors.breakCard.entries {
-            entry.handler(&ctx, &board)
-            if ctx.cancelled { return }  // e.g. Cavern protecting something
-        }
-
-    }
-
-    // MARK: - Turn / counters (stub for you to expand)
-
-    func endTurn(for currentPlayer: PlayerSide) {
-        // Example: tick time counters, brew counters, etc.
-        // You can expand this to implement your duration/brew logic.
-        if currentPlayer == .player {
-            if let c = board.playerCurseTimeCounters {
-                board.playerCurseTimeCounters = max(0, c - 1)
-            }
-            if let w = board.playerWardTimeCounters {
-                board.playerWardTimeCounters = max(0, w - 1)
-            }
-            if let ch = board.playerCharmTimeCounters {
-                board.playerCharmTimeCounters = max(0, ch - 1)
-            }
-            if let b = board.playerPotionBrewCounters {
-                board.playerPotionBrewCounters = b + 1
-            }
-        } else {
-            if let c = board.opponentCurseTimeCounters {
-                board.opponentCurseTimeCounters = max(0, c - 1)
-            }
-            if let w = board.opponentWardTimeCounters {
-                board.opponentWardTimeCounters = max(0, w - 1)
-            }
-            if let ch = board.opponentCharmTimeCounters {
-                board.opponentCharmTimeCounters = max(0, ch - 1)
-            }
-            if let b = board.opponentPotionBrewCounters {
-                board.opponentPotionBrewCounters = b + 1
-            }
-        }
-
-        // You can also drop expired duration cards here by checking counters,
-        // and then calling `breakCard` for them.
-    }
-
-    // MARK: - Card → monitor wiring
-
-    /// Given a slot that just gained a card, attach its monitors.
     private func registerMonitorsForCard(in slot: CardSlot) {
         guard !slot.card.isEmpty,
               let card = PresentedCardModel.cardByCode[slot.card] else { return }
 
         switch card.cardCode {
 
-        // Aspect of Blaze: If you would deal damage, double it instead.
-        case "FAS":
-            monitors.addDealDamageMonitor(from: slot, step: .beforeDamage) { ctx, board in
-                // Card must still be on the field in that slot
+        case "FAS": // Aspect of Blaze
+            monitors.addDealDamageMonitor(from: slot, step: .beforeDamage) { context, board in
                 let current = board.slot(for: slot.owner, zone: slot.zone)
                 guard current.card == slot.card else { return }
-                // Only affects damage dealt by that player
-                guard ctx.source.owner == slot.owner else { return }
-                ctx.amount *= 2
+                guard context.source.owner == slot.owner else { return }
+                context.amount *= 2
             }
 
-        // Aspect of Breeze: If you would gain aether, gain twice that instead.
-        case "AAS":
-            monitors.addGainAetherMonitor(from: slot) { ctx, board in
+        case "AAS": // Aspect of Breeze
+            monitors.addGainAetherMonitor(from: slot, step: .beforeGain) { context, board in
                 let current = board.slot(for: slot.owner, zone: slot.zone)
                 guard current.card == slot.card else { return }
-                guard ctx.player == slot.owner else { return }
-                ctx.amount *= 2
+                guard context.player == slot.owner else { return }
+                context.amount *= 2
             }
 
-        // Aspect of Cavern: your Earth enchantments/items can't be broken.
-        case "EAS":
-            monitors.addBreakCardMonitor(from: slot) { ctx, board in
+        case "EAS": // Aspect of Cavern
+            monitors.addBreakCardMonitor(from: slot) { context, board in
                 let current = board.slot(for: slot.owner, zone: slot.zone)
                 guard current.card == slot.card else { return }
 
-                // Check: same owner, target is an Earth enchantment/item.
-                guard ctx.target.owner == slot.owner,
-                      let brokenCard = PresentedCardModel.cardByCode[ctx.target.card] else { return }
+                guard context.target.owner == slot.owner,
+                      let brokenCard = PresentedCardModel.cardByCode[context.target.card] else { return }
 
-                // "Enchantment" in your design is basically Wards + Charms + Relics?
                 let isEnchantmentOrItem = (brokenCard.type == .ward ||
                                            brokenCard.type == .charm ||
-                                           brokenCard.type == .relic)
+                                           brokenCard.type == .curse ||
+                                           brokenCard.type == .relic ||
+                                           brokenCard.type == .potion)
                 guard isEnchantmentOrItem,
                       brokenCard.element == .EARTH else { return }
 
-                ctx.cancelled = true
+                context.cancelled = true
             }
 
         default:

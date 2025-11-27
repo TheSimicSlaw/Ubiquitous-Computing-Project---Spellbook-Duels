@@ -14,10 +14,11 @@ struct GameEngineDeckVersion : Codable {
 }
 
 func storedDeckToGameDeck(deck : DeckListModel) -> GameEngineDeckVersion {
-    var cardcodelist : [String] = []
+    var cardcodelist: [String] = []
+    var cardCount: Int = 0
     for cardCode in deck.cardList {
-        var cardCount = deck.cardCounts[cardCode]!
-        for count in 1...cardCount {
+        cardCount = deck.cardCounts[cardCode]!
+        for _ in 1...cardCount {
             cardcodelist.append(cardCode)
         }
     }
