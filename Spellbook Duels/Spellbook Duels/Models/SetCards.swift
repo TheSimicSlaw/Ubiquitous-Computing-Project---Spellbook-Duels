@@ -58,7 +58,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 5,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 4
@@ -98,7 +98,7 @@ extension PresentedCardModel {
     // 6
         PresentedCardModel(
             name: "Sparking Projectile",
-            text: "Wards cannot reduce the damage this spell deals.",
+            text: "Wards cannot reduce the damage your attack spells deal.",
             type: .jinx,
             cost: "2 Aether",
             costVal: 2,
@@ -177,7 +177,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 3,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 11
@@ -194,7 +194,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 4,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 12
@@ -245,8 +245,8 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 3,
-            hasActivated: false,
-            numTargets: nil
+            hasActivated: true,
+            numTargets: 1
         ),
     // 15
         PresentedCardModel(
@@ -262,8 +262,8 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 3,
-            hasActivated: false,
-            numTargets: nil
+            hasActivated: true,
+            numTargets: 1
         ),
     // 16
         PresentedCardModel(
@@ -296,13 +296,13 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 5,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 18
         PresentedCardModel(
             name: "Bonecracker",
-            text: "An opponent attacking you takes 3 aether damage. Activate this only during your defend phase.",
+            text: "An opponent that attacked you this turn takes 3 aether damage.",
             type: .relic,
             cost: "1 Aether",
             costVal: 1,
@@ -330,7 +330,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: nil,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 20
@@ -347,7 +347,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 3,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 21
@@ -364,7 +364,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 4,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 22
@@ -381,7 +381,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: nil,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 23
@@ -398,7 +398,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: nil,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 24
@@ -415,7 +415,7 @@ extension PresentedCardModel {
             Strength: nil,
             duration: nil,
             speed: 4,
-            hasActivated: false,
+            hasActivated: true,
             numTargets: nil
         ),
     // 25
@@ -786,7 +786,7 @@ extension PresentedCardModel {
             image: UIImage(named: "Fireball"),
             icon: nil,
             cardCode: "FIR",
-            Strength: 2,
+            Strength: 0,
             duration: nil,
             speed: nil,
             hasActivated: false,
@@ -812,7 +812,7 @@ extension PresentedCardModel {
     // 48
         PresentedCardModel(
             name: "Countervailing Winds",
-            text: "Any player attacking you must choose another player to be the target of their attack (they can choose themselves). It becomes that player’s defend phase.",
+            text: "All damage that would be dealt to you during your defense phase is dealt to the attacking opponent instead.",
             type: .ward,
             cost: "5 Aether",
             costVal: 5,
@@ -922,11 +922,11 @@ extension PresentedCardModel {
             image: UIImage(named: "ScorchedSoul"),
             icon: nil,
             cardCode: "FCO",
-            Strength: nil,
+            Strength: 0,
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: 1
         ),
     // 55
         PresentedCardModel(
@@ -943,7 +943,7 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: 1
         ),
     // 56
         PresentedCardModel(
@@ -1007,7 +1007,7 @@ extension PresentedCardModel {
             image: UIImage(named: "Aetherblaze"),
             icon: nil,
             cardCode: "AAE",
-            Strength: nil,
+            Strength: 0,
             duration: nil,
             speed: nil,
             hasActivated: false,
@@ -1028,7 +1028,7 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: 0
         ),
     // 61
         PresentedCardModel(
@@ -1092,7 +1092,7 @@ extension PresentedCardModel {
             image: UIImage(named: "Drown"),
             icon: nil,
             cardCode: "WDR",
-            Strength: nil,
+            Strength: 0,
             duration: nil,
             speed: nil,
             hasActivated: false,
@@ -1118,7 +1118,7 @@ extension PresentedCardModel {
     // 66
         PresentedCardModel(
             name: "Counterburn",
-            text: "If you played a Water counterspell this turn, double this card’s strength",
+            text: "If you played a Water counterspell this turn, double this card’s strength.",
             type: .jinx,
             cost: "3 Aether",
             costVal: 3,
