@@ -57,7 +57,7 @@ struct BoardModel: Codable {
     var opponentHand: [String] = []
     var opponentDiscard: [String] = []
     
-    // MARK: Test Setters
+    // MARK: Setters
     
     mutating func setPlayer(curse: CardSlot, snap: CardSlot, ward: CardSlot, charm: CardSlot, relic: CardSlot, potion: CardSlot) {
         self.playerCurse = curse
@@ -75,6 +75,32 @@ struct BoardModel: Codable {
         self.opponentCharm = charm
         self.opponentRelic = relic
         self.opponentPotion = potion
+    }
+    
+    mutating func setSlot(_ slot: CardSlot) {
+        switch (slot.owner, slot.zone) {
+            case (.player, .curse):  playerCurse  = slot
+            case (.player, .snap):   playerSnap   = slot
+            case (.player, .ward):   playerWard   = slot
+            case (.player, .charm):  playerCharm  = slot
+            case (.player, .relic):  playerRelic  = slot
+            case (.player, .potion): playerPotion = slot
+
+            case (.opponent, .curse):  opponentCurse  = slot
+            case (.opponent, .snap):   opponentSnap   = slot
+            case (.opponent, .ward):   opponentWard   = slot
+            case (.opponent, .charm):  opponentCharm  = slot
+            case (.opponent, .relic):  opponentRelic  = slot
+            case (.opponent, .potion): opponentPotion = slot
+        }
+    }
+    
+    mutating func setHand(_ hand: [String], owner: PlayerSide) {
+        if owner == .player {
+            playerHand = hand
+        } else {
+            opponentHand = hand
+        }
     }
 }
 

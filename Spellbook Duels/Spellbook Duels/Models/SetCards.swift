@@ -234,7 +234,7 @@ extension PresentedCardModel {
     // 14
         PresentedCardModel(
             name: "Purifying Fire",
-            text: "Break a Curse. Each opponent takes 2 aether damage.",
+            text: "Break an opponent’s Curse. Each opponent takes 2 aether damage.",
             type: .potion,
             cost: "2 Turns to Brew",
             costVal: 2,

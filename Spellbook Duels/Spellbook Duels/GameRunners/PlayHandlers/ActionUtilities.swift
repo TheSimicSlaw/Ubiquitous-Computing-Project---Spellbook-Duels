@@ -34,6 +34,11 @@ enum DiscardFromFieldStep: Int, Codable {
     case afterDiscardFromField  = 1
 }
 
+enum PlayCardStep: Int, Codable {
+    case beforePlay = 0
+    case afterPlay  = 1
+}
+
 // MARK: - Contexts passed through monitors
 
 struct DealDamageContext {
@@ -67,6 +72,12 @@ struct DiscardFromFieldContext {
     var cardOwner: PlayerSide
 }
 
+struct PlayCardFieldContext {
+    var slot: CardSlot
+    var card: String
+    var cancelled: Bool = false
+}
+
 // MARK: - Monitor closure types
 
 typealias DealDamageMonitor = (_ context: inout DealDamageContext, _ board: inout BoardModel) -> Void
@@ -74,6 +85,7 @@ typealias LoseAetherMonitor = (_ context: inout LoseAetherContext,  _ board: ino
 typealias GainAetherMonitor = (_ context: inout GainAetherContext,  _ board: inout BoardModel) -> Void
 typealias BreakCardMonitor = (_ context: inout BreakCardContext,   _ board: inout BoardModel) -> Void
 typealias DiscardFromFieldMonitor = (_ context: inout DiscardFromFieldContext,   _ board: inout BoardModel) -> Void
+typealias PlayCardMonitor = (_ context: inout PlayCardFieldContext,   _ board: inout BoardModel) -> Void
 
 // MARK: - Per-store monitor entries
 
@@ -110,6 +122,13 @@ struct DiscardFromFieldMonitorEntry {
     let position: CardSlot
     let step: DiscardFromFieldStep
     let handler: DiscardFromFieldMonitor
+}
+
+struct PlayCardMonitorEntry {
+    let id: UUID
+    let position: CardSlot
+    let step: PlayCardStep
+    let handler: PlayCardMonitor
 }
 
 // MARK: - Per-type monitor stores
@@ -219,6 +238,27 @@ struct DiscardFromFieldMonitorStore {
     }
 }
 
+struct PlayCardMonitorStore {
+    private(set) var entries: [PlayCardMonitorEntry] = []
+
+    @discardableResult
+    mutating func add(at position: CardSlot, step: PlayCardStep, _ monitor: @escaping PlayCardMonitor) -> UUID {
+        let id = UUID()
+        entries.append(
+            PlayCardMonitorEntry(id: id, position: position, step: step, handler: monitor)
+        )
+        return id
+    }
+
+    mutating func remove(_ id: UUID) {
+        entries.removeAll { $0.id == id }
+    }
+
+    mutating func removeAll(at position: CardSlot) {
+        entries.removeAll { $0.position == position }
+    }
+}
+
 // MARK: - Complete Monitor Store/Registry
 
 enum MonitorKind: Codable {
@@ -227,6 +267,7 @@ enum MonitorKind: Codable {
     case gainAether
     case breakCard
     case discardFromField
+    case playCard
 }
 
 struct MonitorHandle: Codable, Hashable {
@@ -240,6 +281,7 @@ struct Monitors {
     var gainAether = GainAetherMonitorStore()
     var breakCard = BreakCardMonitorStore()
     var discardFromField = DiscardFromFieldMonitorStore()
+    var playCard = PlayCardMonitorStore()
 
     private var registry: [CardSlot: [MonitorHandle]] = [:]
 
@@ -277,10 +319,18 @@ struct Monitors {
     }
     
     @discardableResult
-    mutating func adddiscardFromFieldMonitor(from slot: CardSlot, step: DiscardFromFieldStep, _ monitor: @escaping DiscardFromFieldMonitor) -> UUID {
+    mutating func addDiscardFromFieldMonitor(from slot: CardSlot, step: DiscardFromFieldStep, _ monitor: @escaping DiscardFromFieldMonitor) -> UUID {
         let pos = slot
         let id = discardFromField.add(at: pos, step: step, monitor)
         register(handle: MonitorHandle(kind: .discardFromField, id: id), for: pos)
+        return id
+    }
+    
+    @discardableResult
+    mutating func addPlayCardMonitor(from slot: CardSlot, step: PlayCardStep, _ monitor: @escaping PlayCardMonitor) -> UUID {
+        let pos = slot
+        let id = playCard.add(at: pos, step: step, monitor)
+        register(handle: MonitorHandle(kind: .playCard, id: id), for: pos)
         return id
     }
 
@@ -301,6 +351,8 @@ struct Monitors {
                 breakCard.remove(handle.id)
             case .discardFromField:
                 discardFromField.remove(handle.id)
+            case .playCard:
+                playCard.remove(handle.id)
             }
         }
 

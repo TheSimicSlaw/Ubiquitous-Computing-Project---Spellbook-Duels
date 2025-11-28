@@ -13,8 +13,26 @@ final class GameEngine {
 
     init(initialBoard: BoardModel = BoardModel()) {
         self.board = initialBoard
+        
+        AbilityStack = [:]
+        AbilityStack[1] = []
+        AbilityStack[2] = []
+        AbilityStack[3] = []
+        AbilityStack[4] = []
+        AbilityStack[5] = []
+        
+        AbilitySources = [:]
+        AbilitySources[1] = []
+        AbilitySources[2] = []
+        AbilitySources[3] = []
+        AbilitySources[4] = []
+        AbilitySources[5] = []
     }
-
+    
+    // MARK: - Play Data Structures
+    
+    var AbilityStack: [Int: [CardEffect]]
+    var AbilitySources: [Int: [CardSlot]]
 
     // MARK: - Game Actions
     
@@ -84,21 +102,162 @@ final class GameEngine {
         let slot = board.slot(for: sourceOwner, zone: zone)
         guard !slot.card.isEmpty else { return }
 
-        var ctx = BreakCardContext(source: slot, target: target)
+        var context = BreakCardContext(source: slot, target: target)
 
         for entry in monitors.breakCard.entries where entry.step == .beforeBreak {
-            entry.handler(&ctx, &board)
-            if ctx.cancelled { return }
+            entry.handler(&context, &board)
+            if context.cancelled { return }
         }
         
-        //break
+        discardFromField(slot: target)
         
         for entry in monitors.breakCard.entries where entry.step == .afterBreak {
-            entry.handler(&ctx, &board)
-            if ctx.cancelled { return }
+            entry.handler(&context, &board)
+            if context.cancelled { return }
         }
 
     }
+    
+    private func discardFromField(slot: CardSlot) {
+        guard !slot.card.isEmpty else { return }
+
+        if let card = PresentedCardModel.cardByCode[slot.card],
+           let def = CardEffects.registry[card.cardCode] {
+            def.onLeaveField?(slot, self)
+        }
+
+        var context = DiscardFromFieldContext(card: slot, cardOwner: slot.owner)
+
+        for entry in monitors.discardFromField.entries where entry.step == .beforeDiscardFromField {
+            entry.handler(&context, &board)
+        }
+
+        monitors.removeAllMonitors(for: slot)
+
+        var empty = slot
+        empty.card = ""
+        empty.counters = [:]
+        board.setSlot(empty)
+
+        for entry in monitors.discardFromField.entries where entry.step == .afterDiscardFromField {
+            entry.handler(&context, &board)
+        }
+    }
+    
+    
+    func playCard(fromHandIndex index: Int, owner: PlayerSide, as zone: CardZone, hand: inout [String]) {
+        let cardCode = hand[index]
+        guard let card = PresentedCardModel.cardByCode[cardCode] else { return }
+
+        let slot = CardSlot(owner: owner, zone: zone, card: cardCode)
+
+        switch card.type {
+        case .jinx, .counterspell:
+            playSnap(card: card, into: slot)
+        case .curse, .ward, .charm, .relic, .potion:
+            playPermanent(card: card, into: slot)
+        }
+
+        hand.remove(at: index)
+        board.setHand(hand, owner: owner)
+    }
+    
+    private func playPermanent(card: PresentedCardModel, into slot: CardSlot) {
+        var context = PlayCardFieldContext(slot: slot, card: card.cardCode)
+        
+        for entry in monitors.playCard.entries where entry.step == .beforePlay {
+            entry.handler(&context, &board)
+            if context.cancelled { return }
+        }
+        
+        let existing = board.slot(for: slot.owner, zone: slot.zone)
+        if !existing.card.isEmpty {
+            discardFromField(slot: existing)
+        }
+
+        board.setSlot(slot)
+        registerMonitorsForCard(in: slot)
+
+        if let def = CardEffects.registry[card.cardCode] {
+            def.onEnterField?(slot, self)
+            def.onPlay?(slot, self)
+        }
+        
+        for entry in monitors.playCard.entries where entry.step == .afterPlay {
+            entry.handler(&context, &board)
+        }
+    }
+    
+    func playSnap(card: PresentedCardModel, into slot: CardSlot) {
+        board.setSlot(slot)
+        registerMonitorsForCard(in: slot)
+
+        if let def = CardEffects.registry[card.cardCode] {
+            def.onPlay?(slot, self)
+        }
+    }
+
+    private func cleanupSnapSpells() {
+        let playerSnap = board.playerSnap
+        if !playerSnap.card.isEmpty {
+            discardFromField(slot: playerSnap)
+        }
+
+        let opponentSnap = board.opponentSnap
+        if !opponentSnap.card.isEmpty {
+            discardFromField(slot: opponentSnap)
+        }
+    }
+    
+    func activatePotion(owner: PlayerSide) { // No timing check; UI will not allow activation unless the rules allow it
+        let slot: CardSlot = (owner == .player) ? board.playerPotion : board.opponentPotion
+        guard !slot.card.isEmpty,
+            let card = PresentedCardModel.cardByCode[slot.card],
+            let def = CardEffects.registry[card.cardCode] else { return }
+
+        AbilityStack[(PresentedCardModel.cardByCode[slot.card]?.speed)!]!.append(def.onActivate!)
+        AbilitySources[(PresentedCardModel.cardByCode[slot.card]?.speed)!]!.append(slot)
+        
+        discardFromField(slot: slot)
+    }
+    
+    func activateRelic(owner: PlayerSide) { // No timing check; UI will not allow activation unless the rules allow it
+        let slot: CardSlot = (owner == .player) ? board.playerRelic : board.opponentRelic
+        guard !slot.card.isEmpty,
+            let card = PresentedCardModel.cardByCode[slot.card],
+            let def = CardEffects.registry[card.cardCode] else { return }
+
+        AbilityStack[1]!.append(def.onActivate!)
+        AbilitySources[1]!.append(slot)
+
+        if slot.card != "WSE" {
+            discardFromField(slot: slot)
+        } else {
+            resolveStack()
+        }
+    }
+    
+    func resolveStack() {
+        for speed in 5...1 {
+            if AbilityStack[speed]!.count > 0 {
+                for i in 0..<AbilityStack[speed]!.count {
+                    AbilityStack[speed]![i](AbilitySources[speed]![i], self)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Phase Handling
+    
+    func resolveDefendPhase() {
+        
+    }
+    
+    func endDefendPhase() {
+        cleanupSnapSpells()
+    }
+    
+
 
     // MARK: - Card Monitor Registration
 
@@ -106,45 +265,8 @@ final class GameEngine {
         guard !slot.card.isEmpty,
               let card = PresentedCardModel.cardByCode[slot.card] else { return }
 
-        switch card.cardCode {
+        guard let def = CardEffects.registry[card.cardCode] else { return }
 
-        case "FAS": // Aspect of Blaze
-            monitors.addDealDamageMonitor(from: slot, step: .beforeDamage) { context, board in
-                let current = board.slot(for: slot.owner, zone: slot.zone)
-                guard current.card == slot.card else { return }
-                guard context.source.owner == slot.owner else { return }
-                context.amount *= 2
-            }
-
-        case "AAS": // Aspect of Breeze
-            monitors.addGainAetherMonitor(from: slot, step: .beforeGain) { context, board in
-                let current = board.slot(for: slot.owner, zone: slot.zone)
-                guard current.card == slot.card else { return }
-                guard context.player == slot.owner else { return }
-                context.amount *= 2
-            }
-
-        case "EAS": // Aspect of Cavern
-            monitors.addBreakCardMonitor(from: slot, step: .beforeBreak) { context, board in
-                let current = board.slot(for: slot.owner, zone: slot.zone)
-                guard current.card == slot.card else { return }
-
-                guard context.target.owner == slot.owner,
-                      let brokenCard = PresentedCardModel.cardByCode[context.target.card] else { return }
-
-                let isEnchantmentOrItem = (brokenCard.type == .ward ||
-                                           brokenCard.type == .charm ||
-                                           brokenCard.type == .curse ||
-                                           brokenCard.type == .relic ||
-                                           brokenCard.type == .potion)
-                guard isEnchantmentOrItem,
-                      brokenCard.element == .EARTH else { return }
-
-                context.cancelled = true
-            }
-
-        default:
-            break
-        }
+        def.registerMonitors?(slot, self)
     }
 }
