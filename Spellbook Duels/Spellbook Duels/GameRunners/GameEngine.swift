@@ -10,7 +10,7 @@ import Foundation
 final class GameEngine {
     var board: BoardModel
     
-    init(board: BoardModel) {
-        self.board = board
+    init(initialBoard: BoardModel = BoardModel()) {
+        self.board = initialBoard
     }
 }
