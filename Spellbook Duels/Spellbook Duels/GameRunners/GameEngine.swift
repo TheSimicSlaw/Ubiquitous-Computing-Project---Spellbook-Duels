@@ -10,11 +10,10 @@ import Foundation
 final class GameEngine {
 
     var board: BoardModel
-    var monitors: Monitors
+    var monitors: Monitors = Monitors()
 
     init(initialBoard: BoardModel = BoardModel()) {
         self.board = initialBoard
-        self.monitors = Monitors()
     }
 
 
