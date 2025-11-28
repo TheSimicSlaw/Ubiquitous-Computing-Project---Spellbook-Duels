@@ -16,7 +16,7 @@ struct BoardModel: Codable {
     var playerSnap: CardSlot = CardSlot(owner: .player, zone: .snap, card: "")
     var playerWard: CardSlot = CardSlot(owner: .player, zone: .ward, card: "")
     var playerCharm: CardSlot = CardSlot(owner: .player, zone: .charm, card: "")
-    var playerRelic: CardSlot = CardSlot(owner: .player, zone: .relic, card: "Purifying Fire")
+    var playerRelic: CardSlot = CardSlot(owner: .player, zone: .relic, card: "")
     var playerPotion: CardSlot = CardSlot(owner: .player, zone: .potion, card: "")
     var playerCurseTimeCounters: Int? = nil
     var playerWardTimeCounters: Int? = nil
