@@ -8,7 +8,6 @@
 import Foundation
 
 final class GameEngine {
-
     var board: BoardModel
     var monitors: Monitors = Monitors()
 
