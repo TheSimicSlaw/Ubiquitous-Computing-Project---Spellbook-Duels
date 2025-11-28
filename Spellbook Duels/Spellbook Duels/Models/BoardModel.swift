@@ -6,6 +6,9 @@
 //
 
 struct BoardModel: Codable {
+    
+    // MARK: Player Board State
+    
     var playerAetherTotal: Int = 18
     var opponentAetherTotal: Int = 18
     
@@ -27,6 +30,12 @@ struct BoardModel: Codable {
         }
     }
     
+    var playerDeck: [String] = []
+    var playerHand: [String] = []
+    var playerDiscard: [String] = []
+    
+    // MARK: Opponent Board State
+    
     var opponentCurse: CardSlot = CardSlot(owner: .opponent, zone: .curse, card: "")
     var opponentSnap: CardSlot = CardSlot(owner: .opponent, zone: .snap, card: "")
     var opponentWard: CardSlot = CardSlot(owner: .opponent, zone: .ward, card: "")
@@ -45,14 +54,11 @@ struct BoardModel: Codable {
         }
     }
     
-    var playerDeck: [String] = []
-    var playerHand: [String] = []
-    var playerDiscard: [String] = []
-    
     var opponentHand: [String] = []
     var opponentDiscard: [String] = []
     
-    // the following two functions are for test purposes
+    // MARK: Test Setters
+    
     mutating func setPlayer(curse: CardSlot, snap: CardSlot, ward: CardSlot, charm: CardSlot, relic: CardSlot, potion: CardSlot) {
         self.playerCurse = curse
         self.playerSnap = snap
