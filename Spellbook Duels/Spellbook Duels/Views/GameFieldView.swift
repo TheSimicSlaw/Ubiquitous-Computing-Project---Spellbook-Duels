@@ -28,14 +28,14 @@ struct GameFieldView: View {
 
 struct FieldBackgroundView: View {
     var body: some View {
-        GeometryReader { geo in
-            Image("gamefieldbg")
-                .resizable()
-                .scaledToFill()
-                .rotationEffect(Angle(degrees: 90))
-                .frame(width: geo.size.width, height: geo.size.height)
-                .ignoresSafeArea()
-        }
+            GeometryReader { geo in
+                Image("gamefieldbg")
+                    .resizable()
+                    .scaledToFill()
+                    .rotationEffect(Angle(degrees: 90))
+                    .frame(width: geo.size.width, height: geo.size.height)
+                //.ignoresSafeArea()
+            }
     }
 }
 
@@ -45,17 +45,10 @@ struct OpponentFieldView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("\(viewController.board.opponentAetherTotal) Ae")
-                    .font(.custom("InknutAntiqua-Regular", size: 30))
-                    .foregroundStyle(.white)
-                    .padding(.top)
+                
                 Spacer()
             }
             .padding()
-//            Image(systemName: "book")
-//                .font(.system(size: 100))
-//                .fontWeight(.thin)
-//                .foregroundStyle(.white)
             
             HStack(spacing: 24) { // Opponent's Potion, Relic, and Charm Zones
                 if viewController.board.opponentPotion.card != "" {
@@ -113,9 +106,10 @@ struct OpponentFieldView: View {
                     .fill(.black.opacity(0.5))
                     .frame(width: 80, height: 80)
                 Spacer()
-//                Rectangle() // Spellbook
-//                    .fill(Color("AccentOne"))
-//                    .frame(width: 80, height: 80)
+                Text("\(viewController.board.opponentAetherTotal) Ae")
+                    .font(.custom("InknutAntiqua-Regular", size: 20))
+                    .foregroundStyle(.white)
+                    .padding(.trailing)
             }
         }
         
@@ -124,6 +118,7 @@ struct OpponentFieldView: View {
 
 struct PlayerFieldView: View {
     @EnvironmentObject var viewController: ViewController
+    @State private var isShowing = false
     var body: some View {
         VStack() {
             HStack {
@@ -131,9 +126,10 @@ struct PlayerFieldView: View {
                     .fill(.black.opacity(0.5))
                     .frame(width: 80, height: 80)
                 Spacer()
-//                Rectangle() // Spellbook
-//                    .fill(Color("AccentOne"))
-//                    .frame(width: 80, height: 80)
+                Text("\(viewController.board.opponentAetherTotal) Ae")
+                    .font(.custom("InknutAntiqua-Regular", size: 20))
+                    .foregroundStyle(.white)
+                    .padding(.trailing)
             }
             
             HStack(spacing: 19) { // Player's Curse, Snap, and Ward Zone
@@ -173,7 +169,13 @@ struct PlayerFieldView: View {
                     
                 }
                 if viewController.board.playerRelic.card != "" {
-                    
+                    Image("testzone")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .onTapGesture(count: 2) {
+                            isShowing = true
+                        }
                 } else {
                     Rectangle()
                         .stroke(.white, lineWidth: 2)
@@ -187,12 +189,50 @@ struct PlayerFieldView: View {
                         .frame(width: 60, height: 60)
                 }
             }
+            .padding(.bottom)
+            .sheet(isPresented: $isShowing) {
+                ZStack {
+                    Color("AccentOne")
+                        .ignoresSafeArea()
+                    Text("Detailed View")
+                }
+                
+            }
             
+            ZStack {
+                Image("spellbook")
+                    .resizable()
+                    .scaledToFill()
+                HStack(spacing: 80) {
+                    VStack {
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                    }
+                    VStack {
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                        Rectangle()
+                            .stroke(.white, lineWidth: 2)
+                            .frame(width: 40, height: 40)
+                    }
+                }
+            }
+            .frame(width: 264, height: 157)
+            
+
             HStack {
-                Text("\(viewController.board.opponentAetherTotal) Ae")
-                    .font(.custom("InknutAntiqua-Regular", size: 30))
-                    .foregroundStyle(.white)
-                    .padding(.top)
+                
                 Spacer()
                 
             }
@@ -201,6 +241,14 @@ struct PlayerFieldView: View {
         .padding(.top, 0)
     }
 }
+
+//struct FieldCardView: View {
+//    var body: some View {
+//        
+//    }
+//}
+
+
 
 #Preview {
     GameFieldView()
