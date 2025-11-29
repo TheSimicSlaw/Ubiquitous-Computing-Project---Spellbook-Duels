@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CurseCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -17,9 +18,7 @@ struct CurseCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
-                }
+                
             } label: {
                 if let image = card.icon {
                     Image(uiImage: image)
@@ -48,6 +47,7 @@ struct CurseCardView: View {
 }
 
 struct SnapCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -57,9 +57,7 @@ struct SnapCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
-                }
+                
             } label: {
                 if let image = card.icon {
                     Image(uiImage: image)
@@ -88,6 +86,7 @@ struct SnapCardView: View {
 }
 
 struct WardCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -97,9 +96,7 @@ struct WardCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
-                }
+                
             } label: {
                 if let image = card.icon {
                     Image(uiImage: image)
@@ -128,6 +125,7 @@ struct WardCardView: View {
 }
 
 struct CharmCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -137,9 +135,7 @@ struct CharmCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
-                }
+                
             } label: {
                 if let image = card.icon {
                     Image(uiImage: image)
@@ -168,6 +164,7 @@ struct CharmCardView: View {
 }
 
 struct RelicCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -177,9 +174,12 @@ struct RelicCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
+                if (gameEngine.activePlayer == .player && gameEngine.phase == .action) {
+                    Button("Activate") {
+                        
+                    }
                 }
+                
             } label: {
                 if let image = card.icon {
                     Image(uiImage: image)
@@ -208,6 +208,7 @@ struct RelicCardView: View {
 }
 
 struct PotionCardView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -217,8 +218,10 @@ struct PotionCardView: View {
                 Button("View Details") {
                     showDetails = true
                 }
-                Button("Activate") {
-                    
+                if (gameEngine.activePlayer == .player && gameEngine.phase == .action) {
+                    Button("Activate") {
+                        
+                    }
                 }
             } label: {
                 if let image = card.icon {
