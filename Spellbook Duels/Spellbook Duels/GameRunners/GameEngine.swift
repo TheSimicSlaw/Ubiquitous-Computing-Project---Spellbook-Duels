@@ -4,15 +4,22 @@
 //
 //  Created by Ryan Camp on 11/26/25.
 //
+import Combine
+import SwiftUI
 
-import Foundation
-
-final class GameEngine {
-    var board: BoardModel
+final class GameEngine: ObservableObject {
+    @Published var board: BoardModel
+    @Published var phase: Phase
+    @Published var activePlayer: PlayerSide
+    @Published var isAskingToTurnPage: Bool
     var monitors: Monitors = Monitors()
 
-    init(initialBoard: BoardModel = BoardModel()) {
+    init(initialBoard: BoardModel = BoardModel(), playerFirst: PlayerSide, initialPhase: Phase, askingToTurnPage: Bool) {
         self.board = initialBoard
+        
+        self.activePlayer = playerFirst
+        self.phase = initialPhase
+        self.isAskingToTurnPage = askingToTurnPage
         
         AbilityStack = [:]
         AbilityStack[1] = []
@@ -27,7 +34,9 @@ final class GameEngine {
         AbilitySources[3] = []
         AbilitySources[4] = []
         AbilitySources[5] = []
+        
     }
+    
     
     // MARK: - Play Data Structures
     
@@ -118,7 +127,7 @@ final class GameEngine {
 
     }
     
-    private func discardFromField(slot: CardSlot) {
+    func discardFromField(slot: CardSlot) {
         guard !slot.card.isEmpty else { return }
 
         if let card = PresentedCardModel.cardByCode[slot.card],
@@ -150,6 +159,14 @@ final class GameEngine {
         guard let card = PresentedCardModel.cardByCode[cardCode] else { return }
 
         let slot = CardSlot(owner: owner, zone: zone, card: cardCode)
+        
+        if board.playerPotionBrewed || board.opponentPotionBrewed {
+            // check with players (active then nonactive) to check for potion activations
+            
+            if phase == .action {
+                resolveStack()
+            }
+        }
 
         switch card.type {
         case .jinx, .counterspell:
@@ -185,6 +202,18 @@ final class GameEngine {
         
         for entry in monitors.playCard.entries where entry.step == .afterPlay {
             entry.handler(&context, &board)
+        }
+        
+        switch (card.type, slot.owner) {
+        case (.charm, .player): board.playerCharmTimeCounters = 0; break
+        case (.curse, .player): board.playerCurseTimeCounters = 0; break
+        case (.ward, .player): board.playerWardTimeCounters = 0; break
+            
+        case (.charm, .opponent): board.opponentCharmTimeCounters = 0; break
+        case (.curse, .opponent): board.opponentCurseTimeCounters = 0; break
+        case (.ward, .opponent): board.opponentWardTimeCounters = 0; break
+            
+        default: break
         }
     }
     
@@ -247,14 +276,48 @@ final class GameEngine {
         }
     }
     
+    func incrementReplenishCounters() {
+        switch activePlayer {
+        case .player:
+            if board.playerCharmTimeCounters != nil { board.playerCharmTimeCounters! += 1 }
+            if board.playerCurseTimeCounters != nil { board.playerCurseTimeCounters! += 1 }
+            if board.playerWardTimeCounters != nil { board.playerWardTimeCounters! += 1 }
+            break
+        case .opponent:
+            if board.opponentCharmTimeCounters != nil { board.opponentCharmTimeCounters! += 1 }
+            if board.opponentCurseTimeCounters != nil { board.opponentCurseTimeCounters! += 1 }
+            if board.opponentWardTimeCounters != nil { board.opponentWardTimeCounters! += 1 }
+            break
+        }
+        if board.playerPotionBrewCounters != nil && board.playerPotionBrewed { board.playerPotionBrewCounters! += 1 }
+        if board.opponentPotionBrewCounters != nil && board.opponentPotionBrewed { board.opponentPotionBrewCounters! += 1 }
+    }
+    
     // MARK: - Phase Handling
     
     func resolveDefendPhase() {
-        
+        resolveStack()
+        cleanupSnapSpells()
+        endDefendPhase()
     }
     
     func endDefendPhase() {
-        cleanupSnapSpells()
+        if board.playerPotionBrewed || board.opponentPotionBrewed {
+            // check with players (active then nonactive) to check for potion activations
+        }
+        phase = .replenish
+        resolveReplenishPhase()
+    }
+    
+    func resolveReplenishPhase() {
+        gainAether(sourceOwner: activePlayer, for: activePlayer, amount: 1)
+        incrementReplenishCounters()
+        
+        // check with active player to see if they'd like to turn the page
+        
+        if board.playerPotionBrewed || board.opponentPotionBrewed {
+            // check with players (active then nonactive) to check for potion activations
+        }
     }
     
 
@@ -269,4 +332,8 @@ final class GameEngine {
 
         def.registerMonitors?(slot, self)
     }
+}
+
+enum Phase: Codable {
+    case defend, replenish, action, attack
 }
