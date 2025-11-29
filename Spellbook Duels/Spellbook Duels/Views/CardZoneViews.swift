@@ -191,6 +191,7 @@ struct HandZoneView: View {
                 Rectangle()
                     .stroke(.white, lineWidth: 2)
                     .frame(width: 40, height: 40)
+                Text("---")
             }
             
         }

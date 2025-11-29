@@ -89,6 +89,10 @@ struct OpponentFieldView: View {
                     .fill(.black.opacity(0.5))
                     .frame(width: 80, height: 80)
                 Spacer()
+                if (viewController.board.turn == .opponent) {
+                    OpponentPhaseView(phase: viewController.board.opponentPhase)
+                    Spacer()
+                }
                 Text("\(viewController.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
@@ -109,6 +113,11 @@ struct PlayerFieldView: View {
                     .fill(.black.opacity(0.5))
                     .frame(width: 80, height: 80)
                 Spacer()
+                if (viewController.board.turn == .player) {
+                    PlayerPhaseView()
+                    Spacer()
+                }
+                
                 Text("\(viewController.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
@@ -134,25 +143,30 @@ struct PlayerFieldView: View {
                     .resizable()
                     .scaledToFill()
                 HStack(spacing: 80) {
-                    VStack {
-                        HandZoneView(cardCode: "EAS")
-                        Rectangle()
-                            .stroke(.white, lineWidth: 2)
-                            .frame(width: 40, height: 40)
-                        Rectangle()
-                            .stroke(.white, lineWidth: 2)
-                            .frame(width: 40, height: 40)
+                    VStack(spacing: 10) {
+                        HandZoneView(cardCode: viewController.board.playerHand[0])
+                        HandZoneView(cardCode: viewController.board.playerHand[1])
+                        HandZoneView(cardCode: viewController.board.playerHand[2])
+//                        Rectangle()
+//                            .stroke(.white, lineWidth: 2)
+//                            .frame(width: 40, height: 40)
+//                        Rectangle()
+//                            .stroke(.white, lineWidth: 2)
+//                            .frame(width: 40, height: 40)
                     }
-                    VStack {
-                        Rectangle()
-                            .stroke(.white, lineWidth: 2)
-                            .frame(width: 40, height: 40)
-                        Rectangle()
-                            .stroke(.white, lineWidth: 2)
-                            .frame(width: 40, height: 40)
-                        Rectangle()
-                            .stroke(.white, lineWidth: 2)
-                            .frame(width: 40, height: 40)
+                    VStack(spacing: 10) {
+                        HandZoneView(cardCode: viewController.board.playerHand[3])
+                        HandZoneView(cardCode: viewController.board.playerHand[4])
+                        HandZoneView(cardCode: viewController.board.playerHand[5])
+//                        Rectangle()
+//                            .stroke(.white, lineWidth: 2)
+//                            .frame(width: 40, height: 40)
+//                        Rectangle()
+//                            .stroke(.white, lineWidth: 2)
+//                            .frame(width: 40, height: 40)
+//                        Rectangle()
+//                            .stroke(.white, lineWidth: 2)
+//                            .frame(width: 40, height: 40)
                     }
                 }
             }
@@ -165,13 +179,77 @@ struct PlayerFieldView: View {
     }
 }
 
-//struct FieldCardView: View {
-//    var body: some View {
-//        
-//    }
-//}
+struct PlayerPhaseView: View {
+    @EnvironmentObject var viewController: ViewController
+    @State private var phase: String = "DP"
+    var body: some View {
+        Menu {
+            if (viewController.board.playerPhase < GamePhase.replenish) {
+                Button("Replenish Phase") {
+                    viewController.board.playerPhase = .replenish
+                    phase = "RP"
+                }
+            }
+            if (viewController.board.playerPhase < GamePhase.action) {
+                Button("Action Phase") {
+                    viewController.board.playerPhase = .action
+                    phase = "ACP"
+                }
+            }
+            if (viewController.board.playerPhase < GamePhase.attack) {
+                Button("Attack Phase") {
+                    viewController.board.playerPhase = .attack
+                    phase = "ATP"
+                }
+            }
+            
+            Button("End Turn") {
+                viewController.board.playerPhase = .defend
+                viewController.board.turn = .opponent
+            }
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(.green)
+                    .frame(width: 50, height: 30)
+                Text("\(phase)")
+                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                    .foregroundStyle(.white)
+            }
+        }
+    }
+}
 
-
+struct OpponentPhaseView: View {
+    @State var phase: GamePhase
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.red)
+                .frame(width: 50, height: 30)
+            
+            if (phase == .defend) {
+                Text("DP")
+                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                    .foregroundStyle(.white)
+            } else if (phase == .replenish) {
+                Text("RP")
+                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                    .foregroundStyle(.white)
+            } else if (phase == .action) {
+                Text("ACP")
+                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                    .foregroundStyle(.white)
+            } else if (phase == .attack) {
+                Text("ATP")
+                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                    .foregroundStyle(.white)
+            }
+        }
+        
+    }
+}
 
 #Preview {
     GameFieldView()

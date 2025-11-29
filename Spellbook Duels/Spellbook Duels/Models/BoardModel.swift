@@ -11,6 +11,8 @@ struct BoardModel: Codable {
     
     var playerAetherTotal: Int = 18
     var opponentAetherTotal: Int = 18
+    var playerPhase: GamePhase = .defend
+    var turn: PlayerSide = .player
     
     var playerCurse: CardSlot = CardSlot(owner: .player, zone: .curse, card: "")
     var playerSnap: CardSlot = CardSlot(owner: .player, zone: .snap, card: "")
@@ -31,10 +33,12 @@ struct BoardModel: Codable {
     }
     
     var playerDeck: [String] = []
-    var playerHand: [String] = []
+    var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "", ""]
     var playerDiscard: [String] = []
     
     // MARK: Opponent Board State
+    
+    var opponentPhase: GamePhase = .defend
     
     var opponentCurse: CardSlot = CardSlot(owner: .opponent, zone: .curse, card: "")
     var opponentSnap: CardSlot = CardSlot(owner: .opponent, zone: .snap, card: "")
@@ -115,6 +119,10 @@ enum CardZone: Hashable, Codable {
 enum Counter: String, Hashable, Codable {
     case wave
     case stone
+}
+
+enum GamePhase: Codable, Comparable {
+    case defend, replenish, action, attack
 }
 
 struct CardSlot: Hashable, Codable {
