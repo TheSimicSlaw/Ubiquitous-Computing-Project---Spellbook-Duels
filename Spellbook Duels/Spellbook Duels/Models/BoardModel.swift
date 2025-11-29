@@ -33,7 +33,7 @@ struct BoardModel: Codable {
     }
     
     var playerDeck: [String] = []
-    var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "", ""]
+    var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "EAL", ""]
     var playerDiscard: [String] = ["EST"]
     
     // MARK: Opponent Board State

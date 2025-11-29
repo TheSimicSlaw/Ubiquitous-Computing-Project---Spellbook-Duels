@@ -90,7 +90,7 @@ struct OpponentFieldView: View {
                 DiscardPileView(discardPile: gameEngine.board.opponentDiscard)
 
                 Spacer()
-                if (gameEngine.board.turn == .opponent) {
+                if (gameEngine.activePlayer == .opponent) {
                     OpponentPhaseView(phase: viewController.board.opponentPhase)
                     Spacer()
                 }
@@ -113,7 +113,7 @@ struct PlayerFieldView: View {
             HStack {
                 DiscardPileView(discardPile: gameEngine.board.playerDiscard)
                 Spacer()
-                if (gameEngine.board.turn == .player) {
+                if (gameEngine.activePlayer == .player) {
                     PlayerPhaseView()
                     Spacer()
                 }
@@ -185,33 +185,33 @@ struct PlayerPhaseView: View {
     @State private var phase: String = "DP"
     var body: some View {
         Menu {
-            if (gameEngine.board.playerPhase < Phase.replenish) {
+            if (gameEngine.phase < Phase.replenish) {
                 Button("Replenish Phase") {
-                    gameEngine.board.playerPhase = .replenish
+                    gameEngine.phase = .replenish
                     phase = "RP"
                 }
             }
-            if (gameEngine.board.playerPhase < Phase.action) {
+            if (gameEngine.phase < Phase.action) {
                 Button("Action Phase") {
-                    viewController.board.playerPhase = .action
+                    gameEngine.phase = .action
                     phase = "ACP"
                 }
             }
-            if (gameEngine.board.playerPhase < Phase.attack) {
+            if (gameEngine.phase < Phase.attack) {
                 Button("Attack Phase") {
-                    viewController.board.playerPhase = .attack
+                    gameEngine.phase = .attack
                     phase = "ATP"
                 }
             }
-            if (gameEngine.board.playerPhase == .replenish) {
+            if (gameEngine.phase == .replenish) {
                 Button("Turn The Page") {
                     gameEngine.isAskingToTurnPage = true
                 }
             }
             
             Button("End Turn") {
-                gameEngine.board.playerPhase = .defend
-                gameEngine.board.turn = .opponent
+                gameEngine.phase = .defend
+                gameEngine.activePlayer = .opponent
                 gameEngine.isAskingToTurnPage = false
             }
         } label: {

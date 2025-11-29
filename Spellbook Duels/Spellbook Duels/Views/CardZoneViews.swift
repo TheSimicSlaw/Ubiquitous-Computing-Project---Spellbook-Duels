@@ -248,6 +248,7 @@ struct PotionCardView: View {
 }
 
 struct HandZoneView: View {
+    @EnvironmentObject var gameEngine: GameEngine
     @State var cardCode: String
     @State private var showDetails: Bool = false
     
@@ -258,9 +259,26 @@ struct HandZoneView: View {
                     Button("View Details") {
                         showDetails = true
                     }
-                    Button("Play") {
-                        
+                    if (gameEngine.activePlayer == .player) {
+                        if (gameEngine.phase == .defend && card.type == .ward) {
+                            Button("Play") {
+                                if gameEngine.board.playerWard.card == "" {
+                                    gameEngine.board.playerWard.card = cardCode
+                                } else {
+                                    
+                                }
+                            }
+                        } else if (gameEngine.phase == .action && (card.type != .curse || card.type != .counterspell)) {
+                            Button("Play") {
+                                
+                            }
+                        } else if (gameEngine.phase == .attack && (card.type == .curse || card.type == .counterspell) ) {
+                            Button("Play") {
+                                
+                            }
+                        }
                     }
+                    
                 } label: {
                     if let image = card.icon {
                         Image(uiImage: image)
