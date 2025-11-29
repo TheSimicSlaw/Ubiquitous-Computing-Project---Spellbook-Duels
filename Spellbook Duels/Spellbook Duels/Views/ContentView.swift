@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     @Query var decks: [DeckListModel]
     
     
@@ -34,5 +35,6 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(ViewController())
+        .environmentObject(GameEngine(playerFirst: .player, initialPhase: .defend, askingToTurnPage: false))
         .modelContainer(DeckListModel.precons)
 }

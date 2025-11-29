@@ -334,6 +334,6 @@ final class GameEngine: ObservableObject {
     }
 }
 
-enum Phase: Codable {
+enum Phase: Codable, Comparable {
     case defend, replenish, action, attack
 }

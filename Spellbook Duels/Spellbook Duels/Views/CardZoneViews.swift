@@ -9,21 +9,35 @@ import SwiftUI
 
 struct CurseCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -35,21 +49,35 @@ struct CurseCardView: View {
 
 struct SnapCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 80, height: 80)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -61,21 +89,35 @@ struct SnapCardView: View {
 
 struct WardCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -87,21 +129,35 @@ struct WardCardView: View {
 
 struct CharmCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -113,21 +169,35 @@ struct CharmCardView: View {
 
 struct RelicCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -139,21 +209,35 @@ struct RelicCardView: View {
 
 struct PotionCardView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             Menu {
                 Button("View Details") {
-                    
+                    showDetails = true
                 }
                 Button("Activate") {
                     
                 }
             } label: {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
+                if let image = card.icon {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                } else {
+                    Image("MenuBackgroundColor")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 60, height: 60)
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
+                }
             }
         } else {
             Rectangle()
@@ -165,22 +249,37 @@ struct PotionCardView: View {
 
 struct HandZoneView: View {
     @State var cardCode: String
+    @State private var showDetails: Bool = false
     
     var body: some View {
         if let card = PresentedCardModel.cardByCode[cardCode] {
             HStack {
                 Menu {
                     Button("View Details") {
-                        
+                        showDetails = true
                     }
-                    Button("Activate") {
+                    Button("Play") {
                         
                     }
                 } label: {
-                    Image(uiImage: card.icon!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 40, height: 40)
+                    if let image = card.icon {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .sheet(isPresented: $showDetails) {
+                                DetailedCardView(card: card)
+                            }
+                    } else {
+                        Image("MenuBackgroundColor")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .sheet(isPresented: $showDetails) {
+                                DetailedCardView(card: card)
+                            }
+                    }
+                    
                 }
                 Text("\(card.cardCode)")
                     .font(.custom("InknutAntiqua-Regular", size: 10))

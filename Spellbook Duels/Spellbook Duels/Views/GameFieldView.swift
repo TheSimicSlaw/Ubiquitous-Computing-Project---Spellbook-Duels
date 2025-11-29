@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameFieldView: View {
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     
     @State var isAskingToTurnPage: Bool = false
     
@@ -69,6 +70,7 @@ struct FieldBackgroundView: View {
 
 struct OpponentFieldView: View {
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     
     var body: some View {
         VStack {
@@ -85,15 +87,14 @@ struct OpponentFieldView: View {
             }
             
             HStack {
-                Rectangle() // Discard Pile
-                    .fill(.black.opacity(0.5))
-                    .frame(width: 80, height: 80)
+                DiscardPileView(discardPile: gameEngine.board.opponentDiscard)
+
                 Spacer()
-                if (viewController.board.turn == .opponent) {
+                if (gameEngine.board.turn == .opponent) {
                     OpponentPhaseView(phase: viewController.board.opponentPhase)
                     Spacer()
                 }
-                Text("\(viewController.board.opponentAetherTotal) Ae")
+                Text("\(gameEngine.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
                     .padding(.trailing)
@@ -105,20 +106,19 @@ struct OpponentFieldView: View {
 
 struct PlayerFieldView: View {
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     //@State private var isShowing = false
     var body: some View {
         VStack() {
             HStack {
-                Rectangle() // Discard Pile
-                    .fill(.black.opacity(0.5))
-                    .frame(width: 80, height: 80)
+                DiscardPileView(discardPile: gameEngine.board.playerDiscard)
                 Spacer()
-                if (viewController.board.turn == .player) {
+                if (gameEngine.board.turn == .player) {
                     PlayerPhaseView()
                     Spacer()
                 }
                 
-                Text("\(viewController.board.opponentAetherTotal) Ae")
+                Text("\(gameEngine.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
                     .padding(.trailing)
@@ -144,9 +144,9 @@ struct PlayerFieldView: View {
                     .scaledToFill()
                 HStack(spacing: 80) {
                     VStack(spacing: 10) {
-                        HandZoneView(cardCode: viewController.board.playerHand[0])
-                        HandZoneView(cardCode: viewController.board.playerHand[1])
-                        HandZoneView(cardCode: viewController.board.playerHand[2])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[0])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[1])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[2])
 //                        Rectangle()
 //                            .stroke(.white, lineWidth: 2)
 //                            .frame(width: 40, height: 40)
@@ -155,9 +155,9 @@ struct PlayerFieldView: View {
 //                            .frame(width: 40, height: 40)
                     }
                     VStack(spacing: 10) {
-                        HandZoneView(cardCode: viewController.board.playerHand[3])
-                        HandZoneView(cardCode: viewController.board.playerHand[4])
-                        HandZoneView(cardCode: viewController.board.playerHand[5])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[3])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[4])
+                        HandZoneView(cardCode: gameEngine.board.playerHand[5])
 //                        Rectangle()
 //                            .stroke(.white, lineWidth: 2)
 //                            .frame(width: 40, height: 40)
@@ -181,31 +181,38 @@ struct PlayerFieldView: View {
 
 struct PlayerPhaseView: View {
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     @State private var phase: String = "DP"
     var body: some View {
         Menu {
-            if (viewController.board.playerPhase < GamePhase.replenish) {
+            if (gameEngine.board.playerPhase < Phase.replenish) {
                 Button("Replenish Phase") {
-                    viewController.board.playerPhase = .replenish
+                    gameEngine.board.playerPhase = .replenish
                     phase = "RP"
                 }
             }
-            if (viewController.board.playerPhase < GamePhase.action) {
+            if (gameEngine.board.playerPhase < Phase.action) {
                 Button("Action Phase") {
                     viewController.board.playerPhase = .action
                     phase = "ACP"
                 }
             }
-            if (viewController.board.playerPhase < GamePhase.attack) {
+            if (gameEngine.board.playerPhase < Phase.attack) {
                 Button("Attack Phase") {
                     viewController.board.playerPhase = .attack
                     phase = "ATP"
                 }
             }
+            if (gameEngine.board.playerPhase == .replenish) {
+                Button("Turn The Page") {
+                    gameEngine.isAskingToTurnPage = true
+                }
+            }
             
             Button("End Turn") {
-                viewController.board.playerPhase = .defend
-                viewController.board.turn = .opponent
+                gameEngine.board.playerPhase = .defend
+                gameEngine.board.turn = .opponent
+                gameEngine.isAskingToTurnPage = false
             }
         } label: {
             ZStack {
@@ -221,7 +228,7 @@ struct PlayerPhaseView: View {
 }
 
 struct OpponentPhaseView: View {
-    @State var phase: GamePhase
+    @State var phase: Phase
     
     var body: some View {
         ZStack {
@@ -251,7 +258,30 @@ struct OpponentPhaseView: View {
     }
 }
 
+struct DiscardPileView: View {
+    //@EnvironmentObject var gameEngine: GameEngine
+    
+    @State var discardPile: [String]
+    var body: some View {
+        if (discardPile.isEmpty) {
+            Rectangle() // Discard Pile
+                .fill(.black.opacity(0.5))
+                .frame(width: 80, height: 80)
+        } else {
+            let cardCode = discardPile[discardPile.count - 1]
+            if let card = PresentedCardModel.cardByCode[cardCode] {
+                Image(uiImage: card.icon!)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 80)
+                    .opacity(0.5)
+            }
+        }
+    }
+}
+
 #Preview {
     GameFieldView()
         .environmentObject(ViewController())
+        .environmentObject(GameEngine(playerFirst: .player, initialPhase: .defend, askingToTurnPage: false))
 }
