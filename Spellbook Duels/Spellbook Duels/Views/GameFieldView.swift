@@ -10,6 +10,8 @@ import SwiftUI
 struct GameFieldView: View {
     @EnvironmentObject var viewController: ViewController
     
+    @State var isAskingToTurnPage: Bool = false
+    
     var body: some View {
         ZStack {
             FieldBackgroundView()
@@ -24,7 +26,33 @@ struct GameFieldView: View {
                 PlayerFieldView()
             }
         }
+        .newPopup(isPresented: $isAskingToTurnPage) {
+            askingToTurnPagePopupContent
+        }
     }
+    
+    // MARK: Popups
+    
+    private var askingToTurnPagePopupContent: some View {
+        GeometryReader { geo in
+            let maxWidth = min(geo.size.width * 0.8, 380)
+            
+            
+            VStack(spacing:12) {
+                
+                //.padding(.top, 8)
+            }
+            .frame(width: maxWidth)
+            .padding(.vertical, 16)
+            .frame(
+                width: geo.size.width,
+                height: geo.size.height,
+                alignment: .center
+            )
+        }
+        .frame(height: 260)
+    }
+    
 }
 
 struct FieldBackgroundView: View {
