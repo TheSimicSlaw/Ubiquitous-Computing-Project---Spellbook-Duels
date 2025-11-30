@@ -91,7 +91,7 @@ struct OpponentFieldView: View {
 
                 Spacer()
                 if (gameEngine.activePlayer == .opponent) {
-                    OpponentPhaseView(phase: viewController.board.opponentPhase)
+                    OpponentPhaseView(phase: viewController.board.phase)
                     Spacer()
                 }
                 Text("\(gameEngine.board.opponentAetherTotal) Ae")
@@ -283,5 +283,5 @@ struct DiscardPileView: View {
 #Preview {
     GameFieldView()
         .environmentObject(ViewController())
-        .environmentObject(GameEngine(playerFirst: .player, initialPhase: .defend, askingToTurnPage: false))
+        .environmentObject(GameEngine())
 }

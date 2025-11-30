@@ -18,6 +18,7 @@ struct Spellbook_DuelsApp: App {
     }
     @StateObject var viewController = ViewController()
     @StateObject var firebaseController = DatabaseController()
+    @StateObject var gameEngine = GameEngine()
     
     var body: some Scene {
         WindowGroup {
@@ -25,6 +26,7 @@ struct Spellbook_DuelsApp: App {
                 .modelContainer(for: DeckListModel.self)
                 .environmentObject(viewController)
                 .environmentObject(firebaseController)
+                .environmentObject(gameEngine)
         }
     }
 }

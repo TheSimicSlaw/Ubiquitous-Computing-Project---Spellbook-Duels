@@ -28,8 +28,9 @@ class PresentedCardModel: Identifiable {
     var speed: Int?
     var hasActivated: Bool
     var numTargets: Int?
+    var targetTypes: [(CardType, PlayerSide?)]?
     
-    init(name: String, text: String, type: CardType, cost: String, costVal: Int, element: Element, image: UIImage?, icon: UIImage?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?) {
+    init(name: String, text: String, type: CardType, cost: String, costVal: Int, element: Element, image: UIImage?, icon: UIImage?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?, targetTypes: [(CardType, PlayerSide?)]?) {
         self.name = name
         self.text = text
         self.type = type
@@ -44,5 +45,6 @@ class PresentedCardModel: Identifiable {
         self.speed = speed
         self.hasActivated = hasActivated
         self.numTargets = numTargets
+        self.targetTypes = targetTypes
     }
 }

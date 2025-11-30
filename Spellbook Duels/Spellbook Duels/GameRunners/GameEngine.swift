@@ -9,18 +9,38 @@ import SwiftUI
 
 final class GameEngine: ObservableObject {
     @Published var board: BoardModel
-    @Published var phase: Phase
-    @Published var activePlayer: PlayerSide
-    @Published var isAskingToTurnPage: Bool
+    @Published var isAskingToTurnPage: Bool = false
     var monitors: Monitors = Monitors()
+    
+    var activePlayer: PlayerSide { get { board.activePlayer } set { board.activePlayer = newValue } }
+    var phase: Phase { get { board.phase } set { board.phase = newValue } }
+    var isPlayersTurn: Bool { board.activePlayer == .player }
 
-    init(initialBoard: BoardModel = BoardModel(), playerFirst: PlayerSide, initialPhase: Phase, askingToTurnPage: Bool) {
-        self.board = initialBoard
+    init() {
+        self.board = BoardModel()
         
-        self.activePlayer = playerFirst
-        self.phase = initialPhase
-        self.isAskingToTurnPage = askingToTurnPage
+        AbilityStack = [:]
+        AbilitySources = [:]
         
+        resetStackAndSources()
+    }
+    
+    // MARK: - New Game
+    func startNewGame(initialBoard: BoardModel = BoardModel(), playerFirst: PlayerSide, initialPhase: Phase = .defend) {
+        board = initialBoard
+        board.activePlayer = playerFirst
+        board.phase = initialPhase
+        isAskingToTurnPage = false
+        monitors = Monitors()
+        resetStackAndSources()
+    }
+    
+    // MARK: - Play Data Structures
+    
+    var AbilityStack: [Int: [CardEffect]]
+    var AbilitySources: [Int: [CardSlot]]
+    
+    func resetStackAndSources() {
         AbilityStack = [:]
         AbilityStack[1] = []
         AbilityStack[2] = []
@@ -34,14 +54,7 @@ final class GameEngine: ObservableObject {
         AbilitySources[3] = []
         AbilitySources[4] = []
         AbilitySources[5] = []
-        
     }
-    
-    
-    // MARK: - Play Data Structures
-    
-    var AbilityStack: [Int: [CardEffect]]
-    var AbilitySources: [Int: [CardSlot]]
 
     // MARK: - Game Actions
     
@@ -163,7 +176,7 @@ final class GameEngine: ObservableObject {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
             // check with players (active then nonactive) to check for potion activations
             
-            if phase == .action {
+            if board.phase == .action {
                 resolveStack()
             }
         }
@@ -277,7 +290,7 @@ final class GameEngine: ObservableObject {
     }
     
     func incrementReplenishCounters() {
-        switch activePlayer {
+        switch board.activePlayer {
         case .player:
             if board.playerCharmTimeCounters != nil { board.playerCharmTimeCounters! += 1 }
             if board.playerCurseTimeCounters != nil { board.playerCurseTimeCounters! += 1 }
@@ -305,12 +318,12 @@ final class GameEngine: ObservableObject {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
             // check with players (active then nonactive) to check for potion activations
         }
-        phase = .replenish
+        board.phase = .replenish
         resolveReplenishPhase()
     }
     
     func resolveReplenishPhase() {
-        gainAether(sourceOwner: activePlayer, for: activePlayer, amount: 1)
+        gainAether(sourceOwner: board.activePlayer, for: board.activePlayer, amount: 1)
         incrementReplenishCounters()
         
         // check with active player to see if they'd like to turn the page

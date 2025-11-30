@@ -35,6 +35,6 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(ViewController())
-        .environmentObject(GameEngine(playerFirst: .player, initialPhase: .defend, askingToTurnPage: false))
+        .environmentObject(GameEngine())
         .modelContainer(DeckListModel.precons)
 }

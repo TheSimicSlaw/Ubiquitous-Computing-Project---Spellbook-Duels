@@ -25,7 +25,8 @@ extension PresentedCardModel {
             duration: 5,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 2
         PresentedCardModel(
@@ -42,7 +43,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 3
         PresentedCardModel(
@@ -59,7 +61,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 5,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 4
         PresentedCardModel(
@@ -76,7 +79,8 @@ extension PresentedCardModel {
             duration: 6,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 5
         PresentedCardModel(
@@ -93,7 +97,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 6
         PresentedCardModel(
@@ -110,7 +115,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 7
         PresentedCardModel(
@@ -127,7 +133,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 8
         PresentedCardModel(
@@ -144,7 +151,8 @@ extension PresentedCardModel {
             duration: 4,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 9
         PresentedCardModel(
@@ -161,7 +169,8 @@ extension PresentedCardModel {
             duration: 6,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 10
         PresentedCardModel(
@@ -178,7 +187,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 3,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 11
         PresentedCardModel(
@@ -195,7 +205,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 4,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 12
         PresentedCardModel(
@@ -212,7 +223,8 @@ extension PresentedCardModel {
             duration: 4,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 13
         PresentedCardModel(
@@ -229,7 +241,8 @@ extension PresentedCardModel {
             duration: 4,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 14
         PresentedCardModel(
@@ -246,7 +259,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 3,
             hasActivated: true,
-            numTargets: 1
+            numTargets: 1,
+            targetTypes: [(.curse, .opponent)]
         ),
     // 15
         PresentedCardModel(
@@ -263,7 +277,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 3,
             hasActivated: true,
-            numTargets: 1
+            numTargets: 1,
+            targetTypes: [(.ward, nil)]
         ),
     // 16
         PresentedCardModel(
@@ -280,7 +295,8 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 17
         PresentedCardModel(
@@ -297,7 +313,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 5,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 18
         PresentedCardModel(
@@ -314,7 +331,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 19
         PresentedCardModel(
@@ -331,7 +349,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 20
         PresentedCardModel(
@@ -348,7 +367,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 3,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 21
         PresentedCardModel(
@@ -365,7 +385,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 4,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 22
         PresentedCardModel(
@@ -382,7 +403,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 23
         PresentedCardModel(
@@ -399,7 +421,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 24
         PresentedCardModel(
@@ -416,7 +439,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 4,
             hasActivated: true,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 25
         PresentedCardModel(
@@ -433,7 +457,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 26
         PresentedCardModel(
@@ -450,7 +475,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 27
         PresentedCardModel(
@@ -467,7 +493,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 28
         PresentedCardModel(
@@ -484,7 +511,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 29
         PresentedCardModel(
@@ -501,7 +529,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 30
         PresentedCardModel(
@@ -518,7 +547,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 31
         PresentedCardModel(
@@ -535,7 +565,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 32
         PresentedCardModel(
@@ -552,7 +583,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 33
         PresentedCardModel(
@@ -569,7 +601,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 34
         PresentedCardModel(
@@ -586,7 +619,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 35
         PresentedCardModel(
@@ -603,7 +637,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 36
         PresentedCardModel(
@@ -620,7 +655,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 37
         PresentedCardModel(
@@ -637,7 +673,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 38
         PresentedCardModel(
@@ -654,7 +691,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 39
         PresentedCardModel(
@@ -671,7 +709,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 40
         PresentedCardModel(
@@ -688,7 +727,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 41
         PresentedCardModel(
@@ -705,7 +745,8 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 42
         PresentedCardModel(
@@ -722,7 +763,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 43
         PresentedCardModel(
@@ -739,7 +781,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 44
         PresentedCardModel(
@@ -756,7 +799,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 45
         PresentedCardModel(
@@ -773,7 +817,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 46
         PresentedCardModel(
@@ -790,7 +835,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 47
         PresentedCardModel(
@@ -807,7 +853,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 48
         PresentedCardModel(
@@ -824,7 +871,8 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 49
         PresentedCardModel(
@@ -841,7 +889,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 50
         PresentedCardModel(
@@ -858,7 +907,8 @@ extension PresentedCardModel {
             duration: 4,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 51
         PresentedCardModel(
@@ -875,7 +925,8 @@ extension PresentedCardModel {
             duration: 6,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 52
         PresentedCardModel(
@@ -892,7 +943,8 @@ extension PresentedCardModel {
             duration: 4,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 53
         PresentedCardModel(
@@ -909,7 +961,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 54
         PresentedCardModel(
@@ -926,7 +979,8 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: 1
+            numTargets: 1,
+            targetTypes: [(.charm, nil)]
         ),
     // 55
         PresentedCardModel(
@@ -943,7 +997,8 @@ extension PresentedCardModel {
             duration: 2,
             speed: nil,
             hasActivated: false,
-            numTargets: 1
+            numTargets: nil, // The ward in question will be handled by a monitor
+            targetTypes: nil
         ),
     // 56
         PresentedCardModel(
@@ -960,7 +1015,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 57
         PresentedCardModel(
@@ -977,7 +1033,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 58
         PresentedCardModel(
@@ -994,7 +1051,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 59
         PresentedCardModel(
@@ -1011,7 +1069,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 60
         PresentedCardModel(
@@ -1028,7 +1087,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: 0
+            numTargets: 0,
+            targetTypes: [(.potion, nil), (.relic, nil)] // This is a 2-player client, so it's just up to 2. The targets will vary based on what they pay for N
         ),
     // 61
         PresentedCardModel(
@@ -1045,7 +1105,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 62
         PresentedCardModel(
@@ -1062,7 +1123,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 63
         PresentedCardModel(
@@ -1079,7 +1141,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: 4,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 64
         PresentedCardModel(
@@ -1096,7 +1159,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 65
         PresentedCardModel(
@@ -1113,7 +1177,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 66
         PresentedCardModel(
@@ -1130,7 +1195,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 67
         PresentedCardModel(
@@ -1147,7 +1213,8 @@ extension PresentedCardModel {
             duration: 3,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil
         ),
     // 68
         PresentedCardModel(
@@ -1164,7 +1231,8 @@ extension PresentedCardModel {
             duration: nil,
             speed: nil,
             hasActivated: false,
-            numTargets: nil
+            numTargets: nil,
+            targetTypes: nil // Defending player chooses
         )
     ]
     
