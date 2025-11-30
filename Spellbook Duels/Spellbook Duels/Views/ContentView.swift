@@ -14,20 +14,25 @@ struct ContentView: View {
     @EnvironmentObject var gameEngine: GameEngine
     @Query var decks: [DeckListModel]
     
-    
     var body: some View {
-       NavigationStack() {
-            TabView {
-                PlayMenuView()
-                    .tabItem {
-                        Label("Duel", systemImage: "wand.and.outline")
-                    }
-                    
-                DecksMenuView()
-                    .tabItem {
-                        Label("Library", systemImage: "book")
-                    }
-            }
+        if (viewController.inGame) {
+            GameFieldView()
+        } else if (viewController.isWaiting || viewController.isSearching) {
+            LoadingGameView()
+        } else {
+            NavigationStack() {
+                 TabView {
+                     PlayMenuView()
+                         .tabItem {
+                             Label("Duel", systemImage: "wand.and.outline")
+                         }
+                         
+                     DecksMenuView()
+                         .tabItem {
+                             Label("Library", systemImage: "book")
+                         }
+                 }
+             }
         }
     }
 }
@@ -36,5 +41,6 @@ struct ContentView: View {
     ContentView()
         .environmentObject(ViewController())
         .environmentObject(GameEngine())
+        .environmentObject(DatabaseController())
         .modelContainer(DeckListModel.precons)
 }

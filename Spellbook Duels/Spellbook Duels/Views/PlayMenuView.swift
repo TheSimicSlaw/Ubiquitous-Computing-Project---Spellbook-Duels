@@ -49,7 +49,7 @@ struct PlayMenuView: View {
                     .padding(.bottom, 20)
                     
                     // technically works, but uses an outdated method. Will need to change later
-                    NavigationLink(destination: GameFieldView(),isActive: $navigating) {
+                    NavigationLink(destination: LobbyView(),isActive: $navigating) {
                         EmptyView()
                     }
                 }
@@ -63,13 +63,8 @@ struct PlayMenuView: View {
     }
     
     func startLoading() {
-            isLoading = true
-            // Simulate network delay or work
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                isLoading = false
-                navigating = true
-            }
-        }
+        navigating = true
+    }
 }
 
 

@@ -13,18 +13,18 @@ class DatabaseController: ObservableObject {
     @Published var player = Player()
     @Published var opponent = Player()
     @Published var turn: String = "" // will store the id of whoever's turn it is
-    @Published var playerHand: [String] = [] // stores all the cards in the players hand
+    //@Published var playerHand: [String] = [] // stores all the cards in the players hand
 
-    @Published var discardPile: [String] = [] // will store the codes of the cards in the discard pile
-    @Published var spellBook: [String] = []
+    //@Published var discardPile: [String] = [] // will store the codes of the cards in the discard pile
+    //@Published var spellBook: [String] = []
     
     
-    @Published var playerCardZones: [String: String] = [:] // ["zone name" : "card occupying the zone"]
-    @Published var opponentCardZones: [String: String] = [:]
+    //@Published var playerCardZones: [String: String] = [:] // ["zone name" : "card occupying the zone"]
+    //@Published var opponentCardZones: [String: String] = [:]
     
     private var ref: DatabaseReference = Database.database().reference()
 
-    func createMatch(matchCode: String, playerName: String) {
+    func createMatch(matchCode: String) {
         let newMatchRef = self.ref.child("matches/\(matchCode)")
         newMatchRef.setValue([
             "code": "\(matchCode)",
@@ -39,12 +39,12 @@ class DatabaseController: ObservableObject {
         }
         
         newPlayerRef.setValue([
-            "name": "\(playerName)"
+            "name": "\(self.player.name)"
         ])
         hostGetOpponent(matchCode: matchCode)
     }
     
-    func joinMatch(matchCode: String, playerName: String) {
+    func joinMatch(matchCode: String) {
         let playersRef = self.ref.child("matches/\(matchCode)/players").childByAutoId()
         
         if let playerID = playersRef.key {
@@ -52,7 +52,7 @@ class DatabaseController: ObservableObject {
         }
         
         playersRef.setValue([
-            "name": "\(playerName)"
+            "name": "\(self.player.name)"
         ])
         
         self.ref.child("matches/\(matchCode)/open").setValue(false)

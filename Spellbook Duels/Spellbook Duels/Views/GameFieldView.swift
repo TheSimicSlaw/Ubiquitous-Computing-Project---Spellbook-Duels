@@ -91,7 +91,7 @@ struct OpponentFieldView: View {
 
                 Spacer()
                 if (gameEngine.activePlayer == .opponent) {
-                    OpponentPhaseView(phase: viewController.board.phase)
+                    OpponentPhaseView(phase: gameEngine.phase)
                     Spacer()
                 }
                 Text("\(gameEngine.board.opponentAetherTotal) Ae")
