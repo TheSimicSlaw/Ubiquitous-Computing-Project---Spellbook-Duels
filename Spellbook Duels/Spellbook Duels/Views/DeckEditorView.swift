@@ -74,7 +74,7 @@ struct DeckEditorView: View {
                         HStack(spacing: 12) {
                             ForEach(sortedCards, id: \.card.cardCode) { entry in
                                 VStack {
-                                    Image(uiImage: entry.card.image!)
+                                    Image(entry.card.imageName!)
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 150, height: 200)
@@ -128,7 +128,7 @@ struct DeckEditorView: View {
                                         Button {
                                             increaseCardCount(card: card)
                                         } label: {
-                                            Image(uiImage: card.image!)
+                                            Image(card.imageName!)
                                                 .resizable()
                                                 .scaledToFit()
                                                 .padding(.top)

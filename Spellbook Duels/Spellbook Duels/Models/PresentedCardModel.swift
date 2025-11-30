@@ -20,8 +20,8 @@ class PresentedCardModel: Identifiable {
     var cost: String
     var costVal: Int
     var element: Element
-    var image: UIImage?
-    var icon: UIImage?
+    var imageName: String?
+    var iconName: String?
     var cardCode: String
     var Strength: Int?
     var duration: Int?
@@ -30,15 +30,15 @@ class PresentedCardModel: Identifiable {
     var numTargets: Int?
     var targetTypes: [(CardType, PlayerSide?)]?
     
-    init(name: String, text: String, type: CardType, cost: String, costVal: Int, element: Element, image: UIImage?, icon: UIImage?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?, targetTypes: [(CardType, PlayerSide?)]?) {
+    init(name: String, text: String, type: CardType, cost: String, costVal: Int, element: Element, image: String?, icon: String?, cardCode: String, Strength: Int?, duration: Int?, speed: Int?, hasActivated: Bool, numTargets: Int?, targetTypes: [(CardType, PlayerSide?)]?) {
         self.name = name
         self.text = text
         self.type = type
         self.cost = cost
         self.costVal = costVal
         self.element = element
-        self.image = image
-        self.icon = icon
+        self.imageName = image
+        self.iconName = icon
         self.cardCode = cardCode
         self.Strength = Strength
         self.duration = duration
@@ -46,5 +46,15 @@ class PresentedCardModel: Identifiable {
         self.hasActivated = hasActivated
         self.numTargets = numTargets
         self.targetTypes = targetTypes
+    }
+    
+    var uiImage: UIImage? {
+        guard let imageName = imageName else { return nil }
+        return UIImage(named: imageName)
+    }
+    
+    var iconUIImage: UIImage? {
+        guard let iconName = iconName else { return nil }
+        return UIImage(named: iconName)
     }
 }

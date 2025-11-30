@@ -270,11 +270,22 @@ struct DiscardPileView: View {
         } else {
             let cardCode = discardPile[discardPile.count - 1]
             if let card = PresentedCardModel.cardByCode[cardCode] {
-                Image(uiImage: card.icon!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 80, height: 80)
-                    .opacity(0.5)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .opacity(0.5)
+                } else {
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                }
             }
         }
     }

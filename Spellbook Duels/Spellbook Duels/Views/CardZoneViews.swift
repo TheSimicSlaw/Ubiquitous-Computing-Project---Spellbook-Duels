@@ -20,8 +20,8 @@ struct CurseCardView: View {
                 }
                 
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let image = card.iconName {
+                    Image(image)
                         .resizable()
                         .scaledToFill()
                         .frame(width: 60, height: 60)
@@ -59,22 +59,26 @@ struct SnapCardView: View {
                 }
                 
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(width: 80, height: 80)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
                 } else {
-                    Image("MenuBackgroundColor")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 80, height: 80)
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .sheet(isPresented: $showDetails) {
+                        DetailedCardView(card: card)
+                    }
                 }
             }
         } else {
@@ -98,22 +102,26 @@ struct WardCardView: View {
                 }
                 
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(width: 60, height: 60)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
                 } else {
-                    Image("MenuBackgroundColor")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 60)
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .sheet(isPresented: $showDetails) {
+                        DetailedCardView(card: card)
+                    }
                 }
             }
         } else {
@@ -137,22 +145,26 @@ struct CharmCardView: View {
                 }
                 
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(width: 60, height: 60)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
                 } else {
-                    Image("MenuBackgroundColor")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 60)
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .sheet(isPresented: $showDetails) {
+                        DetailedCardView(card: card)
+                    }
                 }
             }
         } else {
@@ -181,22 +193,26 @@ struct RelicCardView: View {
                 }
                 
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(width: 60, height: 60)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
                 } else {
-                    Image("MenuBackgroundColor")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 60)
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .sheet(isPresented: $showDetails) {
+                        DetailedCardView(card: card)
+                    }
                 }
             }
         } else {
@@ -224,22 +240,26 @@ struct PotionCardView: View {
                     }
                 }
             } label: {
-                if let image = card.icon {
-                    Image(uiImage: image)
+                if let uiImage = card.iconUIImage {
+                    Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                         .frame(width: 60, height: 60)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
                 } else {
-                    Image("MenuBackgroundColor")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 60)
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                    VStack(spacing: 8) {
+                        Text("Missing image")
+                            .font(.headline)
+                        Text(card.imageName ?? "(nil imageName)")
+                            .font(.caption)
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .sheet(isPresented: $showDetails) {
+                        DetailedCardView(card: card)
+                    }
                 }
             }
         } else {
@@ -283,22 +303,26 @@ struct HandZoneView: View {
                     }
                     
                 } label: {
-                    if let image = card.icon {
-                        Image(uiImage: image)
+                    if let uiImage = card.iconUIImage {
+                        Image(uiImage: uiImage)
                             .resizable()
-                            .scaledToFill()
+                            .scaledToFit()
                             .frame(width: 40, height: 40)
                             .sheet(isPresented: $showDetails) {
                                 DetailedCardView(card: card)
                             }
                     } else {
-                        Image("MenuBackgroundColor")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .sheet(isPresented: $showDetails) {
-                                DetailedCardView(card: card)
-                            }
+                        VStack(spacing: 8) {
+                            Text("Missing image")
+                                .font(.headline)
+                            Text(card.imageName ?? "(nil imageName)")
+                                .font(.caption)
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .sheet(isPresented: $showDetails) {
+                            DetailedCardView(card: card)
+                        }
                     }
                     
                 }

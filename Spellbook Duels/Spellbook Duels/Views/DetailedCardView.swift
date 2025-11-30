@@ -14,9 +14,20 @@ struct DetailedCardView: View {
         ZStack {
             Color("AccentOne")
                 .ignoresSafeArea()
-            Image(uiImage: card.image!)
-                .resizable()
-                .scaledToFit()
+            if let uiImage = card.uiImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                VStack(spacing: 8) {
+                    Text("Missing image")
+                        .font(.headline)
+                    Text(card.imageName ?? "(nil imageName)")
+                        .font(.caption)
+                }
+                .foregroundColor(.white)
+                .padding()
+            }
         }
     }
 }
