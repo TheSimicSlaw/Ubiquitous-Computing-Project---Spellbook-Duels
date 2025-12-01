@@ -15,13 +15,14 @@ struct BoardModel: Codable {
     var phase: Phase = .defend
     var activePlayer: PlayerSide = .player
     var nonActivePlayer: PlayerSide { activePlayer == .player ? .opponent : .player }
+    var previousPlayerIsAttacking: Bool = false
     
-    var playerCurse: CardSlot = CardSlot(owner: .player, zone: .curse, card: "")
-    var playerSnap: CardSlot = CardSlot(owner: .player, zone: .snap, card: "")
-    var playerWard: CardSlot = CardSlot(owner: .player, zone: .ward, card: "")
-    var playerCharm: CardSlot = CardSlot(owner: .player, zone: .charm, card: "")
-    var playerRelic: CardSlot = CardSlot(owner: .player, zone: .relic, card: "")
-    var playerPotion: CardSlot = CardSlot(owner: .player, zone: .potion, card: "")
+    var playerCurse: CardSlot = CardSlot(owner: .player, zone: .curse, card: "ESP")
+    var playerSnap: CardSlot = CardSlot(owner: .player, zone: .snap, card: "EIN")
+    var playerWard: CardSlot = CardSlot(owner: .player, zone: .ward, card: "WET")
+    var playerCharm: CardSlot = CardSlot(owner: .player, zone: .charm, card: "EAS")
+    var playerRelic: CardSlot = CardSlot(owner: .player, zone: .relic, card: "EST")
+    var playerPotion: CardSlot = CardSlot(owner: .player, zone: .potion, card: "WIN")
     var playerCurseTimeCounters: Int? = nil
     var playerWardTimeCounters: Int? = nil
     var playerCharmTimeCounters: Int? = nil
@@ -59,6 +60,7 @@ struct BoardModel: Codable {
     }
     
     var opponentHand: [String] = []
+    var opponentDeck: [String] = []
     var opponentDiscard: [String] = []
     
     // MARK: Setters
@@ -106,6 +108,30 @@ struct BoardModel: Codable {
             opponentHand = hand
         }
     }
+    
+    // MARK: - Getters
+    
+    func getSlot(_ owner: PlayerSide, _ zone: CardZone) -> CardSlot {
+        switch (owner, zone) {
+            case (.player, .curse):  return playerCurse
+            case (.player, .snap):   return playerSnap
+            case (.player, .ward):   return playerWard
+            case (.player, .charm):  return playerCharm
+            case (.player, .relic):  return playerRelic
+            case (.player, .potion): return playerPotion
+
+            case (.opponent, .curse):  return opponentCurse
+            case (.opponent, .snap):   return opponentSnap
+            case (.opponent, .ward):   return opponentWard
+            case (.opponent, .charm):  return opponentCharm
+            case (.opponent, .relic):  return opponentRelic
+            case (.opponent, .potion): return opponentPotion
+        }
+    }
+    
+    func getHand(owner: PlayerSide) -> [String] {
+        if owner == .player { return playerHand } else { return opponentHand }
+    }
 }
 
 enum PlayerSide: Codable {
@@ -114,6 +140,17 @@ enum PlayerSide: Codable {
 
 enum CardZone: Hashable, Codable {
     case curse, snap, ward, charm, relic, potion
+    
+    static func zoneForCard(_ type: CardType) -> CardZone {
+        switch type {
+        case .curse: return .curse
+        case .ward: return .ward
+        case .relic: return .relic
+        case .charm: return .charm
+        case .potion: return .potion
+        default: return .snap
+        }
+    }
 }
 
 enum Counter: String, Hashable, Codable {

@@ -10,6 +10,8 @@ import SwiftUI
 final class GameEngine: ObservableObject {
     @Published var board: BoardModel
     @Published var isAskingToTurnPage: Bool = false
+    @Published var isAskingPlayerToActivate: Bool = false
+    @Published var isAskingOpponentToActivate: Bool = false
     var monitors: Monitors = Monitors()
     
     var activePlayer: PlayerSide { get { board.activePlayer } set { board.activePlayer = newValue } }
@@ -39,6 +41,10 @@ final class GameEngine: ObservableObject {
     
     var AbilityStack: [Int: [CardEffect]]
     var AbilitySources: [Int: [CardSlot]]
+    var noAbilitiesOnStack: Bool {
+        if !AbilityStack[1]!.isEmpty || !AbilityStack[2]!.isEmpty || !AbilityStack[3]!.isEmpty || !AbilityStack[4]!.isEmpty || !AbilityStack[5]!.isEmpty { return false }
+        return true
+    }
     
     func resetStackAndSources() {
         AbilityStack = [:]
@@ -166,8 +172,37 @@ final class GameEngine: ObservableObject {
         }
     }
     
+    func pullToHand(slot: CardSlot) {
+        guard !slot.card.isEmpty else { return }
+
+        if let card = PresentedCardModel.cardByCode[slot.card],
+           let def = CardEffects.registry[card.cardCode] {
+            def.onLeaveField?(slot, self)
+        }
+
+        var context = PullToHandContext(card: slot, cardOwner: slot.owner)
+
+        for entry in monitors.pullToHand.entries where entry.step == .beforePullToHand {
+            entry.handler(&context, &board)
+        }
+
+        monitors.removeAllMonitors(for: slot)
+        
+        if context.cardOwner == .player { board.playerHand.append(slot.card) } else { board.opponentHand.append(slot.card) }
+
+        var empty = slot
+        empty.card = ""
+        empty.counters = [:]
+        board.setSlot(empty)
+        
+        enforceHandLimit()
+
+        for entry in monitors.pullToHand.entries where entry.step == .afterPullToHand {
+            entry.handler(&context, &board)
+        }
+    }
     
-    func playCard(fromHandIndex index: Int, owner: PlayerSide, as zone: CardZone, hand: inout [String]) {
+    func playCard(fromHandIndex index: Int, owner: PlayerSide, to zone: CardZone, hand: inout [String]) {
         let cardCode = hand[index]
         guard let card = PresentedCardModel.cardByCode[cardCode] else { return }
 
@@ -306,6 +341,39 @@ final class GameEngine: ObservableObject {
         if board.opponentPotionBrewCounters != nil && board.opponentPotionBrewed { board.opponentPotionBrewCounters! += 1 }
     }
     
+    func drawNCards(_ N: Int, player: PlayerSide) {
+        if player == .player {
+            for _ in 1...N {
+                let card = board.playerDeck.removeFirst()
+                board.playerHand.append(card)
+            }
+        } else {
+            for _ in 1...N {
+                let card = board.opponentDeck.removeFirst()
+                board.opponentHand.append(card)
+            }
+        }
+        enforceHandLimit(player)
+    }
+    
+    func enforceHandLimit(_ player: PlayerSide? = nil) {
+        let handOwner: PlayerSide = player == nil ? activePlayer : player!
+        let hand: [String] = board.getHand(owner: handOwner)
+        
+        if hand.count > 6 {
+            var discards: [Int] = []
+            // have player select hand.count-6 cards to remove, assign to discards
+            var newHand: [String] = []
+            for i in 0..<hand.count {
+                if !discards.contains(i) {
+                    newHand.append(hand[i])
+                }
+            }
+        }
+        
+        board.setHand(hand, owner: activePlayer)
+    }
+    
     // MARK: - Phase Handling
     
     func resolveDefendPhase() {
@@ -318,6 +386,7 @@ final class GameEngine: ObservableObject {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
             // check with players (active then nonactive) to check for potion activations
         }
+        board.previousPlayerIsAttacking = false
         board.phase = .replenish
         resolveReplenishPhase()
     }
@@ -329,7 +398,33 @@ final class GameEngine: ObservableObject {
         // check with active player to see if they'd like to turn the page
         
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            // check with players (active then nonactive) to check for potion activations
+            checkForPotionActivations()
+        }
+        phase = .action
+    }
+    
+    func passFromActionPhase() {
+        phase = .attack
+    }
+    
+    func passAttackPhase() { //
+        if board.getSlot(activePlayer, .curse).card != "" || board.getSlot(activePlayer, .snap).card != "" {
+            board.previousPlayerIsAttacking = true
+        }
+        
+    }
+    
+    func checkForPotionActivations() {
+        if activePlayer == .player {
+            isAskingPlayerToActivate = true
+            // wait for player to choose whether to activate or not, at which point isAskingPlayerToActivate becomes false
+            
+            // wait for opponent to choose whether to activate or not
+        } else {
+            // wait for opponent to choose whether to activate or not
+            
+            isAskingPlayerToActivate = true
+            // wait for player to choose whether to activate or not, at which point isAskingPlayerToActivate becomes false
         }
     }
     

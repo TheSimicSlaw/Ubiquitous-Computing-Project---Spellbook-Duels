@@ -27,9 +27,6 @@ struct GameFieldView: View {
                 PlayerFieldView()
             }
         }
-        .newPopup(isPresented: $isAskingToTurnPage) {
-            askingToTurnPagePopupContent
-        }
     }
     
     // MARK: Popups
@@ -88,16 +85,18 @@ struct OpponentFieldView: View {
                     .padding()
                 Spacer()
             }
-            HStack(spacing: 24) { // Opponent's Potion, Relic, and Charm Zones
-                PotionCardView(cardCode: "")
-                RelicCardView(cardCode: "")
-                CharmCardView(cardCode: "")
+            Spacer(minLength: 40)
+            
+            HStack(spacing: 29) { // Opponent's Potion, Relic, and Charm Zones
+                PotionCardView(player: .opponent)
+                CharmCardView(player: .opponent)
+                RelicCardView(player: .opponent)
             }
             
             HStack(spacing: 19) { // Opponent's Ward, Snap, and Curse zones
-                WardCardView(cardCode: "")
-                SnapCardView(cardCode: "")
-                CurseCardView(cardCode: "")
+                WardCardView(player: .opponent)
+                SnapCardView(player: .opponent)
+                CurseCardView(player: .opponent)
             }
             
             HStack {
@@ -139,18 +138,18 @@ struct PlayerFieldView: View {
             }
             
             HStack(spacing: 19) { // Player's Curse, Snap, and Ward Zone
-                CurseCardView(cardCode: "")
-                SnapCardView(cardCode: "")
-                WardCardView(cardCode: "")
+                CurseCardView(player: .player)
+                SnapCardView(player: .player)
+                WardCardView(player: .player)
                 
             }
             
-            HStack(spacing: 24) { // Player's Player's Charm, Relic, and Potion Zone
-                CharmCardView(cardCode: "EAS")
-                RelicCardView(cardCode: "EST")
-                PotionCardView(cardCode: "WIN")
+            HStack(spacing: 29) { // Player's Player's Charm, Relic, and Potion Zone
+                RelicCardView(player: .player)
+                CharmCardView(player: .player)
+                PotionCardView(player: .player)
             }
-            .padding(.bottom)
+            .padding(.bottom, 30)
             
             ZStack {
                 Image("spellbook")
@@ -158,9 +157,9 @@ struct PlayerFieldView: View {
                     .scaledToFill()
                 HStack(spacing: 80) {
                     VStack(spacing: 10) {
-                        HandZoneView(cardCode: gameEngine.board.playerHand[0])
-                        HandZoneView(cardCode: gameEngine.board.playerHand[1])
-                        HandZoneView(cardCode: gameEngine.board.playerHand[2])
+                        HandZoneView(index: 0, player: .player)
+                        HandZoneView(index: 1, player: .player)
+                        HandZoneView(index: 2, player: .player)
 //                        Rectangle()
 //                            .stroke(.white, lineWidth: 2)
 //                            .frame(width: 40, height: 40)
@@ -169,9 +168,9 @@ struct PlayerFieldView: View {
 //                            .frame(width: 40, height: 40)
                     }
                     VStack(spacing: 10) {
-                        HandZoneView(cardCode: gameEngine.board.playerHand[3])
-                        HandZoneView(cardCode: gameEngine.board.playerHand[4])
-                        HandZoneView(cardCode: gameEngine.board.playerHand[5])
+                        HandZoneView(index: 3, player: .player)
+                        HandZoneView(index: 4, player: .player)
+                        HandZoneView(index: 5, player: .player)
 //                        Rectangle()
 //                            .stroke(.white, lineWidth: 2)
 //                            .frame(width: 40, height: 40)
@@ -186,7 +185,7 @@ struct PlayerFieldView: View {
             }
             .frame(width: 264, height: 157)
             
-
+            Spacer(minLength: 30)
             
         }
         .padding(.top, 0)
@@ -231,11 +230,11 @@ struct PlayerPhaseView: View {
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.green)
-                    .frame(width: 50, height: 30)
-                Text("\(phase)")
+                    .foregroundStyle(.accentOne)
+                    .frame(width: 75, height: 30)
+                Text("Pass Phase")
                     .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
             }
         }
     }

@@ -73,8 +73,8 @@ struct DeckEditorView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
                             ForEach(sortedCards, id: \.card.cardCode) { entry in
-                                VStack {
-                                    Image(entry.card.imageName!)
+                                VStack(spacing: 0) {
+                                    Image(uiImage: entry.card.uiImage!)
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 150, height: 200)
@@ -116,8 +116,8 @@ struct DeckEditorView: View {
                         .padding(.horizontal)
                     }
                     .frame(height: 170)
-                    .padding(.bottom, 50)
-                    .padding(.top, -85)
+                    .padding(.bottom, 40)
+                    .padding(.top, -95)
                         
                         
                     ScrollView {
@@ -128,7 +128,7 @@ struct DeckEditorView: View {
                                         Button {
                                             increaseCardCount(card: card)
                                         } label: {
-                                            Image(card.imageName!)
+                                            Image(uiImage: card.uiImage!)
                                                 .resizable()
                                                 .scaledToFit()
                                                 .padding(.top)
