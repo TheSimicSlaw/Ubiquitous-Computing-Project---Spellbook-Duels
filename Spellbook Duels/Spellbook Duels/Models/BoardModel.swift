@@ -5,6 +5,8 @@
 //  Created by Rocky Williams on 11/25/25.
 //
 
+import Foundation
+
 struct BoardModel: Codable {
     
     // MARK: Player Board State
@@ -35,8 +37,8 @@ struct BoardModel: Codable {
         }
     }
     
-    var playerDeck: [String] = []
-    var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "EAL", ""]
+    var playerDeck: [String] = ["EAS", "EST", "WIN", "WAS", "EAL"]
+    var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "EAL", "", ""]
     var playerDiscard: [String] = ["EST"]
     
     // MARK: Opponent Board State
@@ -131,6 +133,12 @@ struct BoardModel: Codable {
     
     func getHand(owner: PlayerSide) -> [String] {
         if owner == .player { return playerHand } else { return opponentHand }
+    }
+    
+    func toDictionary() throws -> [String: Any] {
+        let data = try JSONEncoder().encode(self)
+        let jsonObject = try JSONSerialization.jsonObject(with: data)
+        return jsonObject as? [String: Any] ?? [:]
     }
 }
 

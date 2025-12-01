@@ -33,6 +33,9 @@ struct CurseCardView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: IconSizes.getIconSize(zone: .curse), height: IconSizes.getIconSize(zone: .curse))
+                        .shadow(color: .yellow, radius: 10)
+                        .shadow(color: .yellow, radius: 10)
+                        //.shadow(color: .yellow, radius: 10)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
@@ -77,6 +80,9 @@ struct SnapCardView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: IconSizes.getIconSize(zone: .snap), height: IconSizes.getIconSize(zone: .snap))
+                        .shadow(color: .yellow, radius: 10)
+                        .shadow(color: .yellow, radius: 10)
+                        //.shadow(color: .yellow, radius: 10)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
@@ -121,6 +127,9 @@ struct WardCardView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: IconSizes.getIconSize(zone: .ward), height: IconSizes.getIconSize(zone: .ward))
+                        .shadow(color: .yellow, radius: 10)
+                        .shadow(color: .yellow, radius: 10)
+                        //.shadow(color: .yellow, radius: 10)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
@@ -165,6 +174,9 @@ struct CharmCardView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: IconSizes.getIconSize(zone: .charm), height: IconSizes.getIconSize(zone: .charm))
+                        .shadow(color: .yellow, radius: 10)
+                        .shadow(color: .yellow, radius: 10)
+                        //.shadow(color: .yellow, radius: 10)
                         .sheet(isPresented: $showDetails) {
                             DetailedCardView(card: card)
                         }
@@ -215,6 +227,9 @@ struct RelicCardView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: IconSizes.getIconSize(zone: .relic), height: IconSizes.getIconSize(zone: .relic))
+                            .shadow(color: .yellow, radius: 10)
+                            .shadow(color: .yellow, radius: 10)
+                            //.shadow(color: .yellow, radius: 10)
                             .sheet(isPresented: $showDetails) {
                                 DetailedCardView(card: card)
                             }
@@ -279,6 +294,9 @@ struct PotionCardView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: IconSizes.getIconSize(zone: .potion), height: IconSizes.getIconSize(zone: .potion))
+                            .shadow(color: .yellow, radius: 10)
+                            .shadow(color: .yellow, radius: 10)
+                            //.shadow(color: .yellow, radius: 10)
                             .sheet(isPresented: $showDetails) {
                                 DetailedCardView(card: card)
                             }

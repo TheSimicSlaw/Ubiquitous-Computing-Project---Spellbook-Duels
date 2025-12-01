@@ -93,6 +93,9 @@ struct OpponentFieldView: View {
             
             HStack(spacing: 29) { // Opponent's Potion, Relic, and Charm Zones
                 PotionCardView(player: .opponent)
+                    .shadow(color: .yellow, radius: 10)
+                    .shadow(color: .yellow, radius: 10)
+                    .shadow(color: .yellow, radius: 15)
                 CharmCardView(player: .opponent)
                 RelicCardView(player: .opponent)
             }
@@ -127,9 +130,11 @@ struct PlayerFieldView: View {
     //@State private var isShowing = false
     var body: some View {
         VStack() {
-            HStack {
+            HStack(spacing: 2) {
                 DiscardPileView(discardPile: gameEngine.board.playerDiscard)
+                PlayerDeckView(activateScryingWater: true, activateSeersScryingBowl: true)
                 Spacer()
+                
                 if (gameEngine.activePlayer == .player) {
                     PlayerPhaseView()
                     Spacer()

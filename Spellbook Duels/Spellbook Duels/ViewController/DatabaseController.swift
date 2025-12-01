@@ -41,6 +41,8 @@ class DatabaseController: ObservableObject {
         newPlayerRef.setValue([
             "name": "\(self.player.name)"
         ])
+
+        writeBoard(matchCode: matchCode)
         hostGetOpponent(matchCode: matchCode)
     }
     
@@ -99,6 +101,17 @@ class DatabaseController: ObservableObject {
                     }
                 }
             }
+        }
+    }
+    
+    func writeBoard(boardModel: BoardModel = BoardModel(), matchCode: String) {
+        let boardRef = self.ref.child("matches/\(matchCode)/board")
+        
+        do {
+            let data = try boardModel.toDictionary()
+            boardRef.setValue(data)
+        } catch {
+            print("Error converting board into a dictionary")
         }
     }
 }
