@@ -72,20 +72,24 @@ struct OpponentFieldView: View {
     
     var body: some View {
         VStack {
-            Menu {
-                Button("Concede") {
-                    viewController.inGame = false
-                    viewController.matchCode = ""
-                    firebaseController.opponent = Player()
-                    
+            Spacer(minLength: 7)
+            HStack {
+                Spacer(minLength: 20)
+                Menu {
+                    Button("Concede") {
+                        viewController.inGame = false
+                        viewController.matchCode = ""
+                        firebaseController.opponent = Player()
+                        
+                    }
+                } label: {
+                    Image(systemName: "flag.fill")
+                        .foregroundStyle(.white)
+                        .font(Font.system(size: 30))
+                        .padding()
+                    Spacer()
                 }
-            } label: {
-                Image(systemName: "flag.fill")
-                    .foregroundStyle(.white)
-                    .padding()
-                Spacer()
             }
-            Spacer(minLength: 40)
             
             HStack(spacing: 29) { // Opponent's Potion, Relic, and Charm Zones
                 PotionCardView(player: .opponent)
@@ -185,7 +189,7 @@ struct PlayerFieldView: View {
             }
             .frame(width: 264, height: 157)
             
-            Spacer(minLength: 30)
+            Spacer(minLength: 36)
             
         }
         .padding(.top, 0)
