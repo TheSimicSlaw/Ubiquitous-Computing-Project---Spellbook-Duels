@@ -13,4 +13,5 @@ class ViewController: ObservableObject {
     @Published var isSearching: Bool = false
     @Published var isWaiting: Bool = false
     @Published var inGame: Bool = false
+    @Published var matchCode: String = ""
 }

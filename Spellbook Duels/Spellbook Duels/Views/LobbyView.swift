@@ -41,6 +41,7 @@ struct LobbyView: View {
                         Button("Submit") {
                             let s = createMatchCode.trimmingCharacters(in: .whitespacesAndNewlines)
                             firebaseController.createMatch(matchCode: s)
+                            viewController.matchCode = s
                             createMatchCode = ""
                             viewController.isWaiting = true
                         }

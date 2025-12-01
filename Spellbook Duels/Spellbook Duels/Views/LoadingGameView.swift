@@ -24,9 +24,12 @@ struct LoadingGameView: View {
                         viewController.inGame = true
                     }
             } else {
-                Text("Loading...")
-                    .font(.custom("InknutAntiqua-Light", size: 25))
-                    
+                VStack {
+                    Text("Loading...")
+                        .font(.custom("InknutAntiqua-Light", size: 25))
+                    Text("Match Code: \(viewController.matchCode)")
+                        .font(.custom("InknutAntiqua-Light", size: 15))
+                }
             }
         }
     }

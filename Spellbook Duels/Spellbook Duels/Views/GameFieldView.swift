@@ -71,9 +71,23 @@ struct FieldBackgroundView: View {
 struct OpponentFieldView: View {
     @EnvironmentObject var viewController: ViewController
     @EnvironmentObject var gameEngine: GameEngine
+    @EnvironmentObject var firebaseController: DatabaseController
     
     var body: some View {
         VStack {
+            Menu {
+                Button("Concede") {
+                    viewController.inGame = false
+                    viewController.matchCode = ""
+                    firebaseController.opponent = Player()
+                    
+                }
+            } label: {
+                Image(systemName: "flag.fill")
+                    .foregroundStyle(.white)
+                    .padding()
+                Spacer()
+            }
             HStack(spacing: 24) { // Opponent's Potion, Relic, and Charm Zones
                 PotionCardView(cardCode: "")
                 RelicCardView(cardCode: "")
