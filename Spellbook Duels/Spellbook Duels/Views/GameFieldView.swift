@@ -149,7 +149,7 @@ struct OpponentFieldView: View {
             }
             
             HStack {
-                DiscardPileView(discardPile: gameEngine.board.opponentDiscard)
+                DiscardPileView(owner: .opponent)
 
                 Spacer()
                 if (gameEngine.activePlayer == .opponent) {
@@ -173,8 +173,7 @@ struct PlayerFieldView: View {
     var body: some View {
         VStack() {
             HStack(spacing: 2) {
-                DiscardPileView(discardPile: gameEngine.board.playerDiscard)
-                                
+                DiscardPileView(owner: .player)
                 Spacer()
                 
                 if (gameEngine.activePlayer == .player) {
@@ -313,9 +312,12 @@ struct OpponentPhaseView: View {
 }
 
 struct DiscardPileView: View {
-    //@EnvironmentObject var gameEngine: GameEngine
+    @EnvironmentObject var gameEngine: GameEngine
     
-    @State var discardPile: [String]
+    var owner: PlayerSide
+    var discardPile: [String] {
+        return (owner == .player ? gameEngine.board.playerDiscard : gameEngine.board.opponentDiscard)
+    }
     var body: some View {
         if (discardPile.isEmpty) {
             Rectangle() // Discard Pile
