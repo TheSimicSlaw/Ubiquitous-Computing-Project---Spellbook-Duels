@@ -120,9 +120,9 @@ struct OpponentFieldView: View {
                 Menu {
                     Button("Concede") {
                         viewController.inGame = false
+                        firebaseController.endMatch(matchCode: viewController.matchCode)
                         viewController.matchCode = ""
                         firebaseController.opponent = Player()
-                        
                     }
                 } label: {
                     Image(systemName: "flag.fill")

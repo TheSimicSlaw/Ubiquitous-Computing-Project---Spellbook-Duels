@@ -231,6 +231,7 @@ struct DecksMenuView: View {
 
 #Preview {
     DecksMenuView()
+        //.modelContainer(for: [DeckListModel.self])
         .modelContainer(DeckListModel.precons)
 }
 

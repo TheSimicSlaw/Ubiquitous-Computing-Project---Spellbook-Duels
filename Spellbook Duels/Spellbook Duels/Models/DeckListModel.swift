@@ -42,4 +42,8 @@ extension DeckListModel {
         
         return container
     }
+    
+    var totalCards: Int {
+        return self.cardCounts.values.reduce(0, +)
+    }
 }

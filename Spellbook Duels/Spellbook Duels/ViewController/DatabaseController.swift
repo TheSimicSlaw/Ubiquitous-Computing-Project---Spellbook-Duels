@@ -76,8 +76,10 @@ class DatabaseController: ObservableObject {
                     names.append(name)
                 }
             }
-            self.opponent.id = players[0]
-            self.opponent.name = names[0]
+            if (players.count == 2) {
+                self.opponent.id = players[0]
+                self.opponent.name = names[0]
+            }
         }
     }
     
@@ -113,5 +115,9 @@ class DatabaseController: ObservableObject {
         } catch {
             print("Error converting board into a dictionary")
         }
+    }
+    
+    func endMatch(matchCode: String) {
+        self.ref.child("matches/\(matchCode)").removeValue()
     }
 }
