@@ -141,6 +141,7 @@ struct DecksMenuView: View {
                         let deck = DeckListModel(deckname: newDeckName, cardList: [], cardCounts: [:], deckElements: newDeckElements)
                         modelContext.insert(deck)
                         selectedDeck = deck
+                        askingNewDeckDetails = false
                         path.append(deck)
                     } label: {
                         Text("Create")
