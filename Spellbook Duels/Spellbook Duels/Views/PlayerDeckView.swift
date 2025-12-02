@@ -17,7 +17,7 @@ struct PlayerDeckView: View {
     
     var body: some View {
         Menu {
-            if activateScryingWater {
+            if activateScryingWater { // temporary for testing purposes; actual activation will be handled in CardEffects
                 Button("Activate Scrying Water") {
                     selectCardsFromDeck = true
                 }
@@ -40,7 +40,16 @@ struct PlayerDeckView: View {
             viewTopNCards(deck: gameEngine.board.playerDeck, n: 3)
         }
         .sheet(isPresented: $selectCardsFromDeck) {
-            selectCards(cards: gameEngine.board.playerDeck, n: 4)
+            let cards: [String] = [
+                gameEngine.board.playerDeck[0],
+                gameEngine.board.playerDeck[1],
+                gameEngine.board.playerDeck[2],
+                gameEngine.board.playerDeck[3]]
+            SelectCardsView(cards: cards, numCardsToSelect: 1) { cardsSelected, notSelected in
+                gameEngine.addCardsToHand(cardsSelected, player: .player)
+                gameEngine.cardsToDiscard(notSelected, from: &gameEngine.board.playerDeck, player: .player)
+                gameEngine.board.playerDeck.remove(at: 0)
+            }
         }
         
     }
@@ -65,33 +74,6 @@ func viewTopNCards(deck: [String], n: Int) -> some View {
         .scrollContentBackground(.hidden)   // remove the default white background
         .background(Color.accentOne)
     }
-}
-
-func selectCards(cards: [String], n: Int) -> some View {
-    @State var selected = Set<Int>()
-    
-    return List {
-        ForEach(0..<min(n, cards.count), id: \.self) { index in
-            if let card = PresentedCardModel.cardByCode[cards[index]] {
-                HStack {
-                    Text(card.name)
-                        Spacer()
-                    if selected.contains(index) {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                    .contentShape(Rectangle()) // makes whole row tappable
-                    .onTapGesture {
-                        if selected.contains(index) {
-                            selected.remove(index)
-                        } else {
-                            selected.insert(index)
-                        }
-                    }
-            }
-        }
-    }
-    
 }
 
 #Preview {

@@ -11,6 +11,9 @@ struct GameFieldView: View {
     @EnvironmentObject var viewController: ViewController
     @EnvironmentObject var gameEngine: GameEngine
     
+    @State private var showHandLimitPopup = false
+    @State private var showHandLimitSheet = false
+    
     @State var isAskingToTurnPage: Bool = false
     
     var body: some View {
@@ -26,6 +29,23 @@ struct GameFieldView: View {
                 
                 PlayerFieldView()
             }
+        }
+        .onChange(of: gameEngine.isAskingToDiscardForHandLimit) { needed in
+            if needed {
+                showHandLimitPopup = true
+            }
+        }
+        .alert("Hand Limit Exceeded",
+               isPresented: $showHandLimitPopup) {
+            Button("Continue") {
+                showHandLimitPopup = false
+                showHandLimitSheet = true
+            }
+        } message: {
+            Text("You have too many cards in your hand. Discard until you only have 6 cards.")
+        }
+        .sheet(isPresented: $showHandLimitSheet) {
+            handLimitSheetContent()
         }
     }
     
@@ -49,6 +69,28 @@ struct GameFieldView: View {
             )
         }
         .frame(height: 260)
+    }
+    
+    @ViewBuilder
+    private func handLimitSheetContent() -> some View {
+        if let owner = gameEngine.pendingHandLimitOwner {
+            let cards = gameEngine.pendingHandLimitCards
+            let numExcessCards = cards.count - 6
+                
+            SelectCardsView(cards: cards, numCardsToSelect: numExcessCards) { cardsToDiscard, _ in
+                    // Start with original hand
+                var hand = cards
+                    // Use your helper to move selected cards to discard
+                gameEngine.cardsToDiscard(cardsToDiscard, from: &hand, player: owner)
+                // Update hand on the board
+                gameEngine.board.setHand(hand, owner: owner)
+                    
+                    // Clear engine state
+                gameEngine.pendingHandLimitCards = []
+                gameEngine.pendingHandLimitOwner = nil
+                gameEngine.isAskingToDiscardForHandLimit = false
+            }
+        }
     }
     
 }
@@ -169,26 +211,11 @@ struct PlayerFieldView: View {
                         HandZoneView(index: 0, player: .player)
                         HandZoneView(index: 1, player: .player)
                         HandZoneView(index: 2, player: .player)
-//                        Rectangle()
-//                            .stroke(.white, lineWidth: 2)
-//                            .frame(width: 40, height: 40)
-//                        Rectangle()
-//                            .stroke(.white, lineWidth: 2)
-//                            .frame(width: 40, height: 40)
                     }
                     VStack(spacing: 10) {
                         HandZoneView(index: 3, player: .player)
                         HandZoneView(index: 4, player: .player)
                         HandZoneView(index: 5, player: .player)
-//                        Rectangle()
-//                            .stroke(.white, lineWidth: 2)
-//                            .frame(width: 40, height: 40)
-//                        Rectangle()
-//                            .stroke(.white, lineWidth: 2)
-//                            .frame(width: 40, height: 40)
-//                        Rectangle()
-//                            .stroke(.white, lineWidth: 2)
-//                            .frame(width: 40, height: 40)
                     }
                 }
             }
@@ -204,7 +231,7 @@ struct PlayerFieldView: View {
 struct PlayerPhaseView: View {
     @EnvironmentObject var viewController: ViewController
     @EnvironmentObject var gameEngine: GameEngine
-    @State private var phase: String = "DP"
+    @State private var phase: String = "DP" 
     var body: some View {
         Menu {
             if (gameEngine.phase < Phase.replenish) {

@@ -345,47 +345,49 @@ struct HandZoneView: View {
     var player: PlayerSide
     
     var body: some View {
-        if let card = PresentedCardModel.cardByCode[gameEngine.board.getHand(owner: player)[index]] {
-            HStack {
-                Menu {
-                    Button("View Details") {
-                        showDetails = true
-                    }
-                    if (gameEngine.activePlayer == .player) {
-                        if canLegallyPlayCard(card.type) {
-                            Button("Play") {
-                                gameEngine.playCard(fromHandIndex: index,owner: .player, to: CardZone.zoneForCard(card.type), hand: &gameEngine.board.playerHand)
+        if gameEngine.board.getHand(owner: player).count > index {
+            if let card = PresentedCardModel.cardByCode[gameEngine.board.getHand(owner: player)[index]] {
+                HStack {
+                    Menu {
+                        Button("View Details") {
+                            showDetails = true
+                        }
+                        if (gameEngine.activePlayer == .player) {
+                            if canLegallyPlayCard(card.type) {
+                                Button("Play") {
+                                    gameEngine.playCard(fromHandIndex: index,owner: .player, to: CardZone.zoneForCard(card.type), hand: &gameEngine.board.playerHand)
+                                }
                             }
                         }
-                    }
-                } label: {
-                    if let uiImage = card.iconUIImage {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
+                    } label: {
+                        if let uiImage = card.iconUIImage {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .sheet(isPresented: $showDetails) {
+                                    DetailedCardView(card: card)
+                                }
+                        } else {
+                            VStack(spacing: 8) {
+                                Text("Missing image")
+                                    .font(.headline)
+                                Text(card.imageName ?? "(nil imageName)")
+                                    .font(.caption)
+                            }
+                            .foregroundColor(.white)
+                            .padding()
                             .sheet(isPresented: $showDetails) {
                                 DetailedCardView(card: card)
                             }
-                    } else {
-                        VStack(spacing: 8) {
-                            Text("Missing image")
-                                .font(.headline)
-                            Text(card.imageName ?? "(nil imageName)")
-                                .font(.caption)
                         }
-                        .foregroundColor(.white)
-                        .padding()
-                        .sheet(isPresented: $showDetails) {
-                            DetailedCardView(card: card)
-                        }
+                        
                     }
-                    
+                    Text("\(card.cardCode)")
+                        .font(.custom("InknutAntiqua-Regular", size: 10))
                 }
-                Text("\(card.cardCode)")
-                    .font(.custom("InknutAntiqua-Regular", size: 10))
+                
             }
-            
         } else {
             HStack {
                 Rectangle()

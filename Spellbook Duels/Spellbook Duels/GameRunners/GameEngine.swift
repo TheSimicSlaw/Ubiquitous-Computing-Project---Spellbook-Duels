@@ -9,10 +9,19 @@ import SwiftUI
 
 final class GameEngine: ObservableObject {
     @Published var board: BoardModel
+    
     @Published var isAskingToTurnPage: Bool = false
+    
     @Published var isAskingPlayerToActivate: Bool = false
     @Published var isAskingOpponentToActivate: Bool = false
+    
+    @Published var isAskingToDiscardForHandLimit: Bool = false
+    @Published var pendingHandLimitCards: [String] = []
+    @Published var pendingHandLimitOwner: PlayerSide? = nil
+    
     var monitors: Monitors = Monitors()
+    
+    let handSize = 6
     
     var activePlayer: PlayerSide { get { board.activePlayer } set { board.activePlayer = newValue } }
     var phase: Phase { get { board.phase } set { board.phase = newValue } }
@@ -65,7 +74,7 @@ final class GameEngine: ObservableObject {
     // MARK: - Game Actions
     
     func dealDamage(sourceOwner: PlayerSide, sourceZone: CardZone, target: PlayerSide, amount: Int) {
-        let sourceSlot = board.slot(for: sourceOwner, zone: sourceZone)
+        let sourceSlot = board.getSlot(sourceOwner, sourceZone)
         guard !sourceSlot.card.isEmpty else { return }
 
         var context = DealDamageContext(source: sourceSlot, target: target, amount: amount)
@@ -188,7 +197,7 @@ final class GameEngine: ObservableObject {
 
         monitors.removeAllMonitors(for: slot)
         
-        if context.cardOwner == .player { board.playerHand.append(slot.card) } else { board.opponentHand.append(slot.card) }
+        addCardsToHand([slot.card], player: context.cardOwner)
 
         var empty = slot
         empty.card = ""
@@ -225,6 +234,10 @@ final class GameEngine: ObservableObject {
 
         hand.remove(at: index)
         board.setHand(hand, owner: owner)
+        
+        if phase == .attack {
+            passAttackPhase()
+        }
     }
     
     private func playPermanent(card: PresentedCardModel, into slot: CardSlot) {
@@ -315,12 +328,35 @@ final class GameEngine: ObservableObject {
     }
     
     func resolveStack() {
-        for speed in 5...1 {
-            if AbilityStack[speed]!.count > 0 {
-                for i in 0..<AbilityStack[speed]!.count {
-                    AbilityStack[speed]![i](AbilitySources[speed]![i], self)
-                }
+        for speed in (1...5).reversed() {
+            guard let effects = AbilityStack[speed] else {
+                print("[ERROR] AbilityStack[\(speed)] is nil during resolveStack()")
+                    continue
             }
+            guard let sources = AbilitySources[speed] else {
+                print("[ERROR] AbilitySources[\(speed)] is nil during resolveStack()")
+                continue
+            }
+
+            guard !effects.isEmpty else { continue }
+
+            guard effects.count == sources.count else {
+                print("""
+                        [ERROR] Mismatched ability arrays at speed \(speed):
+                            effects.count = \(effects.count)
+                            sources.count = \(sources.count)
+                        """)
+                continue
+            }
+
+            for i in 0..<effects.count {
+                let effect = effects[i]
+                let source = sources[i]
+                effect(source, self)
+            }
+
+            AbilityStack[speed] = []
+            AbilitySources[speed] = []
         }
     }
     
@@ -356,25 +392,46 @@ final class GameEngine: ObservableObject {
         enforceHandLimit(player)
     }
     
-    func enforceHandLimit(_ player: PlayerSide? = nil) {
-        let handOwner: PlayerSide = player == nil ? activePlayer : player!
-        let hand: [String] = board.getHand(owner: handOwner)
-        
-        if hand.count > 6 {
-            var discards: [Int] = []
-            // have player select hand.count-6 cards to remove, assign to discards
-            var newHand: [String] = []
-            for i in 0..<hand.count {
-                if !discards.contains(i) {
-                    newHand.append(hand[i])
+    func addCardsToHand(_ cards: [String], player: PlayerSide) {
+        if player == .player {
+            board.playerHand.append(contentsOf: cards)
+        } else {
+            board.opponentHand.append(contentsOf: cards)
+        }
+        enforceHandLimit(player)
+    }
+    
+    func cardsToDiscard(_ cards: [String], from original: inout [String], player: PlayerSide) {
+        for index in 0..<cards.count {
+            if let index = original.firstIndex(of: cards[index]) {
+                let atIndex = original.remove(at: index)
+                if player == .player {
+                    board.playerDiscard.append(atIndex)
+                } else {
+                    board.opponentDiscard.append(atIndex)
                 }
             }
         }
-        
-        board.setHand(hand, owner: activePlayer)
+    }
+    
+    func enforceHandLimit(_ player: PlayerSide? = nil) {
+        let handOwner: PlayerSide = player ?? activePlayer
+        let hand = board.getHand(owner: handOwner)
+            
+        guard hand.count > handSize else { return }
+            
+        pendingHandLimitCards = hand
+        pendingHandLimitOwner = handOwner
+        isAskingToDiscardForHandLimit = true
     }
     
     // MARK: - Phase Handling
+    
+    func startDefendPhase() {
+        if !board.previousPlayerIsAttacking {
+            resolveDefendPhase()
+        }
+    }
     
     func resolveDefendPhase() {
         resolveStack()
@@ -384,7 +441,7 @@ final class GameEngine: ObservableObject {
     
     func endDefendPhase() {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            // check with players (active then nonactive) to check for potion activations
+            checkForPotionActivations()
         }
         board.previousPlayerIsAttacking = false
         board.phase = .replenish
@@ -395,23 +452,36 @@ final class GameEngine: ObservableObject {
         gainAether(sourceOwner: board.activePlayer, for: board.activePlayer, amount: 1)
         incrementReplenishCounters()
         
-        // check with active player to see if they'd like to turn the page
-        
         if board.playerPotionBrewed || board.opponentPotionBrewed {
             checkForPotionActivations()
         }
+        
         phase = .action
     }
     
     func passFromActionPhase() {
+        if board.playerPotionBrewed || board.opponentPotionBrewed {
+            checkForPotionActivations()
+        }
+        
         phase = .attack
     }
     
-    func passAttackPhase() { //
+    func passAttackPhase() {
         if board.getSlot(activePlayer, .curse).card != "" || board.getSlot(activePlayer, .snap).card != "" {
             board.previousPlayerIsAttacking = true
         }
         
+        if board.playerPotionBrewed || board.opponentPotionBrewed {
+            checkForPotionActivations()
+        }
+        
+        if activePlayer == .player {
+            activePlayer = .opponent
+        } else {
+            activePlayer = .player
+        }
+        startDefendPhase()
     }
     
     func checkForPotionActivations() {
