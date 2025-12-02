@@ -171,6 +171,7 @@ struct CardSlot: Hashable, Codable {
     var zone: CardZone
     var card: String
     var counters: [Counter: Int]
+    var isHighlighted: Bool = false
     
     init(owner: PlayerSide, zone: CardZone, card: String = "", counters: [Counter: Int] = [:]) {
         self.owner = owner

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct IconSizes {
     static func getIconSize(zone: CardZone) -> CGFloat {
-        if zone == .snap { return 100 }
-        return 80
+        if zone == .snap { return 90 }
+        return 70
     }
 }
 
