@@ -37,7 +37,7 @@ struct BoardModel: Codable {
         }
     }
     
-    var playerDeck: [String] = PresentedCardModel.fullCardList.map{ $0.cardCode }
+    var playerDeck: [String] = PresentedCardModel.fullCardList.map{ $0.cardCode }.shuffled()
     var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "EAL"]
     var playerDiscard: [String] = []
     
