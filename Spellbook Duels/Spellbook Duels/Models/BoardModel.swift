@@ -39,7 +39,7 @@ struct BoardModel: Codable {
     
     var playerDeck: [String] = PresentedCardModel.fullCardList.map{ $0.cardCode }
     var playerHand: [String] = ["EAS", "EST", "WIN", "WAS", "EAL"]
-    var playerDiscard: [String] = ["EST"]
+    var playerDiscard: [String] = []
     
     // MARK: Opponent Board State
     

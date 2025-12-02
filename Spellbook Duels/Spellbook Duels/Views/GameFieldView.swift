@@ -174,7 +174,7 @@ struct PlayerFieldView: View {
         VStack() {
             HStack(spacing: 2) {
                 DiscardPileView(discardPile: gameEngine.board.playerDiscard)
-                PlayerDeckView(activateScryingWater: true, activateSeersScryingBowl: true)
+                                
                 Spacer()
                 
                 if (gameEngine.activePlayer == .player) {
@@ -202,24 +202,29 @@ struct PlayerFieldView: View {
             }
             .padding(.bottom, 30)
             
-            ZStack {
-                Image("spellbook")
-                    .resizable()
-                    .scaledToFill()
-                HStack(spacing: 80) {
-                    VStack(spacing: 10) {
-                        HandZoneView(index: 0, player: .player)
-                        HandZoneView(index: 1, player: .player)
-                        HandZoneView(index: 2, player: .player)
-                    }
-                    VStack(spacing: 10) {
-                        HandZoneView(index: 3, player: .player)
-                        HandZoneView(index: 4, player: .player)
-                        HandZoneView(index: 5, player: .player)
+            
+            HStack {
+                ZStack {
+                    Image("spellbook")
+                        .resizable()
+                        .scaledToFill()
+                    HStack(spacing: 80) {
+                        VStack(spacing: 10) {
+                            HandZoneView(index: 0, player: .player)
+                            HandZoneView(index: 1, player: .player)
+                            HandZoneView(index: 2, player: .player)
+                        }
+                        VStack(spacing: 10) {
+                            HandZoneView(index: 3, player: .player)
+                            HandZoneView(index: 4, player: .player)
+                            HandZoneView(index: 5, player: .player)
+                        }
                     }
                 }
+                .frame(width: 264, height: 157)
+                PlayerDeckView(activateScryingWater: true, activateSeersScryingBowl: true)
+
             }
-            .frame(width: 264, height: 157)
             
             Spacer(minLength: 36)
             
@@ -315,7 +320,7 @@ struct DiscardPileView: View {
         if (discardPile.isEmpty) {
             Rectangle() // Discard Pile
                 .fill(.black.opacity(0.5))
-                .frame(width: 80, height: 80)
+                .frame(width: 60, height: 60)
         } else {
             let cardCode = discardPile[discardPile.count - 1]
             if let card = PresentedCardModel.cardByCode[cardCode] {
@@ -323,7 +328,7 @@ struct DiscardPileView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 80)
+                        .frame(width: 60, height: 60)
                         .opacity(0.5)
                 } else {
                     VStack(spacing: 8) {
