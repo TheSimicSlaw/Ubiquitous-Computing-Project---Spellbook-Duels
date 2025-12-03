@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
-import Combine
 
 struct BoardModel {
     
@@ -66,8 +64,6 @@ struct BoardModel {
     var opponentHand: [String] = []
     var opponentDeck: [String] = []
     var opponentDiscard: [String] = []
-    var boardFromFirebase: [String: Any] = [:]
-    
     // MARK: Setters
     
     mutating func setPlayer(curse: CardSlot, snap: CardSlot, ward: CardSlot, charm: CardSlot, relic: CardSlot, potion: CardSlot) {
@@ -165,18 +161,23 @@ struct BoardModel {
         return boardDictionary
     }
     
-//    mutating func getOpponentBoard(matchCode: String, opponentID: String) {
-//        if opponentID == "" {
-//            self.boardFromFirebase = [:]
-//        }
-//        let oppBoardRef = Database.database().reference().child("matches/\(matchCode)/\(opponentID)/board")
-//        _ = oppBoardRef.observe(.value) {snapshot in
-//            if let dict = snapshot.value as? [String: Any] {
-//                self.boardFromFirebase = dict
-//            }
-//        }
-//        
-//    }
+    mutating func dictionaryToBoard(_ dict: [String: Any]) {
+        opponentAetherTotal = dict["aetherTotal"] as? Int ?? 18
+        opponentDiscard = dict["discard"] as? [String] ?? []
+        let raw = dict["phase"] as? Int ?? 0
+        phase = Phase(rawValue: raw) ?? .defend
+        opponentCurse.card = dict["curse"] as? String ?? ""
+        opponentSnap.card = dict["snap"] as? String ?? ""
+        opponentWard.card = dict["ward"] as? String ?? ""
+        opponentCharm.card = dict["charm"] as? String ?? ""
+        opponentRelic.card = dict["relic"] as? String ?? ""
+        opponentPotion.card = dict["potion"] as? String ?? ""
+        opponentCurseTimeCounters = dict["curseCounter"] as? Int ?? 0
+        opponentWardTimeCounters = dict["wardCounter"] as? Int ?? 0
+        opponentCharmTimeCounters = dict["charmCounter"] as? Int ?? 0
+        opponentPotionBrewCounters = dict["potionCounter"] as? Int ?? 0
+    }
+    
 }
 
 enum PlayerSide: Codable {

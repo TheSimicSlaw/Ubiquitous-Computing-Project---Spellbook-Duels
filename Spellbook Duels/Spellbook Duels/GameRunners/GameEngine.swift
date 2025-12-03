@@ -6,6 +6,7 @@
 //
 import Combine
 import SwiftUI
+import FirebaseDatabase
 
 final class GameEngine: ObservableObject {
     @Published var board: BoardModel
@@ -597,6 +598,22 @@ final class GameEngine: ObservableObject {
         guard let def = CardEffects.registry[card.cardCode] else { return }
 
         def.registerMonitors?(slot, self)
+    }
+    
+    func getOpponentBoard(matchCode: String, opponentID: String) /*-> [String: Any]*/ {
+        if opponentID == "" {
+           return //[:]
+        }
+        let databaseRef = Database.database().reference()
+        let oppBoardRef = databaseRef.child("matches/\(matchCode)/\(opponentID)/board")
+        
+        let handler = oppBoardRef.observe(.value) {snapshot in
+            if let snapshot = snapshot.value as? [String: Any] {
+                DispatchQueue.main.async {
+                    self.board.dictionaryToBoard(snapshot)
+                }
+            }
+        }
     }
 }
 

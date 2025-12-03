@@ -108,4 +108,19 @@ class DatabaseController: ObservableObject {
     func endMatch(matchCode: String) {
         self.ref.child("matches/\(matchCode)").removeValue()
     }
+    
+//    func getOpponentBoard(matchCode: String, opponentID: String) -> [String: Any] {
+//        if opponentID == "" {
+//           return [:]
+//        }
+//       
+//        let oppBoardRef = self.ref.child("matches/\(matchCode)/\(opponentID)/board")
+//        
+//        _ = oppBoardRef.observe(.value) {snapshot in
+//            if let dict = snapshot.value as? [String: Any] {
+//                self.boardFromFirebase = dict
+//            }
+//        }
+//
+//    }
 }
