@@ -512,6 +512,10 @@ final class GameEngine: ObservableObject {
     }
 }
 
-enum Phase: Codable, Comparable {
+enum Phase: Int, Codable, Comparable {
     case defend, replenish, action, attack
+    
+    static func < (lhs: Phase, rhs: Phase) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
 }

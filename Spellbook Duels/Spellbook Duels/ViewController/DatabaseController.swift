@@ -13,18 +13,10 @@ class DatabaseController: ObservableObject {
     @Published var player = Player()
     @Published var opponent = Player()
     @Published var turn: String = "" // will store the id of whoever's turn it is
-    //@Published var playerHand: [String] = [] // stores all the cards in the players hand
-
-    //@Published var discardPile: [String] = [] // will store the codes of the cards in the discard pile
-    //@Published var spellBook: [String] = []
-    
-    
-    //@Published var playerCardZones: [String: String] = [:] // ["zone name" : "card occupying the zone"]
-    //@Published var opponentCardZones: [String: String] = [:]
     
     private var ref: DatabaseReference = Database.database().reference()
 
-    func createMatch(matchCode: String) {
+    func createMatch(matchCode: String, initialBoard: [String: Any]) {
         let newMatchRef = self.ref.child("matches/\(matchCode)")
         newMatchRef.setValue([
             "code": "\(matchCode)",
@@ -42,7 +34,6 @@ class DatabaseController: ObservableObject {
             "name": "\(self.player.name)"
         ])
 
-        writeBoard(matchCode: matchCode)
         hostGetOpponent(matchCode: matchCode)
     }
     
@@ -106,15 +97,12 @@ class DatabaseController: ObservableObject {
         }
     }
     
-    func writeBoard(boardModel: BoardModel = BoardModel(), matchCode: String) {
-        let boardRef = self.ref.child("matches/\(matchCode)/board")
-        
-        do {
-            let data = try boardModel.toDictionary()
-            boardRef.setValue(data)
-        } catch {
-            print("Error converting board into a dictionary")
+    func writeBoard(matchCode: String, dict: [String: Any]) {
+        if player.id == "" {
+            return
         }
+        let boardRef = self.ref.child("matches/\(matchCode)/\(player.id)/board")
+        boardRef.setValue(dict)
     }
     
     func endMatch(matchCode: String) {

@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import FirebaseDatabase
+import Combine
 
-struct BoardModel: Codable {
+struct BoardModel {
     
     // MARK: Player Board State
     
@@ -64,6 +66,7 @@ struct BoardModel: Codable {
     var opponentHand: [String] = []
     var opponentDeck: [String] = []
     var opponentDiscard: [String] = []
+    var boardFromFirebase: [String: Any] = [:]
     
     // MARK: Setters
     
@@ -135,11 +138,45 @@ struct BoardModel: Codable {
         if owner == .player { return playerHand } else { return opponentHand }
     }
     
-    func toDictionary() throws -> [String: Any] {
-        let data = try JSONEncoder().encode(self)
-        let jsonObject = try JSONSerialization.jsonObject(with: data)
-        return jsonObject as? [String: Any] ?? [:]
+//    func toDictionary() throws -> [String: Any] {
+//        let data = try JSONEncoder().encode(self)
+//        let jsonObject = try JSONSerialization.jsonObject(with: data)
+//        return jsonObject as? [String: Any] ?? [:]
+//    }
+    
+    func boardToDictionary() -> [String: Any] {
+        let boardDictionary: [String: Any] = [
+            "aetherTotal": self.playerAetherTotal,
+            "deck": self.playerDeck,
+            "hand": self.playerHand,
+            "discard": self.playerHand,
+            "phase": self.phase.rawValue,
+            "curse": self.playerCurse.card,
+            "snap": self.playerSnap.card,
+            "ward": self.playerWard.card,
+            "charm": self.playerCharm.card,
+            "relic": self.playerRelic.card,
+            "potion": self.playerPotion,
+            "curseCounter": self.playerCurseTimeCounters ?? 0,
+            "wardCounter": self.playerWardTimeCounters ?? 0,
+            "charmCounter": self.playerCharmTimeCounters ?? 0,
+            "potionCounter": self.playerPotionBrewCounters ?? 0,
+        ]
+        return boardDictionary
     }
+    
+//    mutating func getOpponentBoard(matchCode: String, opponentID: String) {
+//        if opponentID == "" {
+//            self.boardFromFirebase = [:]
+//        }
+//        let oppBoardRef = Database.database().reference().child("matches/\(matchCode)/\(opponentID)/board")
+//        _ = oppBoardRef.observe(.value) {snapshot in
+//            if let dict = snapshot.value as? [String: Any] {
+//                self.boardFromFirebase = dict
+//            }
+//        }
+//        
+//    }
 }
 
 enum PlayerSide: Codable {
