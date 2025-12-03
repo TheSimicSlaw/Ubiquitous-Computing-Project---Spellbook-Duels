@@ -31,7 +31,11 @@ struct BoardModel {
     var playerPotionBrewCounters: Int? = nil
     var playerPotionBrewed: Bool {
         if let ppbcNum = playerPotionBrewCounters, let potion = PresentedCardModel.cardByCode[playerPotion.card] {
-            return ppbcNum >= potion.costVal
+            if let N = playerPotion.counters[.N] {
+                return ppbcNum >= N
+            } else {
+                return ppbcNum >= potion.costVal
+            }
         } else {
             return false
         }
@@ -55,7 +59,11 @@ struct BoardModel {
     var opponentPotionBrewCounters: Int? = nil
     var opponentPotionBrewed: Bool {
         if let ppbcNum = opponentPotionBrewCounters, let potion = PresentedCardModel.cardByCode[opponentPotion.card] {
-            return ppbcNum >= potion.costVal
+            if let N = opponentPotion.counters[.N] {
+                return ppbcNum >= N
+            } else {
+                return ppbcNum >= potion.costVal
+            }
         } else {
             return false
         }

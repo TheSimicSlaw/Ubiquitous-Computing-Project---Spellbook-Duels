@@ -61,6 +61,12 @@ extension View {
 
 struct DeckPopupDemo: View {
     @State private var showPopup = true
+    
+    @State var value: Int = 0
+    let title: String = "Select N for Fireball"
+    let range: ClosedRange<Int> = 0...100
+    let onConfirm: () -> Void = {}
+    let onCancel: () -> Void = {}
 
     var body: some View {
         ZStack {
@@ -110,52 +116,52 @@ struct DeckPopupDemo: View {
             
             
             
-            GeometryReader { geo in
-                let maxWidth = min(geo.size.width * 0.8, 380)
-                let valid: Bool = false
-                
-                VStack (spacing: 12){
-                    Text(valid ? "Save deck and leave?" : "This deck is invalid.\nAre you sure you want to save and leave?")
-                        .foregroundStyle(Color("AccentOne"))
-                        .font(.custom("InknutAntiqua-Bold", size: 18))
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: maxWidth)
-                    
-                    HStack {
-                        Button {
-                            Task {
-                                do {
-                                    showPopup = false
-                                    try await Task.sleep(for: .seconds(3))
-                                    showPopup = true
-                                }
-                            }
-                        } label: {
-                            Text("Cancel")
-                                .foregroundStyle(.red)
-                                .font(.custom("InknutAntiqua-Regular", size: 18))
-                        }
-
-                        Spacer()
-
-                        Button {
-                            Task {
-                                do {
-                                    showPopup = false
-                                    try await Task.sleep(for: .seconds(1))
-                                    showPopup = true
-                                }
-                            }
-                        } label: {
-                            Text("Save & Leave")
-                                .foregroundStyle(Color("AccentOne"))
-                                .font(.custom("InknutAntiqua-Regular", size: 18))
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                }
-            }
-            .frame(height: false ? 105 : 200)
+//            GeometryReader { geo in
+//                let maxWidth = min(geo.size.width * 0.8, 380)
+//                let valid: Bool = false
+//                
+//                VStack (spacing: 12){
+//                    Text(valid ? "Save deck and leave?" : "This deck is invalid.\nAre you sure you want to save and leave?")
+//                        .foregroundStyle(Color("AccentOne"))
+//                        .font(.custom("InknutAntiqua-Bold", size: 18))
+//                        .multilineTextAlignment(.center)
+//                        .frame(maxWidth: maxWidth)
+//                    
+//                    HStack {
+//                        Button {
+//                            Task {
+//                                do {
+//                                    showPopup = false
+//                                    try await Task.sleep(for: .seconds(3))
+//                                    showPopup = true
+//                                }
+//                            }
+//                        } label: {
+//                            Text("Cancel")
+//                                .foregroundStyle(.red)
+//                                .font(.custom("InknutAntiqua-Regular", size: 18))
+//                        }
+//
+//                        Spacer()
+//
+//                        Button {
+//                            Task {
+//                                do {
+//                                    showPopup = false
+//                                    try await Task.sleep(for: .seconds(1))
+//                                    showPopup = true
+//                                }
+//                            }
+//                        } label: {
+//                            Text("Save & Leave")
+//                                .foregroundStyle(Color("AccentOne"))
+//                                .font(.custom("InknutAntiqua-Regular", size: 18))
+//                        }
+//                    }
+//                    .padding(.horizontal, 12)
+//                }
+//            }
+//            .frame(height: false ? 105 : 200)
             
             
 //            VStack{
@@ -224,6 +230,53 @@ struct DeckPopupDemo: View {
 //                )
 //            }
 //            .frame(height: 260)
+            
+            
+            
+            
+            VStack(spacing: 16) {
+                Text(title)
+                    .font(.custom("InknutAntiqua-Bold", size: 16))
+                    .foregroundStyle(.menuBackground)
+                    .multilineTextAlignment(.center)
+
+                Text("Choose a value for N")
+                    .font(.custom("InknutAntiqua-Bold", size: 13))
+                    .foregroundStyle(.menuBackground)
+
+                HStack {
+                    Spacer(minLength: 45)
+                    
+                    Stepper(value: $value, in: range) {
+                        Text("N = \(value)")
+                            .font(.custom("InknutAntiqua-Regular", size: 20))
+                            .foregroundStyle(.menuBackground)
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(.accentOne)
+                    
+                    Spacer(minLength: 45)
+                }
+
+                HStack {
+                    Button("Cancel") {
+                        onCancel()
+                    }
+                    .font(.custom("InknutAntiqua-Regular", size: 12))
+                    .padding(.horizontal)
+                    .foregroundStyle(.menuBackground)
+
+                    Spacer()
+
+                    Button("Confirm") {
+                        onConfirm()
+                    }
+                    .font(.custom("InknutAntiqua-Regular", size: 12))
+                    .padding(.horizontal)
+                    .foregroundStyle(.menuBackground)
+                }
+            }
+            .padding(20)
         }
     }
     
