@@ -19,6 +19,8 @@ final class GameEngine: ObservableObject {
     @Published var pendingHandLimitCards: [String] = []
     @Published var pendingHandLimitOwner: PlayerSide? = nil
     
+    @Published var hasCastNewAttackSpellThisTurn: Bool = false
+    
     var monitors: Monitors = Monitors()
     
     let handSize = 6
@@ -129,6 +131,43 @@ final class GameEngine: ObservableObject {
             if ctx.cancelled { break }
         }
     }
+    
+    func payAether(for card: PresentedCardModel, owner: PlayerSide, baseCost: Int) -> Bool {
+        var context = PayAetherContext(player: owner, card: card.cardCode, cost: baseCost)
+
+        for entry in monitors.payAether.entries where entry.step == .beforePay {
+            entry.handler(&context, &board)
+            if context.cancelled {
+                return false
+            }
+        }
+
+        let currentAether: Int
+        switch context.player {
+        case .player: currentAether = board.playerAetherTotal
+        case .opponent: currentAether = board.opponentAetherTotal
+        }
+
+        guard currentAether >= context.cost else {
+            return false
+        }
+
+        switch context.player {
+        case .player:
+            board.playerAetherTotal -= context.cost
+        case .opponent:
+            board.opponentAetherTotal -= context.cost
+        }
+
+        for entry in monitors.payAether.entries where entry.step == .afterPay {
+            entry.handler(&context, &board)
+            if context.cancelled {
+                break
+            }
+        }
+
+        return true
+    }
 
     func gainAether(sourceOwner: PlayerSide, for player: PlayerSide, amount: Int) {
         var context = GainAetherContext(player: player, amount: amount)
@@ -225,14 +264,32 @@ final class GameEngine: ObservableObject {
         }
     }
     
-    func playCard(fromHandIndex index: Int, owner: PlayerSide, to zone: CardZone, hand: inout [String]) {
+    func playCard(fromHandIndex index: Int, owner: PlayerSide, to zone: CardZone, hand: inout [String], chosenN: Int? = nil) {
         let cardCode = hand[index]
         guard let card = PresentedCardModel.cardByCode[cardCode] else { return }
 
-        let slot = CardSlot(owner: owner, zone: zone, card: cardCode)
+        var slot = CardSlot(owner: owner, zone: zone, card: cardCode)
+        
+        if let n = chosenN { slot.counters[Counter.N] = n }
+        
+        let hasAetherCost: Bool
+        switch card.type {
+        case .potion:
+            hasAetherCost = false
+        default:
+            hasAetherCost = true
+        }
+        
+        if hasAetherCost {
+            let baseCost = chosenN ?? card.costVal
+
+            guard payAether(for: card, owner: owner, baseCost: baseCost) else {
+                return
+            }
+        }
         
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            // check with players (active then nonactive) to check for potion activations
+            checkForPotionActivationsPt1()
             
             if board.phase == .action {
                 resolveStack()
@@ -245,6 +302,8 @@ final class GameEngine: ObservableObject {
         case .curse, .ward, .charm, .relic, .potion:
             playPermanent(card: card, into: slot)
         }
+        
+        if card.type == .curse || card.type == .jinx { hasCastNewAttackSpellThisTurn = true }
 
         hand.remove(at: index)
         board.setHand(hand, owner: owner)
@@ -455,6 +514,7 @@ final class GameEngine: ObservableObject {
     // MARK: - Phase Handling
     
     func startDefendPhase() {
+        hasCastNewAttackSpellThisTurn = false
         if !board.previousPlayerIsAttacking {
             resolveDefendPhase()
         }
@@ -498,6 +558,7 @@ final class GameEngine: ObservableObject {
     }
     
     func passFromActionPhasePt2() {
+        board.previousPlayerIsAttacking = false
         phase = .attack
     }
     
