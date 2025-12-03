@@ -36,6 +36,17 @@ final class GameEngine: ObservableObject {
         resetStackAndSources()
     }
     
+    init(playerFirst: PlayerSide) {
+        self.board = BoardModel()
+        
+        AbilityStack = [:]
+        AbilitySources = [:]
+        
+        resetStackAndSources()
+        
+        startNewGame(playerFirst: .player)
+    }
+    
     // MARK: - New Game
     func startNewGame(initialBoard: BoardModel = BoardModel(), playerFirst: PlayerSide, initialPhase: Phase = .defend) {
         board = initialBoard
@@ -44,6 +55,9 @@ final class GameEngine: ObservableObject {
         isAskingToTurnPage = false
         monitors = Monitors()
         resetStackAndSources()
+        if initialPhase == .defend {
+            startDefendPhase()
+        }
     }
     
     // MARK: - Play Data Structures
@@ -129,7 +143,7 @@ final class GameEngine: ObservableObject {
         case .opponent: board.opponentAetherTotal += context.amount
         }
         
-        for entry in monitors.gainAether.entries where entry.step == .beforeGain {
+        for entry in monitors.gainAether.entries where entry.step == .afterGain {
             entry.handler(&context, &board)
             if context.cancelled { return }
         }
@@ -236,7 +250,10 @@ final class GameEngine: ObservableObject {
         board.setHand(hand, owner: owner)
         
         if phase == .attack {
-            passAttackPhase()
+            passAttackPhasePt1()
+        }
+        if phase == .defend {
+            resolveDefendPhase()
         }
     }
     
@@ -401,15 +418,25 @@ final class GameEngine: ObservableObject {
         enforceHandLimit(player)
     }
     
-    func cardsToDiscard(_ cards: [String], from original: inout [String], player: PlayerSide) {
+    func cardsToDiscard(_ cards: [String], from original: [String], source: NonBoardZone, player: PlayerSide) {
+        var toRemoveFrom: [String] = original
         for index in 0..<cards.count {
-            if let index = original.firstIndex(of: cards[index]) {
-                let atIndex = original.remove(at: index)
+            if let index = toRemoveFrom.firstIndex(of: cards[index]) {
+                let removed = toRemoveFrom.remove(at: index)
                 if player == .player {
-                    board.playerDiscard.append(atIndex)
+                    board.playerDiscard.append(removed)
                 } else {
-                    board.opponentDiscard.append(atIndex)
+                    board.opponentDiscard.append(removed)
                 }
+            }
+        }
+        if source == .hand {
+            board.setHand(toRemoveFrom, owner: player)
+        } else if source == .deck {
+            if player == .player {
+                board.playerDeck = toRemoveFrom
+            } else {
+                board.opponentDeck = toRemoveFrom
             }
         }
     }
@@ -436,46 +463,56 @@ final class GameEngine: ObservableObject {
     func resolveDefendPhase() {
         resolveStack()
         cleanupSnapSpells()
-        endDefendPhase()
+        endDefendPhasePt1()
     }
     
-    func endDefendPhase() {
+    func endDefendPhasePt1() {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            checkForPotionActivations()
+            checkForPotionActivationsPt1()
         }
+    }
+    
+    func endDefendPhasePt2() {
         board.previousPlayerIsAttacking = false
         board.phase = .replenish
-        resolveReplenishPhase()
+        resolveReplenishPhasePt1()
     }
     
-    func resolveReplenishPhase() {
+    func resolveReplenishPhasePt1() {
         gainAether(sourceOwner: board.activePlayer, for: board.activePlayer, amount: 1)
         incrementReplenishCounters()
         
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            checkForPotionActivations()
+            checkForPotionActivationsPt1()
         }
-        
+    }
+    
+    func resolveReplenishPhasePt2() {
         phase = .action
     }
     
-    func passFromActionPhase() {
+    func passFromActionPhasePt1() {
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            checkForPotionActivations()
+            checkForPotionActivationsPt1()
         }
-        
+    }
+    
+    func passFromActionPhasePt2() {
         phase = .attack
     }
     
-    func passAttackPhase() {
+    func passAttackPhasePt1() {
         if board.getSlot(activePlayer, .curse).card != "" || board.getSlot(activePlayer, .snap).card != "" {
             board.previousPlayerIsAttacking = true
         }
         
         if board.playerPotionBrewed || board.opponentPotionBrewed {
-            checkForPotionActivations()
+            checkForPotionActivationsPt1()
         }
         
+    }
+    
+    func passAttackPhasePt2() {
         if activePlayer == .player {
             activePlayer = .opponent
         } else {
@@ -484,17 +521,68 @@ final class GameEngine: ObservableObject {
         startDefendPhase()
     }
     
-    func checkForPotionActivations() {
+    func checkForPotionActivationsPt1() {
+        isAskingPlayerToActivate = false // just in case
+        isAskingOpponentToActivate = false
+        
+        guard board.playerPotionBrewed || board.opponentPotionBrewed else {
+            resumePhase()
+            return
+        }
+        
         if activePlayer == .player {
-            isAskingPlayerToActivate = true
-            // wait for player to choose whether to activate or not, at which point isAskingPlayerToActivate becomes false
-            
-            // wait for opponent to choose whether to activate or not
+            if board.playerPotionBrewed {
+                isAskingPlayerToActivate = true
+            } else { // board.opponentPotionBrewed must be true due to the guard statement above
+                isAskingOpponentToActivate = true
+            }
         } else {
-            // wait for opponent to choose whether to activate or not
-            
-            isAskingPlayerToActivate = true
-            // wait for player to choose whether to activate or not, at which point isAskingPlayerToActivate becomes false
+            if board.opponentPotionBrewed{
+                isAskingOpponentToActivate = true
+            } else { // board.playerPotionBrewed must be true due to the guard statement above
+                isAskingPlayerToActivate = true
+            }
+        }
+        
+        
+    }
+    
+    func declinePotionActivations(for player: PlayerSide) {
+        if player == .player {
+            isAskingPlayerToActivate = false
+        } else {
+            isAskingOpponentToActivate = false
+        }
+        
+        if player == activePlayer {
+            checkForPotionActivationsPt2(player)
+        } else {
+            resumePhase()
+        }
+    }
+    
+    func checkForPotionActivationsPt2(_ player: PlayerSide){
+        if player == .opponent { // Ask the person who didn't just respond
+            if board.playerPotionBrewed {
+                isAskingPlayerToActivate = true
+            } else {
+                resumePhase()
+            }
+        } else {
+            if board.opponentPotionBrewed {
+                isAskingOpponentToActivate = true
+            } else {
+                resumePhase()
+            }
+        }
+    }
+    
+    func resumePhase() {
+        switch phase {
+        case .defend: endDefendPhasePt2(); return
+        case .replenish: resolveReplenishPhasePt2(); return
+        case .action: passFromActionPhasePt2(); return
+        case .attack: passAttackPhasePt2(); return
         }
     }
     
@@ -518,4 +606,8 @@ enum Phase: Int, Codable, Comparable {
     static func < (lhs: Phase, rhs: Phase) -> Bool {
             lhs.rawValue < rhs.rawValue
         }
+}
+
+enum NonBoardZone: Codable, Comparable {
+    case deck, hand, discard
 }

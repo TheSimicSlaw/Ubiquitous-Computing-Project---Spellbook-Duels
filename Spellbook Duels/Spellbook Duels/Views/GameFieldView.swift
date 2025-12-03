@@ -77,11 +77,11 @@ struct GameFieldView: View {
             let cards = gameEngine.pendingHandLimitCards
             let numExcessCards = cards.count - 6
                 
-            SelectCardsView(cards: cards, numCardsToSelect: numExcessCards) { cardsToDiscard, _ in
+            SelectCardsView(cards: cards, numCardsToSelect: numExcessCards) { toDiscard, _ in
                     // Start with original hand
-                var hand = cards
+                let hand = cards
                     // Use your helper to move selected cards to discard
-                gameEngine.cardsToDiscard(cardsToDiscard, from: &hand, player: owner)
+                gameEngine.cardsToDiscard(toDiscard, from: hand, source: .hand, player: owner)
                 // Update hand on the board
                 gameEngine.board.setHand(hand, owner: owner)
                     
@@ -152,10 +152,13 @@ struct OpponentFieldView: View {
                 DiscardPileView(owner: .opponent)
 
                 Spacer()
-                if (gameEngine.activePlayer == .opponent) {
-                    OpponentPhaseView(phase: gameEngine.phase)
-                    Spacer()
-                }
+                
+                PhaseView(owner: .opponent)
+                    .environmentObject(viewController)
+                    .environmentObject(gameEngine)
+                
+                Spacer()
+                
                 Text("\(gameEngine.board.opponentAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
@@ -176,12 +179,13 @@ struct PlayerFieldView: View {
                 DiscardPileView(owner: .player)
                 Spacer()
                 
-                if (gameEngine.activePlayer == .player) {
-                    PlayerPhaseView()
-                    Spacer()
-                }
+                PhaseView(owner: .player)
+                    .environmentObject(viewController)
+                    .environmentObject(gameEngine)
                 
-                Text("\(gameEngine.board.opponentAetherTotal) Ae")
+                Spacer()
+                
+                Text("\(gameEngine.board.playerAetherTotal) Ae")
                     .font(.custom("InknutAntiqua-Regular", size: 20))
                     .foregroundStyle(.white)
                     .padding(.trailing)
@@ -232,84 +236,222 @@ struct PlayerFieldView: View {
     }
 }
 
-struct PlayerPhaseView: View {
-    @EnvironmentObject var viewController: ViewController
+struct PhaseView: View {
     @EnvironmentObject var gameEngine: GameEngine
-    @State private var phase: String = "DP" 
+    @EnvironmentObject var viewController: ViewController   // if you still need it later
+    
+    let owner: PlayerSide   // .player or .opponent
+    
     var body: some View {
-        Menu {
-            if (gameEngine.phase < Phase.replenish) {
-                Button("Replenish Phase") {
-                    gameEngine.phase = .replenish
-                    phase = "RP"
-                }
-            }
-            if (gameEngine.phase < Phase.action) {
-                Button("Action Phase") {
-                    gameEngine.phase = .action
-                    phase = "ACP"
-                }
-            }
-            if (gameEngine.phase < Phase.attack) {
-                Button("Attack Phase") {
-                    gameEngine.phase = .attack
-                    phase = "ATP"
-                }
-            }
-            if (gameEngine.phase == .replenish) {
-                Button("Turn The Page") {
-                    gameEngine.isAskingToTurnPage = true
-                }
-            }
-            
-            Button("End Turn") {
-                gameEngine.phase = .defend
-                gameEngine.activePlayer = .opponent
-                gameEngine.isAskingToTurnPage = false
-            }
-        } label: {
+        if owner == gameEngine.activePlayer {
+            activePlayerPhaseControl
+        } else {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.accentOne)
-                    .frame(width: 75, height: 30)
-                Text("Pass Phase")
+                    .foregroundStyle(owner == .player ? Color.accentOne : .red)
+                    .frame(width: 50, height: 30)
+                Text(phaseLabel(gameEngine.phase))
                     .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(owner == .player ? .black : .white)
             }
+        }
+    }
+    
+    // MARK: - Active Player (local player)
+    
+    @ViewBuilder
+    private var activePlayerPhaseControl: some View {
+        if owner == .player {
+            if gameEngine.isAskingPlayerToActivate {
+                Button {
+                    gameEngine.declinePotionActivations(for: .player)
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.accentOne)
+                            .frame(width: 110, height: 30)
+                        Text("No Activation")
+                            .font(.custom("InknutAntiqua-Regular", size: 10))
+                            .foregroundStyle(.black)
+                    }
+                }
+            } else if gameEngine.isAskingOpponentToActivate {
+                Button {
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.accentOne)
+                            .frame(width: 110, height: 30)
+                        Text("Waiting for opponent...")
+                            .font(.custom("InknutAntiqua-Regular", size: 10))
+                            .foregroundStyle(.black)
+                    }
+                }
+            } else {
+                if gameEngine.phase == .action {
+                    Button {
+                        gameEngine.passFromActionPhasePt1()
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(.accentOne)
+                                .frame(width: 75, height: 30)
+                            Text("Pass Phase")
+                                .font(.custom("InknutAntiqua-Regular", size: 10))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                } else if gameEngine.phase == .defend{
+                    Button {
+                        gameEngine.resolveDefendPhase()
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundStyle(.accentOne)
+                                .frame(width: 115, height: 30)
+                                .overlay {
+                                    Color(gameEngine.board.previousPlayerIsAttacking ? Color.clear : .black.opacity(0.4))
+                                }
+                            Text("No New Defenses")
+                                .font(.custom("InknutAntiqua-Regular", size: 10))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                    //.disabled(!gameEngine.board.previousPlayerIsAttacking)
+                } else if gameEngine.phase == .replenish {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.accentOne)
+                            .frame(width: 115, height: 30)
+                            .overlay {
+                                Color(gameEngine.board.previousPlayerIsAttacking ? Color.clear : .black.opacity(0.4))
+                            }
+                        Text("Replenishing...")
+                            .font(.custom("InknutAntiqua-Regular", size: 10))
+                            .foregroundStyle(.black)
+                    }
+                } else if gameEngine.phase == .attack {
+                    
+                }
+            }
+        } else {
+            if gameEngine.isAskingPlayerToActivate {
+                Button {
+                    gameEngine.declinePotionActivations(for: .player)
+                } label: {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundStyle(.accentOne)
+                            .frame(width: 110, height: 30)
+                        Text("No Activation")
+                            .font(.custom("InknutAntiqua-Regular", size: 10))
+                            .foregroundStyle(.black)
+                    }
+                }
+            } else {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(owner == .player ? Color.accentOne : .red)
+                        .frame(width: 50, height: 30)
+                    Text(phaseLabel(gameEngine.phase))
+                        .font(.custom("InknutAntiqua-Regular", size: 10))
+                        .foregroundStyle(owner == .player ? .black : .white)
+                }
+            }
+        }
+    }
+    
+    
+    
+    private func phaseLabel(_ phase: Phase) -> String {
+        switch phase {
+        case .defend:    return "DP"
+        case .replenish: return "RP"
+        case .action:    return "ACP"
+        case .attack:    return "ATP"
         }
     }
 }
 
-struct OpponentPhaseView: View {
-    @State var phase: Phase
-    
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.red)
-                .frame(width: 50, height: 30)
-            
-            if (phase == .defend) {
-                Text("DP")
-                    .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.white)
-            } else if (phase == .replenish) {
-                Text("RP")
-                    .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.white)
-            } else if (phase == .action) {
-                Text("ACP")
-                    .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.white)
-            } else if (phase == .attack) {
-                Text("ATP")
-                    .font(.custom("InknutAntiqua-Regular", size: 10))
-                    .foregroundStyle(.white)
-            }
-        }
-        
-    }
-}
+
+//struct PlayerPhaseView: View {
+//    @EnvironmentObject var viewController: ViewController
+//    @EnvironmentObject var gameEngine: GameEngine
+//    @State private var phase: String = "DP" 
+//    var body: some View {
+//        Menu {
+//            if (gameEngine.phase < Phase.replenish) {
+//                Button("Replenish Phase") {
+//                    gameEngine.phase = .replenish
+//                    phase = "RP"
+//                }
+//            }
+//            if (gameEngine.phase < Phase.action) {
+//                Button("Action Phase") {
+//                    gameEngine.phase = .action
+//                    phase = "ACP"
+//                }
+//            }
+//            if (gameEngine.phase < Phase.attack) {
+//                Button("Attack Phase") {
+//                    gameEngine.phase = .attack
+//                    phase = "ATP"
+//                }
+//            }
+//            if (gameEngine.phase == .replenish) {
+//                Button("Turn The Page") {
+//                    gameEngine.isAskingToTurnPage = true
+//                }
+//            }
+//            
+//            Button("End Turn") {
+//                gameEngine.phase = .defend
+//                gameEngine.activePlayer = .opponent
+//                gameEngine.isAskingToTurnPage = false
+//            }
+//        } label: {
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 10)
+//                    .foregroundStyle(.accentOne)
+//                    .frame(width: 75, height: 30)
+//                Text("Pass Phase")
+//                    .font(.custom("InknutAntiqua-Regular", size: 10))
+//                    .foregroundStyle(.black)
+//            }
+//        }
+//    }
+//}
+//
+//struct OpponentPhaseView: View {
+//    @State var phase: Phase
+//    
+//    var body: some View {
+//        ZStack {
+//            RoundedRectangle(cornerRadius: 10)
+//                .foregroundStyle(.red)
+//                .frame(width: 50, height: 30)
+//            
+//            if (phase == .defend) {
+//                Text("DP")
+//                    .font(.custom("InknutAntiqua-Regular", size: 10))
+//                    .foregroundStyle(.white)
+//            } else if (phase == .replenish) {
+//                Text("RP")
+//                    .font(.custom("InknutAntiqua-Regular", size: 10))
+//                    .foregroundStyle(.white)
+//            } else if (phase == .action) {
+//                Text("ACP")
+//                    .font(.custom("InknutAntiqua-Regular", size: 10))
+//                    .foregroundStyle(.white)
+//            } else if (phase == .attack) {
+//                Text("ATP")
+//                    .font(.custom("InknutAntiqua-Regular", size: 10))
+//                    .foregroundStyle(.white)
+//            }
+//        }
+//        
+//    }
+//}
 
 struct DiscardPileView: View {
     @EnvironmentObject var gameEngine: GameEngine
@@ -350,5 +492,5 @@ struct DiscardPileView: View {
 #Preview {
     GameFieldView()
         .environmentObject(ViewController())
-        .environmentObject(GameEngine())
+        .environmentObject(GameEngine(playerFirst: .player))
 }
