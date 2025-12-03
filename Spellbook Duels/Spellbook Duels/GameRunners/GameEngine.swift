@@ -666,7 +666,7 @@ final class GameEngine: ObservableObject {
            return //[:]
         }
         let databaseRef = Database.database().reference()
-        let oppBoardRef = databaseRef.child("matches/\(matchCode)/\(opponentID)/board")
+        let oppBoardRef = databaseRef.child("matches/\(matchCode)/players/\(opponentID)/board")
         
         let handler = oppBoardRef.observe(.value) {snapshot in
             if let snapshot = snapshot.value as? [String: Any] {
