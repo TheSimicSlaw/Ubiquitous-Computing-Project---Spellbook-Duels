@@ -47,8 +47,13 @@ struct PlayerDeckView: View {
                 gameEngine.board.playerDeck[3]]
             SelectCardsView(cards: cards, numCardsToSelect: 1) { cardsSelected, notSelected in
                 gameEngine.addCardsToHand(cardsSelected, player: .player)
-                gameEngine.cardsToDiscard(notSelected, from: &gameEngine.board.playerDeck, player: .player)
-                gameEngine.board.playerDeck.remove(at: 0)
+                
+                var deck = gameEngine.board.playerDeck
+                gameEngine.cardsToDiscard(notSelected, from: &deck, player: .player)
+                
+                deck.remove(at: 0)
+                
+                gameEngine.board.playerDeck = deck
             }
         }
         
