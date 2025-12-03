@@ -47,6 +47,25 @@ struct GameFieldView: View {
         .sheet(isPresented: $showHandLimitSheet) {
             handLimitSheetContent()
         }
+        .newPopup(isPresented: $gameEngine.isAskingForNSelection) {
+            NSelectionPopup(
+                value: Binding(
+                    get: { gameEngine.pendingNValue },
+                    set: { gameEngine.pendingNValue = $0 }
+                ),
+            title: "Choose N",
+            range: gameEngine.pendingNRange,
+            onConfirm: {
+                gameEngine.completeNSelection(
+                    selectedN: gameEngine.pendingNValue,
+                    hand: &(gameEngine.board.playerHand)
+                )
+            },
+            onCancel: {
+                gameEngine.cancelNSelection()
+            }
+            )
+        }
     }
     
     // MARK: Popups
@@ -374,84 +393,6 @@ struct PhaseView: View {
 }
 
 
-//struct PlayerPhaseView: View {
-//    @EnvironmentObject var viewController: ViewController
-//    @EnvironmentObject var gameEngine: GameEngine
-//    @State private var phase: String = "DP" 
-//    var body: some View {
-//        Menu {
-//            if (gameEngine.phase < Phase.replenish) {
-//                Button("Replenish Phase") {
-//                    gameEngine.phase = .replenish
-//                    phase = "RP"
-//                }
-//            }
-//            if (gameEngine.phase < Phase.action) {
-//                Button("Action Phase") {
-//                    gameEngine.phase = .action
-//                    phase = "ACP"
-//                }
-//            }
-//            if (gameEngine.phase < Phase.attack) {
-//                Button("Attack Phase") {
-//                    gameEngine.phase = .attack
-//                    phase = "ATP"
-//                }
-//            }
-//            if (gameEngine.phase == .replenish) {
-//                Button("Turn The Page") {
-//                    gameEngine.isAskingToTurnPage = true
-//                }
-//            }
-//            
-//            Button("End Turn") {
-//                gameEngine.phase = .defend
-//                gameEngine.activePlayer = .opponent
-//                gameEngine.isAskingToTurnPage = false
-//            }
-//        } label: {
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 10)
-//                    .foregroundStyle(.accentOne)
-//                    .frame(width: 75, height: 30)
-//                Text("Pass Phase")
-//                    .font(.custom("InknutAntiqua-Regular", size: 10))
-//                    .foregroundStyle(.black)
-//            }
-//        }
-//    }
-//}
-//
-//struct OpponentPhaseView: View {
-//    @State var phase: Phase
-//    
-//    var body: some View {
-//        ZStack {
-//            RoundedRectangle(cornerRadius: 10)
-//                .foregroundStyle(.red)
-//                .frame(width: 50, height: 30)
-//            
-//            if (phase == .defend) {
-//                Text("DP")
-//                    .font(.custom("InknutAntiqua-Regular", size: 10))
-//                    .foregroundStyle(.white)
-//            } else if (phase == .replenish) {
-//                Text("RP")
-//                    .font(.custom("InknutAntiqua-Regular", size: 10))
-//                    .foregroundStyle(.white)
-//            } else if (phase == .action) {
-//                Text("ACP")
-//                    .font(.custom("InknutAntiqua-Regular", size: 10))
-//                    .foregroundStyle(.white)
-//            } else if (phase == .attack) {
-//                Text("ATP")
-//                    .font(.custom("InknutAntiqua-Regular", size: 10))
-//                    .foregroundStyle(.white)
-//            }
-//        }
-//        
-//    }
-//}
 
 struct DiscardPileView: View {
     @EnvironmentObject var gameEngine: GameEngine
@@ -488,6 +429,63 @@ struct DiscardPileView: View {
         }
     }
 }
+
+
+struct NSelectionPopup: View {
+    @Binding var value: Int
+    
+    let title: String
+    let range: ClosedRange<Int>
+    let onConfirm: () -> Void
+    let onCancel: () -> Void
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text(title)
+                .font(.custom("InknutAntiqua-Bold", size: 16))
+                .foregroundStyle(.menuBackground)
+                .multilineTextAlignment(.center)
+
+            Text("Choose a value for N")
+                .font(.custom("InknutAntiqua-Bold", size: 13))
+                .foregroundStyle(.menuBackground)
+
+            HStack {
+                Spacer(minLength: 45)
+                
+                Stepper(value: $value, in: range) {
+                    Text("N = \(value)")
+                        .font(.custom("InknutAntiqua-Regular", size: 20))
+                        .foregroundStyle(.menuBackground)
+                        .multilineTextAlignment(.center)
+                }
+                .foregroundStyle(.accentOne)
+                
+                Spacer(minLength: 45)
+            }
+
+            HStack {
+                Button("Cancel") {
+                    onCancel()
+                }
+                .font(.custom("InknutAntiqua-Regular", size: 12))
+                .padding(.horizontal)
+                .foregroundStyle(.menuBackground)
+
+                Spacer()
+
+                Button("Confirm") {
+                    onConfirm()
+                }
+                .font(.custom("InknutAntiqua-Regular", size: 12))
+                .padding(.horizontal)
+                .foregroundStyle(.menuBackground)
+            }
+        }
+        .padding(20)
+    }
+}
+
 
 #Preview {
     GameFieldView()

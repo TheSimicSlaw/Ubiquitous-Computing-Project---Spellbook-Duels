@@ -22,6 +22,13 @@ final class GameEngine: ObservableObject {
     
     @Published var hasCastNewAttackSpellThisTurn: Bool = false
     
+    @Published var isAskingForNSelection: Bool = false
+    @Published var pendingNRange: ClosedRange<Int> = 0...0
+    @Published var pendingNValue: Int = 0
+    @Published var pendingNHandIndex: Int? = nil
+    @Published var pendingNOwner: PlayerSide? = nil
+    @Published var pendingNZone: CardZone? = nil
+    
     var monitors: Monitors = Monitors()
     
     let handSize = 6
@@ -648,6 +655,59 @@ final class GameEngine: ObservableObject {
         }
     }
     
+    // MARK: - N Handling
+    func beginNSelection(forHandIndex index: Int, owner: PlayerSide, zone: CardZone, currentHand: [String]) {
+        let cardCode = currentHand[index]
+        guard let card = PresentedCardModel.cardByCode[cardCode], card.needsNselect else { return }
+
+        var maxN = 0
+
+        switch card.cardCode {
+        case "FIR", "FCO", "AAE", "ATW": // cards where you pay N aether
+            maxN = (owner == .player) ? board.playerAetherTotal : board.opponentAetherTotal
+        case "WAV": // potion where you pay N turns
+            maxN = 100 // Never going to 100 but I don't want to enforce a cap not specified on the card
+        default: // shouldn't reach this but just in case (and also switch won't leave me alone without a default)
+            break
+        }
+
+        pendingNRange = 0...maxN
+        pendingNValue = min(1, maxN)
+        pendingNHandIndex = index
+        pendingNOwner = owner
+        pendingNZone = zone
+        isAskingForNSelection = true
+    }
+
+    func cancelNSelection() {
+        isAskingForNSelection = false
+        pendingNHandIndex = nil
+        pendingNOwner = nil
+        pendingNZone = nil
+        pendingNRange = 0...0
+        pendingNValue = 0
+    }
+
+    func completeNSelection(selectedN: Int, hand: inout [String]) {
+        guard let index = pendingNHandIndex,
+              let owner = pendingNOwner,
+              let zone = pendingNZone
+        else {
+            return
+        }
+
+        isAskingForNSelection = false
+
+        let clampedN = min(max(selectedN, pendingNRange.lowerBound), pendingNRange.upperBound) // probably unnecessary but it's best to be safe
+
+        playCard(fromHandIndex: index, owner: owner, to: zone, hand: &hand, chosenN: clampedN)
+
+        pendingNHandIndex = nil
+        pendingNOwner = nil
+        pendingNZone = nil
+        pendingNRange = 0...0
+        pendingNValue = 0
+    }
 
 
     // MARK: - Card Monitor Registration
@@ -677,6 +737,8 @@ final class GameEngine: ObservableObject {
         }
     }
 }
+
+
 
 enum Phase: Int, Codable, Comparable {
     case defend, replenish, action, attack
