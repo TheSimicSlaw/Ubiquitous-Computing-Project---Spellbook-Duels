@@ -400,6 +400,9 @@ struct HandZoneView: View {
     }
     
     func canLegallyPlayCard(_ type: CardType) -> Bool {
+        if gameEngine.isAskingPlayerToActivate || gameEngine.isAskingOpponentToActivate {
+            return false
+        }
         if gameEngine.board.previousPlayerIsAttacking && (type == .ward || type == .counterspell) && gameEngine.phase == .defend {
             return true
         }

@@ -49,7 +49,7 @@ struct PlayerDeckView: View {
                 gameEngine.addCardsToHand(cardsSelected, player: .player)
                 
                 var deck = gameEngine.board.playerDeck
-                gameEngine.cardsToDiscard(notSelected, from: &deck, player: .player)
+                gameEngine.cardsToDiscard(notSelected, from: deck, source: .deck, player: .player)
                 
                 deck.remove(at: 0)
                 
