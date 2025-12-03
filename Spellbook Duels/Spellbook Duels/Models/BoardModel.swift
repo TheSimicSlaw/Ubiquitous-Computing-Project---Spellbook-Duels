@@ -202,6 +202,7 @@ enum CardZone: Hashable, Codable {
 enum Counter: String, Hashable, Codable {
     case wave
     case stone
+    case N
 }
 
 struct CardSlot: Hashable, Codable {

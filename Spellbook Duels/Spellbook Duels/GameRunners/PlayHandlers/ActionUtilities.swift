@@ -24,6 +24,11 @@ enum LoseAetherStep: Int, Codable {
     case afterLose  = 1
 }
 
+enum PayAetherStep: Int, Codable {
+    case beforePay = 0
+    case afterPay = 1
+}
+
 enum BreakCardStep: Int, Codable {
     case beforeBreak = 0
     case afterBreak  = 1
@@ -60,6 +65,13 @@ struct LoseAetherContext {
     var cancelled: Bool = false
 }
 
+struct PayAetherContext {
+    var player: PlayerSide
+    var card: String
+    var cost: Int
+    var cancelled: Bool = false
+}
+
 struct GainAetherContext {
     var player: PlayerSide
     var amount: Int
@@ -92,6 +104,7 @@ struct PlayCardFieldContext {
 
 typealias DealDamageMonitor = (_ context: inout DealDamageContext, _ board: inout BoardModel) -> Void
 typealias LoseAetherMonitor = (_ context: inout LoseAetherContext,  _ board: inout BoardModel) -> Void
+typealias PayAetherMonitor = (_ context: inout PayAetherContext, _ board: inout BoardModel) -> Void
 typealias GainAetherMonitor = (_ context: inout GainAetherContext,  _ board: inout BoardModel) -> Void
 typealias BreakCardMonitor = (_ context: inout BreakCardContext,   _ board: inout BoardModel) -> Void
 typealias DiscardFromFieldMonitor = (_ context: inout DiscardFromFieldContext,   _ board: inout BoardModel) -> Void
@@ -112,6 +125,13 @@ struct LoseAetherMonitorEntry {
     let position: CardSlot
     let step: LoseAetherStep
     let handler: LoseAetherMonitor
+}
+
+struct PayAetherMonitorEntry {
+    let id: UUID
+    let position: CardSlot
+    let step: PayAetherStep
+    let handler: PayAetherMonitor
 }
 
 struct GainAetherMonitorEntry {
@@ -180,6 +200,27 @@ struct LoseAetherMonitorStore {
         let id = UUID()
         entries.append(
             LoseAetherMonitorEntry(id: id, position: position, step: step, handler: monitor)
+        )
+        return id
+    }
+
+    mutating func remove(_ id: UUID) {
+        entries.removeAll { $0.id == id }
+    }
+
+    mutating func removeAll(at position: CardSlot) {
+        entries.removeAll { $0.position == position }
+    }
+}
+
+struct PayAetherMonitorStore {
+    private(set) var entries: [PayAetherMonitorEntry] = []
+
+    @discardableResult
+    mutating func add(at position: CardSlot, step: PayAetherStep, _ monitor: @escaping PayAetherMonitor) -> UUID {
+        let id = UUID()
+        entries.append(
+            PayAetherMonitorEntry(id: id, position: position, step: step, handler: monitor)
         )
         return id
     }
@@ -303,6 +344,7 @@ struct PlayCardMonitorStore {
 enum MonitorKind: Codable {
     case dealDamage
     case loseAether
+    case payAether
     case gainAether
     case breakCard
     case discardFromField
@@ -315,9 +357,12 @@ struct MonitorHandle: Codable, Hashable {
     let id: UUID
 }
 
+// MARK: - Monitors
+
 struct Monitors {
     var dealDamage = DealDamageMonitorStore()
     var loseAether = LoseAetherMonitorStore()
+    var payAether = PayAetherMonitorStore()
     var gainAether = GainAetherMonitorStore()
     var breakCard = BreakCardMonitorStore()
     var discardFromField = DiscardFromFieldMonitorStore()
@@ -340,6 +385,14 @@ struct Monitors {
         let pos = slot
         let id = loseAether.add(at: pos, step: step, monitor)
         register(handle: MonitorHandle(kind: .loseAether, id: id), for: pos)
+        return id
+    }
+    
+    @discardableResult
+    mutating func addPayAetherMonitor(from slot: CardSlot, step: PayAetherStep, _ monitor: @escaping PayAetherMonitor) -> UUID {
+        let pos = slot
+        let id = payAether.add(at: pos, step: step, monitor)
+        register(handle: MonitorHandle(kind: .payAether, id: id), for: pos)
         return id
     }
     
@@ -394,6 +447,8 @@ struct Monitors {
                 dealDamage.remove(handle.id)
             case .loseAether:
                 loseAether.remove(handle.id)
+            case .payAether:
+                payAether.remove(handle.id)
             case .gainAether:
                 gainAether.remove(handle.id)
             case .breakCard:

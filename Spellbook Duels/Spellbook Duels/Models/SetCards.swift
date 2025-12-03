@@ -836,7 +836,8 @@ extension PresentedCardModel {
             speed: nil,
             hasActivated: false,
             numTargets: nil,
-            targetTypes: nil
+            targetTypes: nil,
+            needsNSelect: true
         ),
     // 47
         PresentedCardModel(
@@ -980,7 +981,8 @@ extension PresentedCardModel {
             speed: nil,
             hasActivated: false,
             numTargets: 1,
-            targetTypes: [(.charm, nil)]
+            targetTypes: [(.charm, nil)],
+            needsNSelect: true
         ),
     // 55
         PresentedCardModel(
@@ -1070,7 +1072,8 @@ extension PresentedCardModel {
             speed: nil,
             hasActivated: false,
             numTargets: nil,
-            targetTypes: nil
+            targetTypes: nil,
+            needsNSelect: true
         ),
     // 60
         PresentedCardModel(
@@ -1088,7 +1091,8 @@ extension PresentedCardModel {
             speed: nil,
             hasActivated: false,
             numTargets: 0,
-            targetTypes: [(.potion, nil), (.relic, nil)] // 2-player client; targets vary with N
+            targetTypes: [(.potion, nil), (.relic, nil)], // 2-player client; targets vary with N
+            needsNSelect: true
         ),
     // 61
         PresentedCardModel(
@@ -1142,7 +1146,8 @@ extension PresentedCardModel {
             speed: 4,
             hasActivated: false,
             numTargets: nil,
-            targetTypes: nil
+            targetTypes: nil,
+            needsNSelect: true
         ),
     // 64
         PresentedCardModel(
