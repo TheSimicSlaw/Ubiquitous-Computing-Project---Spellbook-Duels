@@ -10,7 +10,7 @@ import SwiftUI
 struct LoadingGameView: View {
     @EnvironmentObject var viewController: ViewController
     @EnvironmentObject var firebaseController: DatabaseController
-    
+    @EnvironmentObject var gameEngine: GameEngine
     var body: some View {
         ZStack {
             Color.accentOne
@@ -22,6 +22,7 @@ struct LoadingGameView: View {
                         viewController.isSearching = false
                         viewController.isWaiting = false
                         viewController.inGame = true
+                        gameEngine.getOpponentBoard(matchCode: viewController.matchCode, opponentID: firebaseController.opponent.id)
                     }
             } else {
                 VStack {
@@ -39,4 +40,5 @@ struct LoadingGameView: View {
     LoadingGameView()
         .environmentObject(ViewController())
         .environmentObject(DatabaseController())
+        .environmentObject(GameEngine())
 }

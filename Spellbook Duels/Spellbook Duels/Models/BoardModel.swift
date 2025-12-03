@@ -152,11 +152,11 @@ struct BoardModel {
             "ward": self.playerWard.card,
             "charm": self.playerCharm.card,
             "relic": self.playerRelic.card,
-            "potion": self.playerPotion,
+            "potion": self.playerPotion.card,
             "curseCounter": self.playerCurseTimeCounters ?? 0,
             "wardCounter": self.playerWardTimeCounters ?? 0,
             "charmCounter": self.playerCharmTimeCounters ?? 0,
-            "potionCounter": self.playerPotionBrewCounters ?? 0,
+            "potionCounter": self.playerPotionBrewCounters ?? 0
         ]
         return boardDictionary
     }

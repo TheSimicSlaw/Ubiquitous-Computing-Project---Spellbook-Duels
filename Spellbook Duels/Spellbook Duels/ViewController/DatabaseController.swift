@@ -9,6 +9,7 @@ import Foundation
 import FirebaseDatabase
 import Combine
 
+@MainActor
 class DatabaseController: ObservableObject {
     @Published var player = Player()
     @Published var opponent = Player()
@@ -16,7 +17,7 @@ class DatabaseController: ObservableObject {
     
     private var ref: DatabaseReference = Database.database().reference()
 
-    func createMatch(matchCode: String, initialBoard: [String: Any]) {
+    func createMatch(matchCode: String) {
         let newMatchRef = self.ref.child("matches/\(matchCode)")
         newMatchRef.setValue([
             "code": "\(matchCode)",
@@ -101,7 +102,7 @@ class DatabaseController: ObservableObject {
         if player.id == "" {
             return
         }
-        let boardRef = self.ref.child("matches/\(matchCode)/\(player.id)/board")
+        let boardRef = self.ref.child("matches/\(matchCode)/players/\(player.id)/board")
         boardRef.setValue(dict)
     }
     

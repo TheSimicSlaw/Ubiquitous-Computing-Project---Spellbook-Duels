@@ -10,6 +10,7 @@ import SwiftUI
 struct LobbyView: View {
     @EnvironmentObject var firebaseController: DatabaseController
     @EnvironmentObject var viewController: ViewController
+    @EnvironmentObject var gameEngine: GameEngine
     
     @State private var createMatchCode: String = ""
     @State private var joinMatchCode: String = ""
@@ -41,6 +42,7 @@ struct LobbyView: View {
                         Button("Submit") {
                             let s = createMatchCode.trimmingCharacters(in: .whitespacesAndNewlines)
                             firebaseController.createMatch(matchCode: s)
+                            firebaseController.writeBoard(matchCode: s, dict: gameEngine.board.boardToDictionary())
                             viewController.matchCode = s
                             createMatchCode = ""
                             viewController.isWaiting = true
@@ -68,6 +70,7 @@ struct LobbyView: View {
                         Button("Submit") {
                             let s = joinMatchCode.trimmingCharacters(in: .whitespacesAndNewlines)
                             firebaseController.joinMatch(matchCode: s)
+                            viewController.matchCode = s
                             joinMatchCode = ""
                             viewController.isSearching = true
                         }
@@ -85,4 +88,5 @@ struct LobbyView: View {
     LobbyView()
         .environmentObject(DatabaseController())
         .environmentObject(ViewController())
+        .environmentObject(GameEngine())
 }
