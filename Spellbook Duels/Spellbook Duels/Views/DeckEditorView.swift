@@ -38,6 +38,8 @@ struct DeckEditorView: View {
     
     @State var isAskingToExit: Bool = false
     @State var failedToSave: Bool = false
+    @State var showCardDetails: Bool = false
+    @State var longPressedCard: PresentedCardModel?
     
     var body: some View {
         GeometryReader { geo in
@@ -79,6 +81,10 @@ struct DeckEditorView: View {
                                         .scaledToFit()
                                         .frame(width: 150, height: 200)
                                         .shadow(radius: 4)
+                                        .onLongPressGesture {
+                                            longPressedCard = entry.card
+                                            showCardDetails = true
+                                        }
                                     
                                     HStack {
                                         Button {
@@ -131,6 +137,10 @@ struct DeckEditorView: View {
                                             Image(uiImage: card.uiImage!)
                                                 .resizable()
                                                 .scaledToFit()
+                                                .onLongPressGesture {
+                                                    longPressedCard = card
+                                                    showCardDetails = true
+                                                }
                                                 .padding(.top)
                                         }
                                                 
@@ -172,6 +182,11 @@ struct DeckEditorView: View {
                         .foregroundStyle(.red)
                         .font(.custom("InknutAntiqua-Regular", size: 16))
                 }
+            }
+        } // Geometry Reader
+        .sheet(isPresented: $showCardDetails) {
+            if let longPressedCard {
+                DetailedCardView(card: longPressedCard)
             }
         }
         
