@@ -911,7 +911,7 @@ struct CardEffects {
                           context.card.zone == slot.zone,
                           context.card.card == slot.card else { return }
 
-                    let stored = context.card.counters["rebukeDamage"] ?? 0
+                    let stored = context.card.counters[.rebukeDamage] ?? 0
                     guard stored > 0 else { return }
 
                     let owner = slot.owner
@@ -1159,7 +1159,7 @@ struct CardEffects {
                           context.amount > 0
                     else { return }
 
-                    let age = current.counters["age"] ?? 0
+                    let age = current.owner == .player ? engine.board.playerWardTimeCounters! : engine.board.opponentWardTimeCounters!
                     let retaliation = max(0, 5 - age)
                     guard retaliation > 0 else { return }
 
