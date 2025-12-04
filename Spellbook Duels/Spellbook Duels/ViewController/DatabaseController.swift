@@ -107,6 +107,7 @@ class DatabaseController: ObservableObject {
     }
     
     func endMatch(matchCode: String) {
+        //self.ref.child("matches/\(matchCode)/")
         self.ref.child("matches/\(matchCode)").removeValue()
     }
     

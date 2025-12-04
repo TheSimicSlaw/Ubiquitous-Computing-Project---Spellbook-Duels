@@ -70,6 +70,7 @@ struct LobbyView: View {
                         Button("Submit") {
                             let s = joinMatchCode.trimmingCharacters(in: .whitespacesAndNewlines)
                             firebaseController.joinMatch(matchCode: s)
+                            firebaseController.writeBoard(matchCode: s, dict: gameEngine.board.boardToDictionary())
                             viewController.matchCode = s
                             joinMatchCode = ""
                             viewController.isSearching = true
