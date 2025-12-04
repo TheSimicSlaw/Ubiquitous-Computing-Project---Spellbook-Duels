@@ -211,6 +211,7 @@ enum Counter: String, Hashable, Codable {
     case wave
     case stone
     case N
+    case rebukeDamage
 }
 
 struct CardSlot: Hashable, Codable {

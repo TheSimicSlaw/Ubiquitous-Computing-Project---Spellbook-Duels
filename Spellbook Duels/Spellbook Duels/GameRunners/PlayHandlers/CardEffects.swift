@@ -900,8 +900,8 @@ struct CardEffects {
                     guard context.amount > 0 else { return }
 
                     var updated = current
-                    let total = updated.counters["rebukeDamage"] ?? 0
-                    updated.counters["rebukeDamage"] = total + context.amount
+                    let total = updated.counters[.rebukeDamage] ?? 0
+                    updated.counters[.rebukeDamage] = total + context.amount
                     board.setSlot(updated)
                 }
 
