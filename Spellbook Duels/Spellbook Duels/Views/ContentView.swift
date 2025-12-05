@@ -12,10 +12,11 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var viewController: ViewController
     @EnvironmentObject var gameEngine: GameEngine
+    @EnvironmentObject var firebaseController: DatabaseController
     @Query var decks: [DeckListModel]
     
     var body: some View {
-        if (viewController.inGame) {
+        if (firebaseController.inGame) {
             GameFieldView()
         } else if (viewController.isWaiting || viewController.isSearching) {
             LoadingGameView()

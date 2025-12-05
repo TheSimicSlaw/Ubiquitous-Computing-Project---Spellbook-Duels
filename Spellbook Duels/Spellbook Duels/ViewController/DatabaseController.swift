@@ -13,6 +13,7 @@ import Combine
 class DatabaseController: ObservableObject {
     @Published var player = Player()
     @Published var opponent = Player()
+    @Published var inGame = false
     @Published var turn: String = "" // will store the id of whoever's turn it is
     
     private var ref: DatabaseReference = Database.database().reference()
@@ -55,7 +56,7 @@ class DatabaseController: ObservableObject {
     
     func guestGetOpponent(matchCode: String) {
         let playersRef = self.ref.child("matches/\(matchCode)/players")
-        playersRef.observeSingleEvent(of: .value) { snapshot in
+        playersRef.observe(.value) { snapshot in
             var players: [String] = []
             var names: [String] = []
             
@@ -66,18 +67,22 @@ class DatabaseController: ObservableObject {
                     guard let value = snapshot.value as? [String: Any] else {continue}
                     let name = value["name"] as? String ?? "Unknown"
                     names.append(name)
+                } else {
+                    self.inGame = false
                 }
             }
             if (players.count == 2) {
                 self.opponent.id = players[0]
                 self.opponent.name = names[0]
+                self.inGame = true
             }
         }
+        listenForConcede(matchCode: matchCode)
     }
     
     func hostGetOpponent(matchCode: String) {
         let playersRef = self.ref.child("matches/\(matchCode)/players")
-        let handler = playersRef.observe(.value) {snapshot in
+        playersRef.observe(.value) {snapshot in
             var players: [String] = []
             var names: [String] = []
             
@@ -91,11 +96,13 @@ class DatabaseController: ObservableObject {
                     if (players.count > 1) {
                         self.opponent.id = players[1]
                         self.opponent.name = names[1]
+                        self.inGame = true
                         break
                     }
                 }
             }
         }
+        listenForConcede(matchCode: matchCode)
     }
     
     func writeBoard(matchCode: String, dict: [String: Any]) {
@@ -106,10 +113,19 @@ class DatabaseController: ObservableObject {
         boardRef.setValue(dict)
     }
     
+    func listenForConcede(matchCode: String) {
+        self.ref.child("matches/\(matchCode)/players").observe(.childRemoved) {snapshot in
+            self.inGame = false
+        }
+    }
+    
     func endMatch(matchCode: String) {
         //self.ref.child("matches/\(matchCode)/")
+        self.inGame = false
+        self.ref.child("matches/\(matchCode)/players/\(player.id)").removeValue()
         self.ref.child("matches/\(matchCode)").removeValue()
     }
+    
     
 //    func getOpponentBoard(matchCode: String, opponentID: String) -> [String: Any] {
 //        if opponentID == "" {

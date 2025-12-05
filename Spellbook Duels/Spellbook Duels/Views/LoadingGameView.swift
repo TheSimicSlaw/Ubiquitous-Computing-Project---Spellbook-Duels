@@ -21,7 +21,7 @@ struct LoadingGameView: View {
                     .onAppear {
                         viewController.isSearching = false
                         viewController.isWaiting = false
-                        viewController.inGame = true
+                        //viewController.inGame = true
                         gameEngine.getOpponentBoard(matchCode: viewController.matchCode, opponentID: firebaseController.opponent.id)
                     }
             } else {
